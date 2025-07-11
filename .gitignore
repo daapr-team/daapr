@@ -1,3 +1,8 @@
+# Ignore temporarily for Copilot use as context
+dpi/
+dpbuild/
+dpdeploy/
+
 # History files
 .Rhistory
 .Rapp.history
