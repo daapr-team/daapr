@@ -25,6 +25,17 @@ RoxygenNote: 7.3.2
 Depends:
     R (>= 3.6.0)
 Imports:
+    digest,
+    fs,
+    gh,
+    git2r,
+    jsonlite,
+    purrr,
+    renv,
+    rio,
+    tibble,
+    tidyr,
+    withr,
     aws.signature,
     cli,
     crayon,
@@ -39,6 +50,7 @@ Imports:
     pins (>= 1.2.0),
     pinsLabkey (>= 0.2.0),
     rlang,
+    rmarkdown,
     rstudioapi,
     utils,
     yaml
@@ -46,9 +58,8 @@ Remotes:
     github::camorosi/pinsLabkey
 Suggests: 
     knitr,
-    rmarkdown,
-    testthat (>= 3.0.0),
-    withr
+    qs,
+    testthat (>= 3.0.0)
 BugReports: https://github.com/amashadihossein/daapr/issues
 VignetteBuilder: knitr
 Config/testthat/edition: 3
