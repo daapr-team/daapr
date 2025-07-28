@@ -4,7 +4,7 @@ template:
 
 navbar:
   structure:
-    left:  [intro, articles, news]
+    left:  [intro, reference, articles, news]
     right: [search, github]
 
 articles:
@@ -17,3 +17,4 @@ articles:
   - min_workflow_local
   - dp_merge
   - faq
+  - dpi
