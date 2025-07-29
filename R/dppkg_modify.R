@@ -156,7 +156,7 @@ dppkg_modify <- function(project_path = ".",
 #' @return pkgmeta containing `name`, `remote_sha`, `version`, `checksum`, and
 #' `repository`
 #' @examples \dontrun{
-#' get_rspm_pkgmeta(pkg_name = "dpi")
+#' get_rspm_pkgmeta(pkg_name = "daapr")
 #' }
 #' @keywords internal
 get_rspm_pkgmeta <- function(pkg_name,

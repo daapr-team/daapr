@@ -4,12 +4,12 @@
 \alias{flname_xos_get}
 \title{Gets cross OS File Name}
 \usage{
-flname_xos_get(fl, package = "dpbuild")
+flname_xos_get(fl, package = "daapr")
 }
 \arguments{
 \item{fl}{just the file name e.g. README.RMD}
 
-\item{package}{package name e.g. dpbuild}
+\item{package}{package name e.g. daapr}
 }
 \description{
 It drops extension that can be OS-specific

@@ -179,13 +179,13 @@ dp_init <- function(project_path = fs::path_wd(),
   }
 
   fs::file_copy(
-    path = system.file("global.R", package = "dpbuild"),
+    path = system.file("global.R", package = "daapr"),
     new_path = fs::path_tidy(glue::glue("{project_path}/R")),
     overwrite = T
   )
 
   fs::file_copy(
-    path = system.file(".renvignore", package = "dpbuild"),
+    path = system.file(".renvignore", package = "daapr"),
     new_path = project_path, overwrite = T
   )
   # add renv
@@ -299,20 +299,6 @@ fn_dry <- function(fn_called) {
     warning("Input expression is too long; line wrapping created")
   }
   return(dried_fn)
-}
-
-
-#' @title Hydrate a dried called function
-#' @description execute and returns the value of function call given its textual
-#'  (dried) representation
-#' @param dried_fn a function called
-#' @return value of the called function given its textual representation
-#' @examples \dontrun{
-#' fn_hydrate(fn_dry(sum(log(1:10))))
-#' }
-#' @keywords internal
-fn_hydrate <- function(dried_fn) {
-  return(eval(rlang::parse_expr(dried_fn)))
 }
 
 
@@ -436,7 +422,7 @@ add_readme <- function(project_path, dp_title, github_repo_url,
                        board_params_set_dried, creds_set_dried) {
   flname <- flname_xos_get(fl = "README.RMD")
   fs::file_copy(
-    path = system.file(flname, package = "dpbuild"),
+    path = system.file(flname, package = "daapr"),
     new_path = project_path, overwrite = T
   )
 

@@ -25,7 +25,7 @@ with
 }
 \examples{
 \dontrun{
-get_rspm_pkgmeta(pkg_name = "dpi")
+get_rspm_pkgmeta(pkg_name = "daapr")
 }
 }
 \keyword{internal}
