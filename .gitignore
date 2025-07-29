@@ -1,8 +1,3 @@
-# Ignore temporarily for Copilot use as context
-dpi/
-dpbuild/
-dpdeploy/
-
 # History files
 .Rhistory
 .Rapp.history
@@ -64,3 +59,6 @@ renv.lock
 renv/
 /doc/
 /Meta/
+
+# daap
+.daap/
