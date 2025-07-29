@@ -59,6 +59,7 @@ Imports:
 Remotes:
     github::camorosi/pinsLabkey
 Suggests: 
+    covr,
     knitr,
     qs,
     testthat (>= 3.0.0)
