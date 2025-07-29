@@ -17,6 +17,8 @@ Authors@R: c(
            email = "rivehill@gmail.com")
     )
 Description: Collection of packages to build and manage data products.
+URLs: https://amashadihossein.github.io/daapr
+BugReports: https://github.com/amashadihossein/daapr/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
@@ -60,6 +62,5 @@ Suggests:
     knitr,
     qs,
     testthat (>= 3.0.0)
-BugReports: https://github.com/amashadihossein/daapr/issues
 VignetteBuilder: knitr
 Config/testthat/edition: 3
