@@ -7,7 +7,7 @@
 inputmap_clean(input_map, remove_id = character(0), force_cleanname = F)
 }
 \arguments{
-\item{input_map}{synced mapped object as returned by \code{dpbuild::dpinput_map}}
+\item{input_map}{synced mapped object as returned by \code{dpinput_map}}
 
 \item{remove_id}{a vector of input_data ids to remove. This is for convenience
 as setting the input_manifest field \code{to_be_synced} to FALSE can achieve the

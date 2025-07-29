@@ -17,7 +17,7 @@ dp_pull <- function(project_path = fs::path_wd())
 
   cred <- git2r::cred_token()
 
-  if (!dpbuild::is_valid_dp_repository(project_path)){
+  if (!is_valid_dp_repository(project_path)){
     stop(cli::format_error("dp_pull failed; make sure this is a valid dp git repository."))
   }
 

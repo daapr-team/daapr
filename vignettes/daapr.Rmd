@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 
 ## Step 1: Initialize the project 
 
-For a new project, start by initializing the project using `dpbuild::dp_init`, which does the following:
+For a new project, start by initializing the project using `dp_init`, which does the following:
 
 1. Sets up the folder structure
 2. Sets up git and switch to specified `branch_name`
@@ -92,7 +92,7 @@ document the steps in building the data product
 the data product
 
 ```{r dpcode_add, eval = F}
-dpbuild::dpcode_add(project_path = dp_repo)
+dpcode_add(project_path = dp_repo)
 ```
 
 After adding code, the steps in `dp_journal.RMD` will walk you through how to
@@ -194,8 +194,8 @@ NOTE: for your push to work:
 2. `Sys.getenv("GITHUB_PAT")` returns the corresponding "GITHUB_PAT"
 
 ```{r commit, eval=F}
-dpbuild::dp_commit(project_path = ".", commit_description = "First dp build: only input data")
-dpbuild::dp_push(project_path = ".")
+dp_commit(project_path = ".", commit_description = "First dp build: only input data")
+dp_push(project_path = ".")
 ```
 
 This will complete one development cycle, making the data product and 
@@ -206,7 +206,7 @@ code ready for deployment. NOTE: committing and and pushing can be decoupled, so
 Now your data product is ready to be deployed to the remote location with one call to `dp_deploy`:
 
 ```{r dpdeploy_, eval=FALSE}
-dpdeploy::dp_deploy()
+dp_deploy()
 ```
 
 ## Step 7: Access data product

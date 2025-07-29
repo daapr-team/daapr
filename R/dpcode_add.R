@@ -23,12 +23,12 @@ dpcode_add <- function(project_path, use_targets = T) {
 
   if (!use_targets) {
     fs::file_copy(
-      path = system.file("dp_make.R", package = "dpbuild"),
+      path = system.file("dp_make.R", package = "daapr"),
       new_path = project_path
     )
 
     fs::file_copy(
-      path = system.file("global_drake.R", package = "dpbuild"),
+      path = system.file("global_drake.R", package = "daapr"),
       new_path = glue::glue("{project_path}/R")
     )
     fs::file_delete(path = glue::glue("{project_path}/R/global.R"))
@@ -41,12 +41,12 @@ dpcode_add <- function(project_path, use_targets = T) {
     # drake specific journal
     flname_dpjournal <- flname_xos_get(fl = "dp_journal.RMD")
     fs::file_copy(
-      path = system.file(flname_dpjournal, package = "dpbuild"),
+      path = system.file(flname_dpjournal, package = "daapr"),
       new_path = project_path
     )
   } else {
     fs::file_copy(
-      path = system.file("_targets.R", package = "dpbuild"),
+      path = system.file("_targets.R", package = "daapr"),
       new_path = project_path
     )
     fs::file_move(
@@ -57,7 +57,7 @@ dpcode_add <- function(project_path, use_targets = T) {
     # targets specific journal (renamed)
     flname_dpjournal <- flname_xos_get(fl = "dp_journal_targets.RMD")
     fs::file_copy(
-      path = system.file(flname_dpjournal, package = "dpbuild"),
+      path = system.file(flname_dpjournal, package = "daapr"),
       new_path = project_path
     )
     fs::file_move(
@@ -66,7 +66,7 @@ dpcode_add <- function(project_path, use_targets = T) {
     )
 
     fs::file_copy(
-      path = system.file("global_targets.R", package = "dpbuild"),
+      path = system.file("global_targets.R", package = "daapr"),
       new_path = glue::glue("{project_path}/R")
     )
     fs::file_delete(path = glue::glue("{project_path}/R/global.R"))
