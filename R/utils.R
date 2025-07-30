@@ -416,7 +416,7 @@ gitinfo_validate <- function(project_path, verbose = F) {
 dpboardlog_update <- function(conf, git_info, dlog = NULL,
                               dp_name = character(0),
                               pin_version = character(0)) {
-  board_object <- dpi::dp_connect(
+  board_object <- dp_connect(
     board_params = conf$board_params, creds = conf$creds,
     board_subdir = "daap/"
   )
