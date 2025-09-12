@@ -18,14 +18,14 @@
 #' board_params_set_local(folder = "xxxx")
 #' }
 #' @export
-board_params_set_local <- function(folder, board_alias = deprecated()){
-
+board_params_set_local <- function(folder, board_alias = deprecated()) {
   if (lifecycle::is_present(board_alias)) {
     lifecycle::deprecate_stop("0.1.0", "board_params_set_local(board_alias)",
-                              details = downgrade_message())
+      details = downgrade_message()
+    )
   }
 
-  if (folder == "" | folder == "."){
+  if (folder == "" | folder == ".") {
     warning(cli::format_warning(glue::glue(
       "You have specified a local pin board location in your current working",
       "path. Reading a local daap from within the daap's storage location is",
@@ -33,9 +33,11 @@ board_params_set_local <- function(folder, board_alias = deprecated()){
     )))
   }
 
-  board_params <- data.frame(board_type = "local_board",
-                             folder = folder,
-                             stringsAsFactors = FALSE)
+  board_params <- data.frame(
+    board_type = "local_board",
+    folder = folder,
+    stringsAsFactors = FALSE
+  )
 
   class(board_params) <- c("local_board", class(board_params))
   return(board_params)

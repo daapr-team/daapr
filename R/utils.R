@@ -65,7 +65,7 @@ dpname_make <- function(project_name, branch_name) {
 #' @return a character version
 #' @importFrom dplyr .data
 #' @keywords internal
-get_pin_version <- function(d, pin_name, pin_description, type = 'rds') {
+get_pin_version <- function(d, pin_name, pin_description, type = "rds") {
   withr::local_options(list(pins.quiet = TRUE))
   pin_name <- as.character(pin_name)
   pin_description <- as.character(pin_description)
@@ -83,7 +83,7 @@ get_pin_version <- function(d, pin_name, pin_description, type = 'rds') {
     x = d,
     name = pin_name,
     board = temp_board_folder,
-    description = pin_description, 
+    description = pin_description,
     type = type
   )
 
@@ -326,7 +326,7 @@ flname_xos_get <- function(fl, package = "daapr") {
 #' @description Check pins package compatibility
 #' @param project_path path to project folder
 #' @keywords internal
-check_pins_compatibility <- function(project_path = "."){
+check_pins_compatibility <- function(project_path = ".") {
   read_conf_file <- dpconf_read(project_path = project_path)
 
   if ("is_legacy" %in% names(read_conf_file)) {
@@ -335,7 +335,7 @@ check_pins_compatibility <- function(project_path = "."){
     is_legacy_dp <- T
   }
 
-  is_installed_pins_version_legacy <- utils::packageVersion(pkg = "pins") < '1.2.0'
+  is_installed_pins_version_legacy <- utils::packageVersion(pkg = "pins") < "1.2.0"
 
   pins_version_message <- glue::glue(
     'This data product was built with a legacy version of pins.
@@ -347,8 +347,7 @@ check_pins_compatibility <- function(project_path = "."){
     remotes::install_github(repo = "amashadihossein/daapr@v0.0.0.9006")'
   )
 
-  if (any(is_legacy_dp,is_installed_pins_version_legacy)) {
-
+  if (any(is_legacy_dp, is_installed_pins_version_legacy)) {
     stop(cli::cli_alert_danger(pins_version_message))
   }
 }
@@ -510,7 +509,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
     if (board_object$board == "pins_board_labkey") {
       pinsLabkey::pin_write(
         x = dpboard_log,
-        type = 'rds',
+        type = "rds",
         name = "dpboard-log",
         board = board_object,
         description = "Data Product Log"
@@ -518,7 +517,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
     } else {
       pins::pin_write(
         x = dpboard_log,
-        type = 'rds',
+        type = "rds",
         name = "dpboard-log",
         board = board_object,
         description = "Data Product Log"
@@ -564,7 +563,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
   if (board_object$board == "pins_board_labkey") {
     pinsLabkey::pin_write(
       x = dpboard_log,
-      type = 'rds',
+      type = "rds",
       name = "dpboard-log",
       board = board_object,
       description = "Data Product Log"
@@ -572,7 +571,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
   } else {
     pins::pin_write(
       x = dpboard_log,
-      type = 'rds',
+      type = "rds",
       name = "dpboard-log",
       board = board_object,
       description = "Data Product Log"

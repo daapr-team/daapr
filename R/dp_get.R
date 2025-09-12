@@ -33,7 +33,6 @@
 #' @importFrom dplyr .data
 #' @export
 dp_get <- function(board_object, data_name, version = NULL) {
-
   # check for whether we're getting input or data product
   is_dpinput <- is_dpinput_board(board_object)
 
@@ -71,9 +70,11 @@ dp_get <- function(board_object, data_name, version = NULL) {
       # Check in case we've manage to pin the same hash more than once
       if (length(version) > 1) {
         version <- version[length(version)]
-        message(paste0("More than one pin version found with hash ",
-                       specified_version, ". Using latest version: ",
-                       version))
+        message(paste0(
+          "More than one pin version found with hash ",
+          specified_version, ". Using latest version: ",
+          version
+        ))
       }
     }
   }

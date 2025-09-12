@@ -10,16 +10,17 @@
 #' @examples
 #' \dontrun{
 #' github_repo_url <- "https://github.com/<USERNAME>/<REPOSITORY NAME>"
-#' dp_params <- dp_make_params(github_repo_url = github_repo_url, 
-#'                             repo_token = Sys.getenv("GITHUB_PAT"))
+#' dp_params <- dp_make_params(
+#'   github_repo_url = github_repo_url,
+#'   repo_token = Sys.getenv("GITHUB_PAT")
+#' )
 #' }
 #' @export
-dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"), branch_name=NULL){
-
+dp_make_params <- function(github_repo_url, repo_token = Sys.getenv("GITHUB_PAT"), branch_name = NULL) {
   check_http_error <- httr::http_error(github_repo_url)
   GITHUB_API_URL <- "https://api.github.com"
 
-  if (missing(github_repo_url)){
+  if (missing(github_repo_url)) {
     stop(cli::cli_alert_danger("github_repo_url parameter cannot be missing"))
   }
 
@@ -27,7 +28,7 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
 
   hostname <- domain_components$hostname
 
-  is_enterprise_server <- !grepl(pattern = hostname, x=GITHUB_API_URL, fixed = T)
+  is_enterprise_server <- !grepl(pattern = hostname, x = GITHUB_API_URL, fixed = T)
 
   str_split_hostname <- unlist(strsplit(domain_components$hostname, split = "\\."))
   top_level_domain <- paste0(".", str_split_hostname[length(str_split_hostname)])
@@ -38,16 +39,15 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
 
   if (is_enterprise_server) {
     api_url <- paste0(split_github_url[1], top_level_domain, "/api/v3")
-    path_api_url_branches <- file.path(api_url,"repos", OWNER, REPO, "branches")
+    path_api_url_branches <- file.path(api_url, "repos", OWNER, REPO, "branches")
   } else {
-    path_api_url_branches <- file.path(GITHUB_API_URL,"repos", OWNER, REPO, "branches")
+    path_api_url_branches <- file.path(GITHUB_API_URL, "repos", OWNER, REPO, "branches")
   }
 
-  if(check_http_error) {
+  if (check_http_error) {
     retrieve_branch_name <- httr::GET(
       path_api_url_branches,
-      httr::add_headers(Authorization = paste("token", repo_token)
-      )
+      httr::add_headers(Authorization = paste("token", repo_token))
     )
   } else {
     retrieve_branch_name <- httr::GET(path_api_url_branches)
@@ -64,7 +64,7 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
     all_branches <- httr::content(retrieve_branch_name)
 
     list_all_branches <- list()
-    for (branch in 1:length(all_branches)){
+    for (branch in 1:length(all_branches)) {
       bn <- all_branches[[branch]]$name
       list_all_branches[[branch]] <- bn
     }
@@ -85,11 +85,10 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
 
     if (length(list_all_branches) == 1L) {
       selected_branch_name <- unlist(list_all_branches)
-    } else  {
+    } else {
       selected_branch_name <- select_branch_name(list_all_branches = list_all_branches)
     }
     cli::cli_alert_warning(glue::glue("`{selected_branch_name}` branch was selected to be used."))
-
   } else {
     selected_branch_name <- branch_name
   }
@@ -99,41 +98,39 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
   yaml_log_tail <- ".daap/daap_log.yaml"
 
   split_github_url_dotcom <- paste0(split_github_url[1], top_level_domain)
-  raw_githubusercontent <- paste0(raw_string,".githubusercontent",top_level_domain)
+  raw_githubusercontent <- paste0(raw_string, ".githubusercontent", top_level_domain)
 
   if (is_enterprise_server) {
-    path_repo_config <- file.path(split_github_url_dotcom, raw_string,split_github_url[2], selected_branch_name, yaml_config_tail)
+    path_repo_config <- file.path(split_github_url_dotcom, raw_string, split_github_url[2], selected_branch_name, yaml_config_tail)
   } else {
-    path_repo_config <- file.path("https://", raw_githubusercontent,split_github_url[2], selected_branch_name, yaml_config_tail)
+    path_repo_config <- file.path("https://", raw_githubusercontent, split_github_url[2], selected_branch_name, yaml_config_tail)
   }
 
-  if(check_http_error) {
+  if (check_http_error) {
     read_config_from_repo <- yaml::yaml.load(httr::GET(
       path_repo_config,
       httr::add_headers(Authorization = paste("token", repo_token))
-    )
-    )
+    ))
   } else {
     read_config_from_repo <- yaml::yaml.load(httr::GET(path_repo_config))
   }
 
   if (is_enterprise_server) {
-    path_log <- file.path(split_github_url_dotcom, raw_string,split_github_url[2], selected_branch_name, yaml_log_tail)
+    path_log <- file.path(split_github_url_dotcom, raw_string, split_github_url[2], selected_branch_name, yaml_log_tail)
   } else {
-    path_log <- file.path("https://", raw_githubusercontent,split_github_url[2], selected_branch_name, yaml_log_tail)
+    path_log <- file.path("https://", raw_githubusercontent, split_github_url[2], selected_branch_name, yaml_log_tail)
   }
 
-  if(check_http_error) {
+  if (check_http_error) {
     read_repo_config_log <- yaml::yaml.load(httr::GET(
       path_log,
       httr::add_headers(Authorization = paste("token", repo_token))
-    )
-    )
+    ))
   } else {
     read_repo_config_log <- yaml::yaml.load(httr::GET(path_log))
   }
 
-  data_name <- unlist(unname((read_repo_config_log)[[length(read_repo_config_log)]]['dp_name']))
+  data_name <- unlist(unname((read_repo_config_log)[[length(read_repo_config_log)]]["dp_name"]))
   latest_pin_version <- unlist(unname(read_repo_config_log[[length(read_repo_config_log)]]["pin_version"]))
 
   board_params <- read_config_from_repo$board_params_set_dried
@@ -153,10 +150,10 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
   }
 
   params_list <- list(
-    board_params=fn_hydrate(board_params),
-    creds=fn_hydrate(creds),
-    data_name=data_name,
-    latest_pin_version=latest_pin_version
+    board_params = fn_hydrate(board_params),
+    creds = fn_hydrate(creds),
+    data_name = data_name,
+    latest_pin_version = latest_pin_version
   )
 
   check_if_creds_empty <- unname(unlist((params_list$creds))) == ""
@@ -166,4 +163,3 @@ dp_make_params <- function(github_repo_url, repo_token=Sys.getenv("GITHUB_PAT"),
   }
   return(params_list)
 }
-
