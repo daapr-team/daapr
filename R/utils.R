@@ -18,7 +18,7 @@ downgrade_message <- function() {
 #' @title Hydrate a dried called function
 #' @description execute and returns the value of function call given its textual
 #'  (dried) representation
-#' @param fn_called a function called
+#' @param dried_fn a function called
 #' @return value of the called function given its textual representation
 #' @examples \dontrun{
 #' fn_hydrate(fn_dry(sum(log(1:10))))
