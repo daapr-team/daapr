@@ -11,8 +11,8 @@ dppkg_modify(
   pkg_sha = character(0),
   repo_name = "RSPM",
   repo_url,
-  force_repo_overwrite = F,
-  verbose = T
+  force_repo_overwrite = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
