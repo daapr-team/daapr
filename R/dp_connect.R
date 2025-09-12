@@ -76,7 +76,7 @@ dp_connect.s3_board <- function(board_params, creds, ...) {
         region = board_params$region,
         access_key = key,
         secret_access_key = secret,
-        versioned = T
+        versioned = TRUE
       )
       return(board)
     },
@@ -105,7 +105,7 @@ dp_connect.labkey_board <- function(board_params, creds, ...) {
         api_key = creds$api_key,
         base_url = board_params$url,
         folder = board_params$folder,
-        versioned = T,
+        versioned = TRUE,
         subdir = board_subdir
       )
       return(board)

@@ -25,7 +25,7 @@ board_params_set_local <- function(folder, board_alias = deprecated()) {
     )
   }
 
-  if (folder == "" | folder == ".") {
+  if (folder == "" || folder == ".") {
     warning(cli::format_warning(glue::glue(
       "You have specified a local pin board location in your current working",
       "path. Reading a local daap from within the daap's storage location is",

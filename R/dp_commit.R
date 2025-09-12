@@ -32,7 +32,7 @@ dp_commit <- function(project_path = fs::path_wd(),
   log_history <- yaml::read_yaml(file = log_path)
 
   # keeping the references to rds for backword compatibility
-  rds_file_sha1 <- digest::digest(object = object_path, algo = "sha1", file = T)
+  rds_file_sha1 <- digest::digest(object = object_path, algo = "sha1", file = TRUE)
 
 
   log_history$HEAD <- as.character(glue::glue("rds_log_{substring(rds_file_sha1, first = 1, last = 7)}"))

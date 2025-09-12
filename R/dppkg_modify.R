@@ -35,9 +35,9 @@ dppkg_modify <- function(project_path = ".",
                          pkg_sha = character(0),
                          repo_name = "RSPM",
                          repo_url,
-                         force_repo_overwrite = F,
-                         verbose = T) {
-  if (length(pkg_version) == 0 | length(pkg_sha) == 0) {
+                         force_repo_overwrite = FALSE,
+                         verbose = TRUE) {
+  if (length(pkg_version) == 0 || length(pkg_sha) == 0) {
     if (length(pkg_version) != 0) {
       warning(cli::format_warning(glue::glue(
         "pkg_version {pkg_version} is ",
@@ -65,7 +65,7 @@ dppkg_modify <- function(project_path = ".",
     pkg_version <- pkgmeta$version
     pkg_sha <- pkgmeta$remote_sha
 
-    if (length(pkg_version) == 0 | length(pkg_sha) == 0) {
+    if (length(pkg_version) == 0 || length(pkg_sha) == 0) {
       stop(cli::format_error(glue::glue(
         "Failed to retrieve pkgmeta from ",
         "RSPM. Try providing pkg_version and",
@@ -139,8 +139,8 @@ dppkg_modify <- function(project_path = ".",
   }
 
   jsonlite::write_json(
-    x = renv_manifest, path = renv_manifest_path, pretty = T,
-    auto_unbox = T
+    x = renv_manifest, path = renv_manifest_path, pretty = TRUE,
+    auto_unbox = TRUE
   )
 
   invisible(renv_manifest)

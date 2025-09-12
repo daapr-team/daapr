@@ -4,7 +4,7 @@
 \alias{make_names_codefriendly}
 \title{Make names code friendly}
 \usage{
-make_names_codefriendly(x, make_unique = T)
+make_names_codefriendly(x, make_unique = TRUE)
 }
 \arguments{
 \item{x}{a character string to be converted}

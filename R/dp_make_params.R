@@ -28,7 +28,7 @@ dp_make_params <- function(github_repo_url, repo_token = Sys.getenv("GITHUB_PAT"
 
   hostname <- domain_components$hostname
 
-  is_enterprise_server <- !grepl(pattern = hostname, x = GITHUB_API_URL, fixed = T)
+  is_enterprise_server <- !grepl(pattern = hostname, x = GITHUB_API_URL, fixed = TRUE)
 
   str_split_hostname <- unlist(strsplit(domain_components$hostname, split = "\\."))
   top_level_domain <- paste0(".", str_split_hostname[length(str_split_hostname)])
@@ -76,7 +76,7 @@ dp_make_params <- function(github_repo_url, repo_token = Sys.getenv("GITHUB_PAT"
           "Multiple branches have been found.\
           Which branch do you want to use?"
         ),
-        graphics = F
+        graphics = FALSE
       )
 
       final_branch_name <- unlist(list_all_branches)[user_input]

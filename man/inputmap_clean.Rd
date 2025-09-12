@@ -4,7 +4,7 @@
 \alias{inputmap_clean}
 \title{Clean input_map}
 \usage{
-inputmap_clean(input_map, remove_id = character(0), force_cleanname = F)
+inputmap_clean(input_map, remove_id = character(0), force_cleanname = FALSE)
 }
 \arguments{
 \item{input_map}{synced mapped object as returned by \code{dpinput_map}}

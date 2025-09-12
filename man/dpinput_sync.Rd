@@ -4,7 +4,7 @@
 \alias{dpinput_sync}
 \title{Sync Input Data to Remote}
 \usage{
-dpinput_sync(conf, input_map, verbose = F, type = "rds", ...)
+dpinput_sync(conf, input_map, verbose = FALSE, type = "rds", ...)
 }
 \arguments{
 \item{conf}{environment containing all config.R variables. See \code{dpconf_get()}}

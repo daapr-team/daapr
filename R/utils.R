@@ -70,8 +70,7 @@ get_pin_version <- function(d, pin_name, pin_description, type = "rds") {
   pin_name <- as.character(pin_name)
   pin_description <- as.character(pin_description)
 
-  # local_board_folder <- pins::board_folder(path = "daap_internal", versioned = T)
-  temp_board_folder <- pins::board_temp(versioned = T)
+  temp_board_folder <- pins::board_temp(versioned = TRUE)
 
   pin_name_exists <- pins::pin_exists(board = temp_board_folder, name = pin_name)
 
@@ -116,22 +115,8 @@ readme_get <- function(d, general_note) {
 
   readme <- readme[c("general_note", setdiff(names(d), "README"))]
 
-  # readme$session_info <- sessionInfo()
-
   return(readme)
 }
-
-
-# tbsig_get <- function(x){
-#   sha1.hms <<- sha1.difftime <<- function (x, digits = 14L, zapsmall = 7L, ..., algo = "sha1") {
-#
-#     digest:::sha1.character(x = x,
-#                             digits = digits, zapsmall = zapsmall, ..., algo = algo)
-#   }
-#   tbsig <- digest::sha1(x = x, environment = F)
-#   return(tbsig)
-# }
-
 
 #' @title Get sha1 signature for a table
 #' @description  This function is a wrapper around digest::sha1 to handle exotic column classes
@@ -158,7 +143,7 @@ tbsig_get <- function(d) {
 
   attributes(d1) <- attributes(d)
 
-  tbsig <- digest::sha1(x = d1, environment = F)
+  tbsig <- digest::sha1(x = d1, environment = FALSE)
 
   return(tbsig)
 }
@@ -209,10 +194,10 @@ make_sha1_compatible <- function(l) {
 #' @param make_unique if TRUE it ensures each element of a vector names end up being unique
 #' @return the code friendly converted character string
 #' @export
-make_names_codefriendly <- function(x, make_unique = T) {
+make_names_codefriendly <- function(x, make_unique = TRUE) {
   x <- trimws(x) %>%
     paste0(ifelse(grepl(pattern = "^[0-9]", x = .), "var_", ""), .) %>%
-    gsub("(?<![0-9])\\-", "-", x = ., perl = T) %>%
+    gsub("(?<![0-9])\\-", "-", x = ., perl = TRUE) %>%
     gsub("\\&", "_and_", x = .) %>%
     gsub("\\@", "_at_", x = .) %>%
     gsub("\\+", "_pos_", x = .) %>%
@@ -224,10 +209,10 @@ make_names_codefriendly <- function(x, make_unique = T) {
     gsub(" ", "_", x = .)
 
   if (make_unique) {
-    return(make.names(names = x, unique = T))
+    return(make.names(names = x, unique = TRUE))
   }
 
-  return(make.names(names = x, unique = F))
+  return(make.names(names = x, unique = FALSE))
 }
 
 
@@ -274,14 +259,14 @@ dpinputnames_simplify <- function(x, make_unique = FALSE) {
 #' being unique. If FALSE, it won't clean names unless names are already unique
 #' @return input_map pruned and with cleaner names
 #' @export
-inputmap_clean <- function(input_map, remove_id = character(0), force_cleanname = F) {
+inputmap_clean <- function(input_map, remove_id = character(0), force_cleanname = FALSE) {
   input_map$input_manifest <- input_map$input_manifest %>%
     dplyr::mutate(to_be_synced = replace(.data$to_be_synced, .data$id %in% remove_id, FALSE))
 
   input_map$input_manifest <- input_map$input_manifest %>% dplyr::filter(.data$to_be_synced)
   input_map$input_obj <- input_map$input_obj[input_map$input_manifest$id]
 
-  if (!inherits(try(dpinputnames_simplify(input_map$input_manifest$id)), "try-error") | force_cleanname) {
+  if (!inherits(try(dpinputnames_simplify(input_map$input_manifest$id)), "try-error") || force_cleanname) {
     input_map$input_manifest <- input_map$input_manifest %>%
       dplyr::mutate(id = dpinputnames_simplify(.data$id, make_unique = force_cleanname))
 
@@ -293,7 +278,7 @@ inputmap_clean <- function(input_map, remove_id = character(0), force_cleanname 
     input_map$input_obj <- sapply(names(input_map$input_obj), function(name_i) {
       input_map$input_obj[[name_i]]$metadata$id <- name_i
       input_map$input_obj[[name_i]]
-    }, simplify = F, USE.NAMES = T)
+    }, simplify = FALSE, USE.NAMES = TRUE)
   }
 
   return(input_map)
@@ -332,7 +317,7 @@ check_pins_compatibility <- function(project_path = ".") {
   if ("is_legacy" %in% names(read_conf_file)) {
     is_legacy_dp <- read_conf_file$is_legacy
   } else {
-    is_legacy_dp <- T
+    is_legacy_dp <- TRUE
   }
 
   is_installed_pins_version_legacy <- utils::packageVersion(pkg = "pins") < "1.2.0"
@@ -359,7 +344,7 @@ check_pins_compatibility <- function(project_path = ".") {
 #' @param verbose F if TRUE prints process details
 #' @return git_info, a list containing git information
 #' @keywords internal
-gitinfo_validate <- function(project_path, verbose = F) {
+gitinfo_validate <- function(project_path, verbose = FALSE) {
   #--- Check git set up-------
   repo <- git2r::repository(path = project_path)
   last_commit <- git2r::last_commit(repo = repo)
@@ -383,7 +368,7 @@ gitinfo_validate <- function(project_path, verbose = F) {
   )
 
   #-----Check remote git url-------------
-  remote_url <- try(git2r::remote_url(repo = ".", remote = git2r::remotes()), silent = T)
+  remote_url <- try(git2r::remote_url(repo = ".", remote = git2r::remotes()), silent = TRUE)
   has_remote_url <- class(remote_url) != "try-error"
   if (verbose) {
     if (has_remote_url) {
@@ -471,7 +456,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
   }
 
   if (length(dlog) == 0) {
-    if (length(dp_name) == 0 | length(pin_version) == 0) {
+    if (length(dp_name) == 0 || length(pin_version) == 0) {
       stop(cli::format_error(glue::glue(
         "Cannot update. dlog, dp_name and ",
         "pin_version all have length 0"
@@ -590,7 +575,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
 get_dlog <- function(project_path) {
   dlog <- yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_log.yaml"))
   dlog <- purrr::modify_depth(
-    .x = dlog, .depth = 2, .ragged = T,
+    .x = dlog, .depth = 2, .ragged = TRUE,
     .f = function(x) paste0(x, collapse = " > ")
   )
   return(dlog)

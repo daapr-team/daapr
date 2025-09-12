@@ -17,7 +17,7 @@ dp_deploy <- function(project_path = ".", ...) {
   }
 
   # validate and retrieve git info
-  git_info <- gitinfo_validate(project_path = project_path, verbose = F)
+  git_info <- gitinfo_validate(project_path = project_path, verbose = FALSE)
 
   # get daap content and info
   conf <- dpconf_get(project_path = project_path)
@@ -36,7 +36,7 @@ dp_deploy <- function(project_path = ".", ...) {
 #' @description Determines the saved data output object type (rds vs qs etc.)
 #' @noRd
 detect_type <- function(project_path) {
-  fs::dir_ls(file.path(project_path, "output_files/"), recurse = T, regexp = "data_object") %>%
+  fs::dir_ls(file.path(project_path, "output_files/"), recurse = TRUE, regexp = "data_object") %>%
     tools::file_ext() %>%
     tolower()
 }
@@ -76,14 +76,14 @@ dp_deployCore <- function(conf, project_path, d, dlog, git_info, type, ...) {
 
 #' @keywords internal
 dp_deployCore.s3_board <- function(conf, project_path, d, dlog, git_info, type,
-                                   verbose = F, ...) {
+                                   verbose = FALSE, ...) {
   if (verbose) {
     print(glue::glue("Deploying to S3 remote"))
   }
 
   # define board and pin dp to S3
   aws_creds <- conf$creds
-  if (aws_creds$key == "" | aws_creds$secret == "") {
+  if (aws_creds$key == "" || aws_creds$secret == "") {
     if (aws_creds$profile_name == "") {
       stop(cli::format_error(
         "Please check aws credentials. You need to ",
@@ -104,7 +104,7 @@ dp_deployCore.s3_board <- function(conf, project_path, d, dlog, git_info, type,
     region = conf$board_params$region,
     access_key = aws_creds$key,
     secret_access_key = aws_creds$secret,
-    versioned = T
+    versioned = TRUE
   )
 
   pins::pin_write(
@@ -123,7 +123,7 @@ dp_deployCore.s3_board <- function(conf, project_path, d, dlog, git_info, type,
 
 #' @keywords internal
 dp_deployCore.labkey_board <- function(conf, project_path, d, dlog, git_info, type,
-                                       verbose = F, ...) {
+                                       verbose = FALSE, ...) {
   if (verbose) {
     print(glue::glue("Deploying to LabKey remote"))
   }
@@ -139,7 +139,7 @@ dp_deployCore.labkey_board <- function(conf, project_path, d, dlog, git_info, ty
     api_key = labkey_creds$api_key,
     base_url = conf$board_params$url,
     folder = conf$board_params$folder,
-    versioned = T,
+    versioned = TRUE,
     subdir = "daap/"
   )
 
@@ -160,7 +160,7 @@ dp_deployCore.labkey_board <- function(conf, project_path, d, dlog, git_info, ty
 
 #' @keywords internal
 dp_deployCore.local_board <- function(conf, project_path, d, dlog, git_info, type,
-                                      verbose = F, ...) {
+                                      verbose = FALSE, ...) {
   if (verbose) {
     print(glue::glue("Deploying to local or mounted drive"))
   }
@@ -169,7 +169,7 @@ dp_deployCore.local_board <- function(conf, project_path, d, dlog, git_info, typ
   # define board and pin dp to local board
   board_object <- pins::board_folder(
     path = file.path(conf$board_params$folder, "daap"),
-    versioned = T
+    versioned = TRUE
   )
 
   pins::pin_write(

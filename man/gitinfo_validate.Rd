@@ -4,7 +4,7 @@
 \alias{gitinfo_validate}
 \title{Validate git info for deploy}
 \usage{
-gitinfo_validate(project_path, verbose = F)
+gitinfo_validate(project_path, verbose = FALSE)
 }
 \arguments{
 \item{project_path}{path to project}

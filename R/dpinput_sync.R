@@ -8,12 +8,12 @@
 #' @return synced_map this is input_map with sync status added to metadata
 #' @importFrom dplyr .data
 #' @export
-dpinput_sync <- function(conf, input_map, verbose = F, type = "rds", ...) {
+dpinput_sync <- function(conf, input_map, verbose = FALSE, type = "rds", ...) {
   # grab rewrite_ok if passed in ...
   args <- list(...)
   rewrite_ok <- args$rewrite_ok
   if (length(rewrite_ok) == 0) {
-    rewrite_ok <- F
+    rewrite_ok <- FALSE
   }
 
   if (verbose) {
@@ -30,7 +30,7 @@ dpinput_sync <- function(conf, input_map, verbose = F, type = "rds", ...) {
 
   to_be_synced <- setdiff(names(input_map$input_obj), skip_sync)
 
-  if (length(to_be_synced) == 0 & !rewrite_ok) {
+  if (length(to_be_synced) == 0 && !rewrite_ok) {
     if (verbose) {
       cli::cli_alert_info("No new unsynced data was found to be synced")
     }
@@ -90,7 +90,7 @@ init_board <- function(conf) {
 #' @keywords internal
 init_board.s3_board <- function(conf) {
   aws_creds <- conf$creds
-  if (aws_creds$key == "" | aws_creds$secret == "") {
+  if (aws_creds$key == "" || aws_creds$secret == "") {
     if (aws_creds$profile_name == "") {
       stop(cli::format_error(glue::glue(
         "Please check aws credentials. You need ",
@@ -127,7 +127,7 @@ init_board.labkey_board <- function(conf) {
     api_key = labkey_creds$api_key,
     base_url = conf$board_params$url,
     folder = conf$board_params$folder,
-    versioned = T,
+    versioned = TRUE,
     subdir = "dpinput/"
   )
 }
@@ -136,7 +136,7 @@ init_board.labkey_board <- function(conf) {
 init_board.local_board <- function(conf) {
   pins::board_folder(
     path = file.path(conf$board_params$folder, "dpinput"),
-    versioned = T
+    versioned = TRUE
   )
 }
 
@@ -190,13 +190,13 @@ pathnames_reroot <- function(pathnames, new_root = "input_files") {
       )
     }
     rename_i
-  }, simplify = T, USE.NAMES = T)
+  }, simplify = TRUE, USE.NAMES = TRUE)
 
   return(pathnames_rerooted)
 }
 
 #' @keywords internal
-sync_iterate <- function(input_map, board_object, skip_sync, rewrite_ok = F, type = "rds",
+sync_iterate <- function(input_map, board_object, skip_sync, rewrite_ok = FALSE, type = "rds",
                          verbose) {
   synced_map <- purrr::map(.x = input_map, .f = function(input_i) {
     if (board_object$board == "pins_board_labkey") {
@@ -222,13 +222,13 @@ sync_iterate <- function(input_map, board_object, skip_sync, rewrite_ok = F, typ
 
       input_i$metadata$synced <- input_i$metadata$pin_version %in% synced_versions
     } else {
-      input_i$metadata$synced <- F
+      input_i$metadata$synced <- FALSE
     }
 
-    skip_pin_to_remote <- T
+    skip_pin_to_remote <- TRUE
     if (!input_i$metadata$id %in% skip_sync) {
       if (!input_i$metadata$synced | rewrite_ok) {
-        skip_pin_to_remote <- F
+        skip_pin_to_remote <- FALSE
       }
     }
 
