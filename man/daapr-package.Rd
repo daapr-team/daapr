@@ -8,15 +8,15 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Collection of packages to build and manage data products.
+Build and manage data products in R.
 
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Collection of packages to build and manage data products.
+Build and manage data products in R.
 
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Collection of packages to build and manage data products.
+Build and manage data products in R.
 }
 \seealso{
 Useful links:

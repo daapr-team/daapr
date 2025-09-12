@@ -4,7 +4,7 @@
 \alias{dp_clone}
 \title{Clone data product project from a remote repo}
 \usage{
-dp_clone(remote_url, branch, verbose = F)
+dp_clone(remote_url, branch, verbose = FALSE)
 }
 \arguments{
 \item{remote_url}{a url like \verb{https://github.com/teamAccount/me/dp_test1.git}}

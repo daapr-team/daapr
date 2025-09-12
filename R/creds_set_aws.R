@@ -29,7 +29,7 @@
 #' @export
 creds_set_aws <- function(profile_name = character(0), key = character(0),
                           secret = character(0)) {
-  if (!(length(profile_name) > 0 | length(key) > 0 & length(secret) > 0)) {
+  if (!(length(profile_name) > 0 || length(key) > 0 && length(secret) > 0)) {
     stop(cli::format_error(glue::glue(
       "Either a named profile or both AWS ",
       "secret and key need to be provided"
@@ -66,7 +66,7 @@ creds_set_aws <- function(profile_name = character(0), key = character(0),
     return(aws_creds)
   }
 
-  if (length(key) == 0 | length(secret) == 0) {
+  if (length(key) == 0 || length(secret) == 0) {
     stop(cli::format_error(glue::glue(
       "key has length {length(key)} and secret ",
       "has length {length(secret)}. Either ",

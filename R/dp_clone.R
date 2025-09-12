@@ -12,7 +12,7 @@
 #' )
 #' }
 #' @export
-dp_clone <- function(remote_url, branch, verbose = F) {
+dp_clone <- function(remote_url, branch, verbose = FALSE) {
   dirs_to_add <- c("input_files", "output_files")
 
   if (nchar(Sys.getenv("GITHUB_PAT")) == 0) {

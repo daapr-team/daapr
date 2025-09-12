@@ -110,7 +110,7 @@ dp_init <- function(project_path = fs::path_wd(),
   }
 
   creds_set_dried_parsed <- rlang::parse_expr(creds_set_dried)
-  if (!inherits(creds_set_dried_parsed, "call") & board_type != "local_board") {
+  if (!inherits(creds_set_dried_parsed, "call") && board_type != "local_board") {
     stop(cli::format_error(glue::glue("Encountered error in creds_set_dried in
                                       dp_init. Make sure you are passing a
                                       callable expression to fn_dry")))
@@ -181,15 +181,15 @@ dp_init <- function(project_path = fs::path_wd(),
   fs::file_copy(
     path = system.file("global.R", package = "daapr"),
     new_path = fs::path_tidy(glue::glue("{project_path}/R")),
-    overwrite = T
+    overwrite = TRUE
   )
 
   fs::file_copy(
     path = system.file(".renvignore", package = "daapr"),
-    new_path = project_path, overwrite = T
+    new_path = project_path, overwrite = TRUE
   )
   # add renv
-  renv::init(project = fs::path_tidy(project_path), restart = F)
+  renv::init(project = fs::path_tidy(project_path), restart = FALSE)
   setwd(wd0)
 
   # commit git
@@ -270,7 +270,7 @@ dpconf_init <- function(project_path,
 #' @export
 fn_dry <- function(fn_called) {
   fn_as_call <- rlang::enexpr(fn_called)
-  is_creds_set_method <- grepl(pattern = "creds_set_", x = fn_as_call, ignore.case = F)[1]
+  is_creds_set_method <- grepl(pattern = "creds_set_", x = fn_as_call, ignore.case = FALSE)[1]
 
   if (is_creds_set_method) {
     fn_as_call_main <- rlang::call_name(fn_as_call)
@@ -288,7 +288,7 @@ fn_dry <- function(fn_called) {
     }
 
     for (arg in get_fn_args) {
-      if (!rlang::is_callable(arg) | class(arg) %in% c("(", "{")) {
+      if (!rlang::is_callable(arg) || class(arg) %in% c("(", "{")) {
         stop(cli::format_error(error_message))
       }
     }
@@ -335,7 +335,7 @@ dp_git_init <- function(project_path, project_name, branch_name,
 
 
   repo <- git2r::init(path = project_path)
-  git_status <- git2r::status(repo = repo, ignored = T)
+  git_status <- git2r::status(repo = repo, ignored = TRUE)
   repo_is_clean <- all(sapply(git_status, length) == 0)
   git2r::remote_add(repo = repo, name = "origin", url = github_repo_url)
 
@@ -394,9 +394,6 @@ dp_git_init <- function(project_path, project_name, branch_name,
       git2r::checkout(object = repo, branch = branch_name)
     }
 
-    # dpconf$branch_name <- git2r::repository_head(repo = repo)$name
-
-    # last_commit <- git2r::last_commit(repo = repo)
   } else {
     stop(cli::format_error(glue::glue(
       "Repo is not clean. dp_git is to be used ",
@@ -423,7 +420,7 @@ add_readme <- function(project_path, dp_title, github_repo_url,
   flname <- flname_xos_get(fl = "README.RMD")
   fs::file_copy(
     path = system.file(flname, package = "daapr"),
-    new_path = project_path, overwrite = T
+    new_path = project_path, overwrite = TRUE
   )
 
   board_params_set <- fn_hydrate(board_params_set_dried)

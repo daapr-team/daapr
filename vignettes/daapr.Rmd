@@ -118,7 +118,7 @@ input_map <- inputmap_clean(input_map = input_map)
 
 # Sync each input file to remote data repo
 config <- dpconf_get(project_path = ".")
-synced_map <- dpinput_sync(conf = config, input_map = input_map, verbose = T)
+synced_map <- dpinput_sync(conf = config, input_map = input_map, verbose = TRUE)
 
 # For each sync'd dataset, record info that will help you retrieve as needed
 dpinput_write(project_path = ".", input_d = synced_map)

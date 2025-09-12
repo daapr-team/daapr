@@ -135,7 +135,7 @@ check_dir <- function(filepath) {
   if (!dir.exists(paths = dirname(filepath))) {
     dir.create(
       path = dirname(filepath),
-      recursive = T
+      recursive = TRUE
     )
   }
 }
@@ -150,7 +150,7 @@ check_dir <- function(filepath) {
 #' @keywords internal
 dplognote_get <- function(data_object, dataobj_path, type = "rds") {
   attrs <- purrr::list_modify(attributes(data_object), names = purrr::zap())
-  rds_file_sha1 <- digest::digest(object = dataobj_path, algo = "sha1", file = T)
+  rds_file_sha1 <- digest::digest(object = dataobj_path, algo = "sha1", file = TRUE)
 
   data_object_pin_version <- get_pin_version(
     d = data_object,

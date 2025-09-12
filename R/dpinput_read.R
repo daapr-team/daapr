@@ -8,7 +8,7 @@
 #' @export
 dpinput_read <-
   function(daap_input_yaml = yaml::read_yaml(file = "./.daap/daap_input.yaml"),
-           add_metadata = F) {
+           add_metadata = FALSE) {
     dpinput <- purrr::map(daap_input_yaml, .f = function(x) {
       if (is.list(x)) {
         if (all(c("id", "name", "pin_version", "synced") %in% names(x))) {
@@ -60,12 +60,12 @@ make_pinlink <- function(synced_input_i) {
   function(board_params = NULL, creds = NULL, ...) {
     args <- list(...)
 
-    if (!is.null(args$conf) & is.null(args$config)) {
+    if (!is.null(args$conf) && is.null(args$config)) {
       args$config <- args$conf
     }
 
     if (!is.null(args$config)) {
-      if (length(board_params) != 0 | length(creds) != 0) {
+      if (length(board_params) != 0 || length(creds) != 0) {
         warning(cli::format_warning(glue::glue(
           "supplied config overwrites any",
           " board_params or creds provided"
@@ -87,7 +87,7 @@ make_pinlink <- function(synced_input_i) {
       creds <- NULL
     }
 
-    if (length(creds) == 0 & !is_local_board) {
+    if (length(creds) == 0 && !is_local_board) {
       stop(cli::format_error(glue::glue(
         "Provide either a parameter-set",
         " board_params and creds or a valid ",
@@ -104,7 +104,6 @@ make_pinlink <- function(synced_input_i) {
       board_object = board_object, data_name = data_name,
       version = data_version
     )
-    # dpinput_i <- cast_class(dpinput_i)
 
     return(dpinput_i)
   }

@@ -6,7 +6,7 @@
 \usage{
 dpinput_read(
   daap_input_yaml = yaml::read_yaml(file = "./.daap/daap_input.yaml"),
-  add_metadata = F
+  add_metadata = FALSE
 )
 }
 \arguments{
