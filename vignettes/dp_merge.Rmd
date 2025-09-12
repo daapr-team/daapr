@@ -34,7 +34,7 @@ data product based on `mtcars` dataset we have built).
 
 ## Step 1: Initialize the project
 
-As this is a new project, we initialize the project using `dpbuild::dp_init`. See
+As this is a new project, we initialize the project using `dp_init`. See
 the [vignette](https://amashadihossein.github.io/daapr/articles/daapr.html) on 
 new project workflow for details of what the initialization does.
 
