@@ -16,7 +16,7 @@ Authors@R: c(
            role = c("aut"),
            email = "rivehill@gmail.com")
     )
-Description: Collection of packages to build and manage data products.
+Description: Build and manage data products in R.
 URLs: https://amashadihossein.github.io/daapr
 BugReports: https://github.com/amashadihossein/daapr/issues
 License: GPL (>= 3)
@@ -27,40 +27,37 @@ RoxygenNote: 7.3.2
 Depends:
     R (>= 3.6.0)
 Imports:
+    aws.signature,
+    cli,
     digest,
+    dplyr,
+    ellipsis,
     fs,
     gh,
     git2r,
-    jsonlite,
-    purrr,
-    renv,
-    rio,
-    tibble,
-    tidyr,
-    withr,
-    aws.signature,
-    cli,
-    crayon,
-    dplyr,
-    ellipsis,
     glue,
     httr,
+    jsonlite,
     lifecycle,
     lubridate,
     magrittr,
-    paws.storage,
     pins (>= 1.2.0),
     pinsLabkey (>= 0.2.0),
+    purrr,
+    renv,
+    rio,
     rlang,
     rmarkdown,
-    rstudioapi,
+    tibble,
+    tidyr,
     utils,
+    withr,
     yaml
 Remotes:
     github::camorosi/pinsLabkey
 Suggests: 
-    covr,
     knitr,
+    paws.storage,
     qs,
     testthat (>= 3.0.0)
 VignetteBuilder: knitr
