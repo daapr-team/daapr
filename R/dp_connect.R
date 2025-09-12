@@ -68,17 +68,18 @@ dp_connect.s3_board <- function(board_params, creds, ...) {
     )
   }
   # Register the board
-  tryCatch({
-    board <- pins::board_s3(
-      prefix = board_subdir,
-      bucket = board_params$bucket_name,
-      region = board_params$region,
-      access_key = key,
-      secret_access_key = secret,
-      versioned = T
-    )
-    return(board)
-  },
+  tryCatch(
+    {
+      board <- pins::board_s3(
+        prefix = board_subdir,
+        bucket = board_params$bucket_name,
+        region = board_params$region,
+        access_key = key,
+        secret_access_key = secret,
+        versioned = T
+      )
+      return(board)
+    },
     error = function(cond) {
       cli::cli_alert_danger("Encountered error in dp_connect.")
       cli::cli_alert_warning("Make sure crendentials passed are correct.")
@@ -97,36 +98,40 @@ dp_connect.labkey_board <- function(board_params, creds, ...) {
   }
 
   # Register the board
-  tryCatch({
-    board <- pinsLabkey::board_labkey(
-      cache_alias = board_params$cache_alias,
-      api_key = creds$api_key,
-      base_url = board_params$url,
-      folder = board_params$folder,
-      versioned = T,
-      subdir = board_subdir
+  tryCatch(
+    {
+      board <- pinsLabkey::board_labkey(
+        cache_alias = board_params$cache_alias,
+        api_key = creds$api_key,
+        base_url = board_params$url,
+        folder = board_params$folder,
+        versioned = T,
+        subdir = board_subdir
       )
-    return(board)
-  },
-  error = function(cond) {
-    cli::cli_alert_danger("Encountered error in dp_connect.")
-    cli::cli_alert_warning("Make sure crendentials passed are correct.")
-    cli::cli_alert_warning("Networking constraints (e.g. VPN) may be blocking communication.")
-    cli::cli_alert_danger(cond)
+      return(board)
+    },
+    error = function(cond) {
+      cli::cli_alert_danger("Encountered error in dp_connect.")
+      cli::cli_alert_warning("Make sure crendentials passed are correct.")
+      cli::cli_alert_warning("Networking constraints (e.g. VPN) may be blocking communication.")
+      cli::cli_alert_danger(cond)
     }
   )
 }
 
 
-#'@export
-dp_connect.local_board <- function(board_params, creds = NULL, ...){
+#' @export
+dp_connect.local_board <- function(board_params, creds = NULL, ...) {
   args <- list(...)
   board_subdir <- "daap"
-  if(length(args$board_subdir) >0)
+  if (length(args$board_subdir) > 0) {
     board_subdir <- args$board_subdir
+  }
 
   # Register the board
-  board <- pins::board_folder(path = file.path(board_params$folder, board_subdir),
-                              versioned = TRUE)
+  board <- pins::board_folder(
+    path = file.path(board_params$folder, board_subdir),
+    versioned = TRUE
+  )
   return(board)
 }

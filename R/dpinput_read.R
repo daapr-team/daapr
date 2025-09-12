@@ -95,7 +95,7 @@ make_pinlink <- function(synced_input_i) {
       )))
     }
 
-    board_object <-  dp_connect(
+    board_object <- dp_connect(
       board_params = board_params, creds = creds,
       board_subdir = "dpinput/"
     )

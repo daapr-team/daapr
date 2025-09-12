@@ -30,7 +30,7 @@ dp_commit <- function(project_path = fs::path_wd(),
     stop("daap_log.yaml was not found. First, complete dp_write")
   }
   log_history <- yaml::read_yaml(file = log_path)
-  
+
   # keeping the references to rds for backword compatibility
   rds_file_sha1 <- digest::digest(object = object_path, algo = "sha1", file = T)
 
@@ -62,7 +62,7 @@ get_data_object_path <- function(project_path) {
     RDS = fs::path_tidy(glue::glue("{project_path}/output_files/RDS_format/data_object.RDS")),
     QS = fs::path_tidy(glue::glue("{project_path}/output_files/qs_format/data_object.qs"))
   )
-  
+
   # Iterate through the list and check if the file exists
   for (format in names(possible_formats)) {
     path <- possible_formats[[format]]
@@ -70,7 +70,7 @@ get_data_object_path <- function(project_path) {
       return(path)
     }
   }
-  
+
   # If no file is found, raise an error
   stop("No data_object file found in any of the expected formats.")
 }

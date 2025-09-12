@@ -1,5 +1,5 @@
 testthat::test_that("fn_hydrate output matches specified environment variables", {
-  withr::local_envvar(.new=list(
+  withr::local_envvar(.new = list(
     "AWS_ACCESS_KEY_ID" = "abc",
     "AWS_SECRET_ACCESS_KEY" = "defgh"
   ))

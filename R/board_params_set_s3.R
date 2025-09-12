@@ -24,14 +24,15 @@
 board_params_set_s3 <- function(bucket_name, region, board_alias = deprecated()) {
   if (lifecycle::is_present(board_alias)) {
     lifecycle::deprecate_stop("0.1.0", "board_params_set_s3(board_alias)",
-                              details = downgrade_message())
+      details = downgrade_message()
+    )
   }
 
-  if (bucket_name == ""){
+  if (bucket_name == "") {
     stop(cli::format_error("Non-empty bucket_name must be provided."))
   }
 
-  if (region == ""){
+  if (region == "") {
     stop(cli::format_error("Non-empty region must be provided."))
   }
 

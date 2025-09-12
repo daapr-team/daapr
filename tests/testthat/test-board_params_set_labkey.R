@@ -19,10 +19,12 @@ test_that("LabKey params are built properly with cache_alias", {
 
 test_that("board_alias raises a deprecation error", {
   expect_error(
-    board_params_set_labkey(board_alias = "labkey-board",
-                            url = "https://learn.labkey.com/",
-                            folder = "folder_name"),
-    regexp="deprecated"
+    board_params_set_labkey(
+      board_alias = "labkey-board",
+      url = "https://learn.labkey.com/",
+      folder = "folder_name"
+    ),
+    regexp = "deprecated"
   )
 })
 

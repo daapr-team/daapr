@@ -26,10 +26,11 @@ board_params_set_labkey <- function(board_alias = deprecated(), url, folder = ""
                                     cache_alias = NULL) {
   if (lifecycle::is_present(board_alias)) {
     lifecycle::deprecate_stop("0.3.0", "board_params_set_labkey(board_alias)",
-                              details = downgrade_message())
+      details = downgrade_message()
+    )
   }
 
-  if (url == ""){
+  if (url == "") {
     stop(cli::format_error("Non-empty url must be provided."))
   }
 

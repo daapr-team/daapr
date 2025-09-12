@@ -34,28 +34,28 @@ dp_deploy <- function(project_path = ".", ...) {
 
 #' @title Detect output object type
 #' @description Determines the saved data output object type (rds vs qs etc.)
-#' @noRd 
-detect_type = function(project_path){
-  fs::dir_ls(file.path(project_path,'output_files/'), recurse = T, regexp = 'data_object') %>% 
-      tools::file_ext() %>%
-      tolower()
+#' @noRd
+detect_type <- function(project_path) {
+  fs::dir_ls(file.path(project_path, "output_files/"), recurse = T, regexp = "data_object") %>%
+    tools::file_ext() %>%
+    tolower()
 }
 
 #' @title Read data output object
 #' @description read the output data object, for now only rds and qs are supported
-#' @noRd 
-object_read <- function(project_path, type){
-  type = rlang::arg_match0(type, c('rds', 'qs'))
-  switch(type, 
-  rds = readRDS(file = glue::glue("{project_path}/output_files/RDS_format/data_object.RDS")),
-  qs = read_qs(project_path)
+#' @noRd
+object_read <- function(project_path, type) {
+  type <- rlang::arg_match0(type, c("rds", "qs"))
+  switch(type,
+    rds = readRDS(file = glue::glue("{project_path}/output_files/RDS_format/data_object.RDS")),
+    qs = read_qs(project_path)
   )
 }
 
 #' @title Reas qs object
 #' @description Read in qs object
-#' @noRd  
-read_qs <- function(path){
+#' @noRd
+read_qs <- function(path) {
   rlang::check_installed("qs")
   dataobj_path <- glue::glue(
     "{path}/",
@@ -75,7 +75,7 @@ dp_deployCore <- function(conf, project_path, d, dlog, git_info, type, ...) {
 }
 
 #' @keywords internal
-dp_deployCore.s3_board <- function(conf, project_path, d, dlog, git_info, type, 
+dp_deployCore.s3_board <- function(conf, project_path, d, dlog, git_info, type,
                                    verbose = F, ...) {
   if (verbose) {
     print(glue::glue("Deploying to S3 remote"))
@@ -159,7 +159,7 @@ dp_deployCore.labkey_board <- function(conf, project_path, d, dlog, git_info, ty
 
 
 #' @keywords internal
-dp_deployCore.local_board <- function(conf, project_path, d, dlog, git_info, type, 
+dp_deployCore.local_board <- function(conf, project_path, d, dlog, git_info, type,
                                       verbose = F, ...) {
   if (verbose) {
     print(glue::glue("Deploying to local or mounted drive"))
