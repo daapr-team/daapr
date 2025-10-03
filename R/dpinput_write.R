@@ -19,7 +19,7 @@ dpinput_write <- function(project_path, input_d, verbose = F) {
     )))
   }
 
-  dpinput_make(input_d = input_d) %>%
+  dpinput_make(input_d = input_d) |>
     yaml::write_yaml(
       x = .,
       file = glue::glue("{project_path}/.daap/daap_input.yaml")

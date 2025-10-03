@@ -89,7 +89,7 @@ get_pin_version <- function(d, pin_name, pin_description, type = "rds") {
   pin_version <- pins::pin_versions(
     name = pin_name,
     board = temp_board_folder
-  ) %>% dplyr::pull(.data$hash)
+  ) |> dplyr::pull(.data$hash)
   pins::pin_delete(names = pin_name, board = temp_board_folder)
 
   return(pin_version)
@@ -195,17 +195,17 @@ make_sha1_compatible <- function(l) {
 #' @return the code friendly converted character string
 #' @export
 make_names_codefriendly <- function(x, make_unique = TRUE) {
-  x <- trimws(x) %>%
-    paste0(ifelse(grepl(pattern = "^[0-9]", x = .), "var_", ""), .) %>%
-    gsub("(?<![0-9])\\-", "-", x = ., perl = TRUE) %>%
-    gsub("\\&", "_and_", x = .) %>%
-    gsub("\\@", "_at_", x = .) %>%
-    gsub("\\+", "_pos_", x = .) %>%
-    gsub(",", "_comma_", x = .) %>%
-    gsub("\\/", "_fwdslsh_", x = .) %>%
-    gsub("\\(|\\)", "\\.", x = .) %>%
-    gsub("\\%", "percent_", x = .) %>%
-    gsub("\\#", "num_", x = .) %>%
+  x <- trimws(x) |>
+    paste0(ifelse(grepl(pattern = "^[0-9]", x = .), "var_", ""), .) |>
+    gsub("(?<![0-9])\\-", "-", x = ., perl = TRUE) |>
+    gsub("\\&", "_and_", x = .) |>
+    gsub("\\@", "_at_", x = .) |>
+    gsub("\\+", "_pos_", x = .) |>
+    gsub(",", "_comma_", x = .) |>
+    gsub("\\/", "_fwdslsh_", x = .) |>
+    gsub("\\(|\\)", "\\.", x = .) |>
+    gsub("\\%", "percent_", x = .) |>
+    gsub("\\#", "num_", x = .) |>
     gsub(" ", "_", x = .)
 
   if (make_unique) {
@@ -226,7 +226,7 @@ make_names_codefriendly <- function(x, make_unique = TRUE) {
 #' @return the code friendly converted character string
 #' @keywords internal
 dpinputnames_simplify <- function(x, make_unique = FALSE) {
-  simplified_inputnames <- fs::path_split(x) %>%
+  simplified_inputnames <- fs::path_split(x) |>
     sapply(X = ., function(x) {
       x_trimmed <- x
       if (length(x) > 1) {
@@ -260,14 +260,14 @@ dpinputnames_simplify <- function(x, make_unique = FALSE) {
 #' @return input_map pruned and with cleaner names
 #' @export
 inputmap_clean <- function(input_map, remove_id = character(0), force_cleanname = FALSE) {
-  input_map$input_manifest <- input_map$input_manifest %>%
+  input_map$input_manifest <- input_map$input_manifest |>
     dplyr::mutate(to_be_synced = replace(.data$to_be_synced, .data$id %in% remove_id, FALSE))
 
-  input_map$input_manifest <- input_map$input_manifest %>% dplyr::filter(.data$to_be_synced)
+  input_map$input_manifest <- input_map$input_manifest |> dplyr::filter(.data$to_be_synced)
   input_map$input_obj <- input_map$input_obj[input_map$input_manifest$id]
 
   if (!inherits(try(dpinputnames_simplify(input_map$input_manifest$id)), "try-error") || force_cleanname) {
-    input_map$input_manifest <- input_map$input_manifest %>%
+    input_map$input_manifest <- input_map$input_manifest |>
       dplyr::mutate(id = dpinputnames_simplify(.data$id, make_unique = force_cleanname))
 
     names(input_map$input_obj) <-
@@ -470,11 +470,11 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
     }
 
     # update the records based on composite key dp_name, dp_version, and git_sha
-    dpboard_log_tmp <- dpboard_log %>%
+    dpboard_log_tmp <- dpboard_log |>
       dplyr::filter(.data$dp_name != dp_name | .data$pin_version != pin_version |
         .data$git_sha != git_info$git_sha)
 
-    tmp <- dpboard_log %>%
+    tmp <- dpboard_log |>
       dplyr::filter(.data$dp_name == dp_name & .data$pin_version == pin_version &
         .data$git_sha == git_info$git_sha)
     if (nrow(tmp) == 0) {
@@ -487,8 +487,8 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
       )))
     }
 
-    tmp <- tmp %>% dplyr::mutate(archived = TRUE)
-    dpboard_log <- dplyr::bind_rows(dpboard_log_tmp, tmp) %>%
+    tmp <- tmp |> dplyr::mutate(archived = TRUE)
+    dpboard_log <- dplyr::bind_rows(dpboard_log_tmp, tmp) |>
       dplyr::distinct()
 
     if (board_object$board == "pins_board_labkey") {
@@ -523,26 +523,26 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
   daap_log_i[[1]]$git_remote <- git_info$remote_url
 
   # Convert to table
-  daap_log_i <- daap_log_i %>%
-    dplyr::bind_rows(.id = "rdsid") %>%
-    dplyr::mutate(rdsid = gsub("rds_", "", .data$rdsid)) %>%
-    dplyr::mutate(dp_name = gsub(pattern = "_", replacement = "-", x = .data$dp_name)) %>%
-    dplyr::relocate(.data$dp_name) %>%
-    dplyr::mutate(last_deployed = format(Sys.time(), tz = "GMT", usetz = TRUE)) %>%
+  daap_log_i <- daap_log_i |>
+    dplyr::bind_rows(.id = "rdsid") |>
+    dplyr::mutate(rdsid = gsub("rds_", "", .data$rdsid)) |>
+    dplyr::mutate(dp_name = gsub(pattern = "_", replacement = "-", x = .data$dp_name)) |>
+    dplyr::relocate(.data$dp_name) |>
+    dplyr::mutate(last_deployed = format(Sys.time(), tz = "GMT", usetz = TRUE)) |>
     dplyr::mutate(archived = FALSE)
 
 
   if (is.null(dpboard_log)) {
-    dpboard_log <- daap_log_i %>% dplyr::slice(0)
+    dpboard_log <- daap_log_i |> dplyr::slice(0)
   }
 
   # Update deploy time if same pin/git_sha exist otherwise append
-  tmp <- dpboard_log %>%
+  tmp <- dpboard_log |>
     dplyr::filter(.data$dp_name != daap_log_i$dp_name |
       .data$pin_version != daap_log_i$pin_version |
       .data$git_sha != daap_log_i$git_sha)
 
-  dpboard_log <- dplyr::bind_rows(tmp, daap_log_i) %>%
+  dpboard_log <- dplyr::bind_rows(tmp, daap_log_i) |>
     dplyr::distinct()
 
   if (board_object$board == "pins_board_labkey") {

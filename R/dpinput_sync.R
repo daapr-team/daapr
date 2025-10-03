@@ -23,9 +23,9 @@ dpinput_sync <- function(conf, input_map, verbose = FALSE, type = "rds", ...) {
     ))
   }
 
-  skip_sync <- input_map$input_manifest %>%
+  skip_sync <- input_map$input_manifest |>
     dplyr::filter(.data$to_be_synced == FALSE | .data$synced == TRUE &
-      .data$to_be_synced == TRUE) %>%
+      .data$to_be_synced == TRUE) |>
     dplyr::pull(.data$id)
 
   to_be_synced <- setdiff(names(input_map$input_obj), skip_sync)
@@ -63,14 +63,14 @@ dpinput_sync <- function(conf, input_map, verbose = FALSE, type = "rds", ...) {
   )
 
   synced_map <- syncedmap_rename(synced_map = synced_map)
-  to_be_synced <- pathnames_reroot(pathnames = to_be_synced) %>% unname()
+  to_be_synced <- pathnames_reroot(pathnames = to_be_synced) |> unname()
 
   was_synced <- purrr::map(to_be_synced,
     .f = function(di) {
-      purrr::pluck(synced_map, di, "metadata", "synced") %>%
+      purrr::pluck(synced_map, di, "metadata", "synced") |>
         isTRUE()
     }
-  ) %>% unlist()
+  ) |> unlist()
 
   sync_fails <- to_be_synced[!was_synced]
 
@@ -164,8 +164,8 @@ syncedmap_rename <- function(synced_map) {
   synced_map <- purrr::modify_in(
     .x = synced_map,
     .where = list(1, "metadata", "id"),
-    .f = ~ .x %>%
-      pathnames_reroot(pathnames = .) %>%
+    .f = ~ .x |>
+      pathnames_reroot(pathnames = .) |>
       unname()
   )
 
@@ -180,7 +180,7 @@ syncedmap_rename <- function(synced_map) {
 #' @param new_root a directory relative to which all paths be renamed
 #' @keywords internal
 pathnames_reroot <- function(pathnames, new_root = "input_files") {
-  parsed_paths <- fs::path_split(pathnames) %>% `names<-`(pathnames)
+  parsed_paths <- fs::path_split(pathnames) |> `names<-`(pathnames)
 
   pathnames_rerooted <- sapply(parsed_paths, function(path_i) {
     rename_i <- path_i
@@ -210,13 +210,13 @@ sync_iterate <- function(input_map, board_object, skip_sync, rewrite_ok = FALSE,
         synced_versions <- pinsLabkey::pin_versions(
           name = input_i$metadata$name,
           board = board_object
-        ) %>%
+        ) |>
           dplyr::pull(hash)
       } else {
         synced_versions <- pins::pin_versions(
           name = input_i$metadata$name,
           board = board_object
-        ) %>%
+        ) |>
           dplyr::pull(hash)
       }
 

@@ -14,8 +14,8 @@ dpinput_map0 <- function(project_path = ".") {
   read_dpinput0 <-
     dpinput_read(daap_input_yaml = daap_input_yaml, add_metadata = T)
   input_obj0 <- dpinput_flatten(read_dpinput0)
-  input_manifest0 <- input_obj0 %>%
-    purrr::map(~ purrr::pluck(.x, "metadata")) %>%
+  input_manifest0 <- input_obj0 |>
+    purrr::map(~ purrr::pluck(.x, "metadata")) |>
     dplyr::bind_rows()
 
   input_map0 <- list(input_obj = input_obj0, input_manifest = input_manifest0)
@@ -40,7 +40,7 @@ dpinput_flatten <- function(read_dpinput0) {
     simple_list <- read_dpinput0[index_simple]
     names(simple_list) <- purrr::map(.x = names(simple_list), .f = function(x) {
       simple_list[[x]][["metadata"]][["id"]]
-    }) %>% unlist()
+    }) |> unlist()
   }
 
 

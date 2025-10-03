@@ -108,7 +108,7 @@ product is built.
 data_files_read <- dpinput_read()
 
 # build your output data
-output <- data_files_read$cars(config = config) %>%
+output <- data_files_read$cars(config = config) |>
   dplyr::mutate(dist_m = 0.3048 * dist)
 
 # Structure the input, output, metadata ... you wish to have in your data product
