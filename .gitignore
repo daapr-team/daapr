@@ -62,3 +62,4 @@ renv/
 
 # daap
 .daap/
+/.quarto/
