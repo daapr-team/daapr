@@ -163,7 +163,7 @@ get_rspm_pkgmeta <- function(pkg_name,
                              rspm_api_url) {
   pm_url <-
     glue::glue("{rspm_api_url}/{pkg_name}")
-  rspm_pkgmeta <- httr::GET(url = pm_url) %>% httr::content()
+  rspm_pkgmeta <- httr::GET(url = pm_url) |> httr::content()
 
   return(rspm_pkgmeta[c("name", "remote_sha", "version", "checksum", "repository")])
 }

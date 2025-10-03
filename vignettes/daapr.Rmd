@@ -139,7 +139,7 @@ in the R project directory.
 
 ```{r derive_fn, eval = F}
 derive_dist <- function(data_files_read, config) {
-  output <- data_files_read$cars(config = config) %>%
+  output <- data_files_read$cars(config = config) |>
     dplyr::mutate(dist_m = 0.3048 * dist)
 
   return(output)

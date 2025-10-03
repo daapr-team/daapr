@@ -57,8 +57,8 @@ Open `dp_make.R` and edit to add a single line
 data_files_read <- dpinput_read()
 
 # build your ouput data
-output <- data_files_read$cars(config = config) %>%
-  dplyr::mutate(dist_m = 0.3048 * dist) %>%
+output <- data_files_read$cars(config = config) |>
+  dplyr::mutate(dist_m = 0.3048 * dist) |>
   dplyr::mutate(dist_cm = 100 * dist_m)
 
 # Structure the input, output, metadata ... you wish to have in your data product

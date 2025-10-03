@@ -39,8 +39,8 @@ dp_get <- function(board_object, data_name, version = NULL) {
   # only check if pin name exists if it's not an input
   if (!is_dpinput) {
     dp_ls <- dp_list(board_object = board_object)
-    available_datanames <- dp_ls %>%
-      dplyr::filter(!.data$archived) %>%
+    available_datanames <- dp_ls |>
+      dplyr::filter(!.data$archived) |>
       dplyr::pull(.data$dp_name)
 
     if (!data_name %in% available_datanames) {
@@ -64,8 +64,8 @@ dp_get <- function(board_object, data_name, version = NULL) {
       )))
     } else {
       specified_version <- version
-      version <- pin_versions %>%
-        dplyr::filter(.data$hash == specified_version) %>%
+      version <- pin_versions |>
+        dplyr::filter(.data$hash == specified_version) |>
         dplyr::pull(version)
       # Check in case we've manage to pin the same hash more than once
       if (length(version) > 1) {

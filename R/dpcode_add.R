@@ -78,7 +78,7 @@ dpcode_add <- function(project_path, use_targets = T) {
   }
 
   # pkgs_dependencies <- renv::dependencies(path = project_path,
-  #                                         root = project_path) %>%
+  #                                         root = project_path) |>
   #   dplyr::pull(Package)
 
   # renv::install(packages = pkgs_dependencies,prompt = F)

@@ -29,55 +29,55 @@ dpinput_map <- function(project_path) {
   input_map0 <- dpinput_map0(project_path = project_path)
 
   if (length(input_map0) > 0) {
-    input_manifest0 <- input_map0$input_manifest %>%
-      dplyr::mutate(id0 = glue::glue("{.data$path}/{substr(file_sha1,start=1,stop = 7)}")) %>%
+    input_manifest0 <- input_map0$input_manifest |>
+      dplyr::mutate(id0 = glue::glue("{.data$path}/{substr(file_sha1,start=1,stop = 7)}")) |>
       dplyr::mutate(restaged_items = .data$id0 %in% names(input_obj))
 
-    if (nrow(restaged <- input_manifest0 %>% dplyr::filter(.data$restaged_items)) > 0) {
+    if (nrow(restaged <- input_manifest0 |> dplyr::filter(.data$restaged_items)) > 0) {
       input_obj[restaged$id0] <- NULL
       input_obj <- c(input_obj, input_map0$input_obj[restaged$id])
     }
 
 
-    if (nrow(newlystaged <- input_manifest0 %>% dplyr::filter(!.data$restaged_items)) > 0) {
+    if (nrow(newlystaged <- input_manifest0 |> dplyr::filter(!.data$restaged_items)) > 0) {
       input_obj <- c(input_obj, input_map0$input_obj[newlystaged$id])
     }
   }
 
 
-  input_manifest <- input_obj %>%
-    purrr::map(~ purrr::pluck(.x, "metadata")) %>%
+  input_manifest <- input_obj |>
+    purrr::map(~ purrr::pluck(.x, "metadata")) |>
     dplyr::bind_rows()
 
-  input_manifest_failed <- input_manifest %>%
-    dplyr::filter(.data$file_read_fail) %>%
-    dplyr::mutate(to_be_synced = F) %>%
+  input_manifest_failed <- input_manifest |>
+    dplyr::filter(.data$file_read_fail) |>
+    dplyr::mutate(to_be_synced = F) |>
     dplyr::distinct()
 
 
-  input_manifest_read <- input_manifest %>%
+  input_manifest_read <- input_manifest |>
     dplyr::filter(!.data$file_read_fail)
 
-  input_manifest_read <- input_manifest_read %>%
-    dplyr::group_by(.data$data_sha1) %>%
-    dplyr::count() %>%
-    dplyr::left_join(input_manifest_read, .) %>%
-    dplyr::ungroup() %>%
-    dplyr::arrange(.data$data_sha1, dplyr::desc(.data$synced)) %>%
-    dplyr::mutate(to_be_synced = !duplicated(.data$data_sha1)) %>%
-    dplyr::rename(n_dupe_datasha1 = .data$n) %>%
-    dplyr::group_by(.data$data_sha1) %>%
-    dplyr::mutate(n_name_per_datasha1 = dplyr::n_distinct(.data$name)) %>%
-    dplyr::ungroup() %>%
-    dplyr::group_by(.data$name) %>%
-    dplyr::mutate(n_datasha1_per_name = dplyr::n_distinct(.data$data_sha1)) %>%
+  input_manifest_read <- input_manifest_read |>
+    dplyr::group_by(.data$data_sha1) |>
+    dplyr::count() |>
+    dplyr::left_join(input_manifest_read, .) |>
+    dplyr::ungroup() |>
+    dplyr::arrange(.data$data_sha1, dplyr::desc(.data$synced)) |>
+    dplyr::mutate(to_be_synced = !duplicated(.data$data_sha1)) |>
+    dplyr::rename(n_dupe_datasha1 = .data$n) |>
+    dplyr::group_by(.data$data_sha1) |>
+    dplyr::mutate(n_name_per_datasha1 = dplyr::n_distinct(.data$name)) |>
+    dplyr::ungroup() |>
+    dplyr::group_by(.data$name) |>
+    dplyr::mutate(n_datasha1_per_name = dplyr::n_distinct(.data$data_sha1)) |>
     dplyr::select(
       .data$id, .data$path, .data$name, .data$file_name, .data$file_sha1,
       .data$data_sha1, .data$file_read_fail, .data$n_dupe_datasha1,
       .data$n_name_per_datasha1, .data$n_datasha1_per_name, .data$description,
       .data$pin_version, .data$synced, .data$to_be_synced
-    ) %>%
-    dplyr::mutate(synced = tidyr::replace_na(.data$synced, F)) %>%
+    ) |>
+    dplyr::mutate(synced = tidyr::replace_na(.data$synced, F)) |>
     dplyr::ungroup()
 
 
@@ -94,15 +94,15 @@ dpinput_map <- function(project_path) {
 #' @return ls_tidy a tibble
 #' @keywords internal
 dir_ls_tidy <- function(current_dir) {
-  ls_tidy <- tibble::tibble(path = fs::dir_ls(current_dir)) %>%
-    dplyr::mutate(ext = fs::path_ext(.data$path)) %>%
-    dplyr::mutate(is_file = fs::is_file(.data$path)) %>%
-    dplyr::mutate(is_dir = fs::is_dir(.data$path)) %>%
+  ls_tidy <- tibble::tibble(path = fs::dir_ls(current_dir)) |>
+    dplyr::mutate(ext = fs::path_ext(.data$path)) |>
+    dplyr::mutate(is_file = fs::is_file(.data$path)) |>
+    dplyr::mutate(is_dir = fs::is_dir(.data$path)) |>
     dplyr::mutate(content_type = dplyr::case_when(
       is_file & ext != "zip" ~ "file",
       is_file & ext == "zip" ~ "zip",
       is_dir ~ "dir"
-    )) %>%
+    )) |>
     dplyr::select(.data$path, .data$ext, .data$content_type)
 
   return(ls_tidy)
@@ -126,9 +126,9 @@ dir_process <- function(current_dir, junk_path = character(0)) {
   ls_tidy <- dir_ls_tidy(current_dir = current_dir)
 
   if ("file" %in% ls_tidy$content_type) {
-    tmp <- ls_tidy %>%
-      dplyr::filter(.data$content_type == "file") %>%
-      dplyr::select(.data$path) %>%
+    tmp <- ls_tidy |>
+      dplyr::filter(.data$content_type == "file") |>
+      dplyr::select(.data$path) |>
       purrr::pmap(.l = ., .f = function(path) {
         # TODO: change the tibble data.frame. need to deal with better plucking
         # so it can handle inherited classes
@@ -156,9 +156,9 @@ dir_process <- function(current_dir, junk_path = character(0)) {
 
 
   if ("zip" %in% ls_tidy$content_type) {
-    tmp <- ls_tidy %>%
-      dplyr::filter(.data$content_type == "zip") %>%
-      dplyr::select(.data$path) %>%
+    tmp <- ls_tidy |>
+      dplyr::filter(.data$content_type == "zip") |>
+      dplyr::select(.data$path) |>
       purrr::pmap(.l = ., .f = function(path) dir_process_zip(zip_dir = path))
 
     if (length(junk_path) > 0) {
@@ -170,9 +170,9 @@ dir_process <- function(current_dir, junk_path = character(0)) {
 
 
   if ("dir" %in% ls_tidy$content_type) {
-    tmp <- ls_tidy %>%
-      dplyr::filter(.data$content_type == "dir") %>%
-      dplyr::select(.data$path) %>%
+    tmp <- ls_tidy |>
+      dplyr::filter(.data$content_type == "dir") |>
+      dplyr::select(.data$path) |>
       purrr::pmap(.l = ., .f = function(path) {
         dir_process(
           current_dir = path,
@@ -202,7 +202,7 @@ dir_process_zip <- function(zip_dir) {
   exdir <- tempfile()
   dir_created <- fs::dir_create(path = exdir)
   unzipped <- utils::unzip(zipfile = zip_dir, exdir = dir_created)
-  current_dir <- fs::path_dir(path = unzipped) %>% unique()
+  current_dir <- fs::path_dir(path = unzipped) |> unique()
   highest_common_dir <- fs::path_common(current_dir)
   read_files <- dir_process(
     current_dir = highest_common_dir,
@@ -250,19 +250,19 @@ dirTree_flatten <- function(read_files) {
 #' sha1 and original path to each data
 #' @keywords internal
 dirTree_build <- function(flattened_dirTree) {
-  dirTree <- names(flattened_dirTree) %>%
+  dirTree <- names(flattened_dirTree) |>
     purrr::map(.x = ., .f = function(pathname) {
       tmp <- list(data = flattened_dirTree[[pathname]])
       tmp$metadata <-
-        attributes(tmp$data)[c("class", "data_sha1", "file_sha1", "file_read_fail")] %>%
-        dplyr::bind_cols() %>%
-        dplyr::mutate(file_name = basename(pathname)) %>%
-        dplyr::mutate(name = tools::file_path_sans_ext(.data$file_name)) %>%
-        dplyr::mutate(name = make_names_codefriendly(.data$name)) %>%
-        dplyr::mutate(path = pathname) %>%
-        dplyr::mutate(id = glue::glue("{path}/{substr(file_sha1,start=1,stop = 7)}")) %>%
-        dplyr::mutate(id = as.character(.data$id)) %>%
-        dplyr::mutate(description = NA, pin_version = NA, synced = NA) %>%
+        attributes(tmp$data)[c("class", "data_sha1", "file_sha1", "file_read_fail")] |>
+        dplyr::bind_cols() |>
+        dplyr::mutate(file_name = basename(pathname)) |>
+        dplyr::mutate(name = tools::file_path_sans_ext(.data$file_name)) |>
+        dplyr::mutate(name = make_names_codefriendly(.data$name)) |>
+        dplyr::mutate(path = pathname) |>
+        dplyr::mutate(id = glue::glue("{path}/{substr(file_sha1,start=1,stop = 7)}")) |>
+        dplyr::mutate(id = as.character(.data$id)) |>
+        dplyr::mutate(description = NA, pin_version = NA, synced = NA) |>
         dplyr::select(
           .data$id, .data$name, .data$path, .data$file_name,
           .data$file_sha1, .data$data_sha1, .data$file_read_fail,
@@ -275,7 +275,7 @@ dirTree_build <- function(flattened_dirTree) {
       tmp
     })
 
-  names(dirTree) <- purrr::map(dirTree, ~ .x$metadata$id) %>% unlist()
+  names(dirTree) <- purrr::map(dirTree, ~ .x$metadata$id) |> unlist()
 
   return(dirTree)
 }
