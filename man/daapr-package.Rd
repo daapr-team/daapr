@@ -13,7 +13,7 @@ Build and manage data products in R.
 \seealso{
 Useful links:
 \itemize{
-  \item Report bugs at \url{https://github.com/amashadihossein/daapr/issues}
+  \item Report bugs at \url{https://github.com/daapr-team/daapr/issues}
 }
 
 }
@@ -24,6 +24,13 @@ Authors:
 \itemize{
   \item Clara Amorosi (\href{https://orcid.org/0000-0002-0730-2576}{ORCID})
   \item Yue Jiang \email{rivehill@gmail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Burak Kutlu [contributor]
+  \item Leslie Emery [contributor]
+  \item Som Bohora [contributor]
 }
 
 }
