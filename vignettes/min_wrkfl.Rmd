@@ -27,7 +27,7 @@ dataset in metric unit. See `?cars` for additional detail about the dataset.
 ## Step 1: Initialize the project
 
 As this is a new project, we initialize the project using `dp_init`. See
-the getting started [vignette](https://amashadihossein.github.io/daapr/articles/daapr.html) for details of what the initialization does.
+the getting started [vignette](https://daapr-team.github.io/daapr/articles/daapr.html) for details of what the initialization does.
 
 ```{r dp_init_, eval = F}
 library(daapr)

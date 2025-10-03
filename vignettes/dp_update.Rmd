@@ -22,7 +22,7 @@ the input data remains unchanged.
 ## User story
 
 We are interested in updating the previously built data product `dp-cars-us001` 
-so that it provides distances in cars dataset in cm. See [minimalist example](https://amashadihossein.github.io/daapr/articles/min_wrkfl.html) 
+so that it provides distances in cars dataset in cm. See [minimalist example](https://daapr-team.github.io/daapr/articles/min_wrkfl.html) 
 
 ## Step 1 Clone the existing `dp_cars` project, set env and activate
 
