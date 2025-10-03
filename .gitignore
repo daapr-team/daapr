@@ -53,3 +53,12 @@ Meta
 
 # pkgdown site
 docs/
+
+# renv
+renv.lock
+renv/
+/doc/
+/Meta/
+
+# daap
+.daap/

@@ -10,30 +10,55 @@ Authors@R: c(
     person(given = "Clara",
            family = "Amorosi",
            role = c("aut"),
-           comment = c(ORCID = "0000-0002-0730-2576"))
+           comment = c(ORCID = "0000-0002-0730-2576")),
+    person(given = "Yue",
+           family = "Jiang",
+           role = c("aut"),
+           email = "rivehill@gmail.com")
     )
-Description: Collection of packages to build and manage data products.
+Description: Build and manage data products in R.
+URLs: https://amashadihossein.github.io/daapr
+BugReports: https://github.com/amashadihossein/daapr/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
+Depends:
+    R (>= 3.6.0)
 Imports:
-    pins (>= 1.2.0),
-    dpi (>= 0.2.0),
-    dpbuild (>= 0.2.0),
-    dpdeploy (>= 0.2.0),
+    aws.signature,
     cli,
-    crayon,
+    digest,
+    dplyr,
+    ellipsis,
+    fs,
+    gh,
+    git2r,
     glue,
-    utils,
-    rstudioapi
-Remotes:
-    amashadihossein/dpi,
-    amashadihossein/dpbuild,
-    amashadihossein/dpdeploy
-Suggests: 
+    httr,
+    jsonlite,
+    lifecycle,
+    lubridate,
+    magrittr,
+    pins (>= 1.2.0),
+    pinsLabkey (>= 0.2.0),
+    purrr,
+    renv,
+    rio,
+    rlang,
     rmarkdown,
-    knitr
-BugReports: https://github.com/amashadihossein/daapr/issues
+    tibble,
+    tidyr,
+    utils,
+    withr,
+    yaml
+Remotes:
+    github::camorosi/pinsLabkey
+Suggests: 
+    knitr,
+    paws.storage,
+    qs,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
