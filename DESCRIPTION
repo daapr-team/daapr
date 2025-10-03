@@ -14,11 +14,20 @@ Authors@R: c(
     person(given = "Yue",
            family = "Jiang",
            role = c("aut"),
-           email = "rivehill@gmail.com")
+           email = "rivehill@gmail.com"),
+    person(given = "Burak",
+           family = "Kutlu",
+           role = c("ctb")),
+    person(given = "Leslie",
+           family = "Emery",
+           role = c("ctb")),
+    person(given = "Som",
+           family = "Bohora",
+           role = c("ctb"))
     )
 Description: Build and manage data products in R.
-URLs: https://amashadihossein.github.io/daapr
-BugReports: https://github.com/amashadihossein/daapr/issues
+URLs: https://daapr-team.github.io/daapr
+BugReports: https://github.com/daapr-team/daapr/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
