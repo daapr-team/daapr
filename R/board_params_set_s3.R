@@ -68,9 +68,20 @@ board_params_set_s3 <- function(bucket_name, prefix = NULL, region, board_alias 
     )))
   }
 
+  # If prefix is provided, check that it ends with a trailing slash
+  if (!is.null(prefix) && nchar(prefix) > 0 && !endsWith(prefix, "/")) {
+    stop(cli::format_warning(glue::glue(
+      "prefix '{prefix}' must end with a trailing slash ",
+      "to avoid issues with S3 directory handling."
+    )), call. = FALSE)
+  }
+
+  # Create the data frame with explicit lengths to avoid row count issues
   board_params <- data.frame(
     board_type = "s3_board",
-    bucket_name = bucket_name, prefix = prefix, region = region,
+    bucket_name = bucket_name,
+    prefix = if (is.null(prefix)) NA_character_ else prefix,
+    region = region,
     stringsAsFactors = FALSE
   )
 
