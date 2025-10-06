@@ -165,7 +165,7 @@ syncedmap_rename <- function(synced_map) {
     .x = synced_map,
     .where = list(1, "metadata", "id"),
     .f = ~ .x |>
-      pathnames_reroot(pathnames = .) |>
+      pathnames_reroot() |>
       unname()
   )
 

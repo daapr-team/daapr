@@ -196,17 +196,17 @@ make_sha1_compatible <- function(l) {
 #' @export
 make_names_codefriendly <- function(x, make_unique = TRUE) {
   x <- trimws(x) |>
-    paste0(ifelse(grepl(pattern = "^[0-9]", x = .), "var_", ""), .) |>
-    gsub("(?<![0-9])\\-", "-", x = ., perl = TRUE) |>
-    gsub("\\&", "_and_", x = .) |>
-    gsub("\\@", "_at_", x = .) |>
-    gsub("\\+", "_pos_", x = .) |>
-    gsub(",", "_comma_", x = .) |>
-    gsub("\\/", "_fwdslsh_", x = .) |>
-    gsub("\\(|\\)", "\\.", x = .) |>
-    gsub("\\%", "percent_", x = .) |>
-    gsub("\\#", "num_", x = .) |>
-    gsub(" ", "_", x = .)
+    (\(y) paste0(ifelse(grepl(pattern = "^[0-9]", x = y), "var_", ""), y))() |>
+    (\(y) gsub("(?<![0-9])\\-", "-", x = y, perl = TRUE))() |>
+    (\(y) gsub("\\&", "_and_", x = y))() |>
+    (\(y) gsub("\\@", "_at_", x = y))() |>
+    (\(y) gsub("\\+", "_pos_", x = y))() |>
+    (\(y) gsub(",", "_comma_", x = y))() |>
+    (\(y) gsub("\\/", "_fwdslsh_", x = y))() |>
+    (\(y) gsub("\\(|\\)", "\\.", x = y))() |>
+    (\(y) gsub("\\%", "percent_", x = y))() |>
+    (\(y) gsub("\\#", "num_", x = y))() |>
+    (\(y) gsub(" ", "_", x = y))()
 
   if (make_unique) {
     return(make.names(names = x, unique = TRUE))
@@ -227,7 +227,7 @@ make_names_codefriendly <- function(x, make_unique = TRUE) {
 #' @keywords internal
 dpinputnames_simplify <- function(x, make_unique = FALSE) {
   simplified_inputnames <- fs::path_split(x) |>
-    sapply(X = ., function(x) {
+    sapply(function(x) {
       x_trimmed <- x
       if (length(x) > 1) {
         x_trimmed <- fs::path_ext_remove(rev(x)[2])
