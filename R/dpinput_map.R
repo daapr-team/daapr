@@ -61,7 +61,7 @@ dpinput_map <- function(project_path) {
   input_manifest_read <- input_manifest_read |>
     dplyr::group_by(.data$data_sha1) |>
     dplyr::count() |>
-    dplyr::left_join(input_manifest_read, .) |>
+    (\(x) dplyr::left_join(input_manifest_read, x))() |>
     dplyr::ungroup() |>
     dplyr::arrange(.data$data_sha1, dplyr::desc(.data$synced)) |>
     dplyr::mutate(to_be_synced = !duplicated(.data$data_sha1)) |>
@@ -129,7 +129,7 @@ dir_process <- function(current_dir, junk_path = character(0)) {
     tmp <- ls_tidy |>
       dplyr::filter(.data$content_type == "file") |>
       dplyr::select(.data$path) |>
-      purrr::pmap(.l = ., .f = function(path) {
+      purrr::pmap(.f = function(path) {
         # TODO: change the tibble data.frame. need to deal with better plucking
         # so it can handle inherited classes
         tb_i <- try(as.data.frame(tibble::tibble(rio::import(file = path))))
@@ -159,7 +159,7 @@ dir_process <- function(current_dir, junk_path = character(0)) {
     tmp <- ls_tidy |>
       dplyr::filter(.data$content_type == "zip") |>
       dplyr::select(.data$path) |>
-      purrr::pmap(.l = ., .f = function(path) dir_process_zip(zip_dir = path))
+      purrr::pmap(.f = function(path) dir_process_zip(zip_dir = path))
 
     if (length(junk_path) > 0) {
       names(tmp) <- sub(pattern = junk_path, replacement = "", x = names(tmp))
@@ -173,7 +173,7 @@ dir_process <- function(current_dir, junk_path = character(0)) {
     tmp <- ls_tidy |>
       dplyr::filter(.data$content_type == "dir") |>
       dplyr::select(.data$path) |>
-      purrr::pmap(.l = ., .f = function(path) {
+      purrr::pmap(.f = function(path) {
         dir_process(
           current_dir = path,
           junk_path = path
@@ -251,7 +251,7 @@ dirTree_flatten <- function(read_files) {
 #' @keywords internal
 dirTree_build <- function(flattened_dirTree) {
   dirTree <- names(flattened_dirTree) |>
-    purrr::map(.x = ., .f = function(pathname) {
+    purrr::map(.f = function(pathname) {
       tmp <- list(data = flattened_dirTree[[pathname]])
       tmp$metadata <-
         attributes(tmp$data)[c("class", "data_sha1", "file_sha1", "file_read_fail")] |>
@@ -275,7 +275,7 @@ dirTree_build <- function(flattened_dirTree) {
       tmp
     })
 
-  names(dirTree) <- purrr::map(dirTree, ~ .x$metadata$id) |> unlist()
+  names(dirTree) <- purrr::map(dirTree, ~ .x$metadata$id) |> unlist() # TODO does this work with native pipe?
 
   return(dirTree)
 }
