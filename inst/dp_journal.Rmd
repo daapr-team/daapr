@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval=FALSE, results = FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE, results = FALSE, message = FALSE)
 library(daapr)
 ```
 
@@ -150,7 +150,6 @@ Here I converted `dp_input` to its metadata representation
 
 ```{r dpinput_write}
 dpinput_write(project_path = ".", input_d = input_d)
-
 ```
 
 
@@ -173,7 +172,6 @@ Below dp_make steps and dependencies are visualized
 ```{r dpmake_vis, results= TRUE}
 renv::install(packages = "visNetwork")
 drake::vis_drake_graph(daap_plan)
-
 ```
 
 # Committing, pushing to GitHub for build
