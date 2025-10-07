@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval=FALSE, results = FALSE, message=FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE, results = FALSE, message = FALSE)
 library(daapr)
 ```
 
@@ -142,7 +142,6 @@ clin$trtdur <- synced_map$trtdur
 clin$vits <- synced_map$vits
 data_def <- synced_map$spec
 input_d <- list(clin = clin, data_def = data_def)
-
 ```
 
 ## `dp_input` ->  metadata 

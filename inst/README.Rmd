@@ -35,7 +35,7 @@ Set environment variables as needed to enable evaluation of
 and order to access the data board 
 
 ```{r board, echo=FALSE}
-params$board_params_set |> knitr::kable(.)
+params$board_params_set |> knitr::kable()
 ```
 
 ### STEP 3: Build
