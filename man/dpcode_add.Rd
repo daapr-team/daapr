@@ -15,5 +15,5 @@ dpcode_add(project_path, use_targets = T)
 repo
 }
 \description{
-Adds dp_make.R and dp_journal.RMD to the dp project repo
+Adds dp_make.R and dp_journal.Rmd to the dp project repo
 }

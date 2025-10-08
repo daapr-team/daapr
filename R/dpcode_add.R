@@ -1,5 +1,5 @@
 #' @title Adds script templates
-#' @description Adds dp_make.R and dp_journal.RMD to the dp project repo
+#' @description Adds dp_make.R and dp_journal.Rmd to the dp project repo
 #' @param project_path Path to the project
 #' @param use_targets T/F when TRUE, uses targets instead of drake (recommended)
 #' @return repo
@@ -36,10 +36,10 @@ dpcode_add <- function(project_path, use_targets = T) {
       path = glue::glue("{project_path}/R/global_drake.R"),
       new_path = glue::glue("{project_path}/R/global.R")
     )
-    renv::install(packages = "drake", prompt = F)
+    renv::install(packages = "drake", prompt = FALSE)
 
     # drake specific journal
-    flname_dpjournal <- flname_xos_get(fl = "dp_journal.RMD")
+    flname_dpjournal <- flname_xos_get(fl = "dp_journal.Rmd")
     fs::file_copy(
       path = system.file(flname_dpjournal, package = "daapr"),
       new_path = project_path
@@ -55,14 +55,14 @@ dpcode_add <- function(project_path, use_targets = T) {
     )
 
     # targets specific journal (renamed)
-    flname_dpjournal <- flname_xos_get(fl = "dp_journal_targets.RMD")
+    flname_dpjournal <- flname_xos_get(fl = "dp_journal_targets.Rmd")
     fs::file_copy(
       path = system.file(flname_dpjournal, package = "daapr"),
       new_path = project_path
     )
     fs::file_move(
-      path = glue::glue("{project_path}/dp_journal_targets.RMD"),
-      new_path = glue::glue("{project_path}/dp_journal.RMD")
+      path = glue::glue("{project_path}/dp_journal_targets.Rmd"),
+      new_path = glue::glue("{project_path}/dp_journal.Rmd")
     )
 
     fs::file_copy(
@@ -74,17 +74,11 @@ dpcode_add <- function(project_path, use_targets = T) {
       path = glue::glue("{project_path}/R/global_targets.R"),
       new_path = glue::glue("{project_path}/R/global.R")
     )
-    renv::install(packages = c("targets"), prompt = F)
+    renv::install(packages = c("targets"), prompt = FALSE)
   }
 
-  # pkgs_dependencies <- renv::dependencies(path = project_path,
-  #                                         root = project_path) |>
-  #   dplyr::pull(Package)
-
-  # renv::install(packages = pkgs_dependencies,prompt = F)
-
   # snapshot with pkgs in global
-  renv::snapshot(prompt = F) # TODO: look into  explicitly adding pkgs
+  renv::snapshot(prompt = FALSE) # TODO: look into  explicitly adding pkgs
 
   # commit
   repo <- git2r::repository(path = project_path)
