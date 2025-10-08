@@ -295,7 +295,7 @@ purge_local_cache <- function(path_cache = pins::board_cache_path()) {
 
 #' @title Gets cross OS File Name
 #' @description  It drops extension that can be OS-specific
-#' @param fl just the file name e.g. README.RMD
+#' @param fl just the file name e.g. README.Rmd
 #' @param package package name e.g. daapr
 #' @keywords internal
 flname_xos_get <- function(fl, package = "daapr") {

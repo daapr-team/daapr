@@ -417,7 +417,7 @@ dp_git_init <- function(project_path, project_name, branch_name,
 #' @keywords internal
 add_readme <- function(project_path, dp_title, github_repo_url,
                        board_params_set_dried, creds_set_dried) {
-  flname <- flname_xos_get(fl = "README.RMD")
+  flname <- flname_xos_get(fl = "README.Rmd")
   fs::file_copy(
     path = system.file(flname, package = "daapr"),
     new_path = project_path, overwrite = TRUE

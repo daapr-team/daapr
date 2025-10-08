@@ -7,7 +7,7 @@
 flname_xos_get(fl, package = "daapr")
 }
 \arguments{
-\item{fl}{just the file name e.g. README.RMD}
+\item{fl}{just the file name e.g. README.Rmd}
 
 \item{package}{package name e.g. daapr}
 }
