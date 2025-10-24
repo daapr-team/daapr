@@ -1,0 +1,96 @@
+# Use the current release of daapr (and separate component packages) to create a
+# canonical daap to test against. The daap will exist in a GitHub repo and not
+# in this code base.
+
+# Run this in a terminal with RScript, because it will screw up your active renv
+# and attached packages otherwise!
+# By the end of this script the new daap's renv will be active, but you'll still be
+# in the wd you started in.
+
+# options(renv.config.install.remotes=FALSE)
+# renv::remove(c("dpi", "pinsLabkey", "dpbuild", "dpdeploy", "daapr"))
+# # Don't use internal PPM for this as it's not publicly available
+# remotes::install_github("camorosi/pinsLabkey@main", upgrade="never")
+# remotes::install_github("amashadihossein/dpi@main", upgrade="never")
+# remotes::install_github("amashadihossein/dpbuild@main", upgrade="never")
+# remotes::install_github("amashadihossein/dpdeploy@main", upgrade="never")
+# remotes::install_github("amashadihossein/daapr@main", upgrade="never")
+
+# Require daapr packages after migration to pins v1
+package_version_check <- c(
+  daapr = packageVersion("daapr"),
+  dpi = packageVersion("dpi"),
+  dpbuild = packageVersion("dpbuild"),
+  dpdeploy = packageVersion("dpdeploy")
+)
+if (!all(package_version_check >= "0.1")){
+  stop(glue::glue("The following packages have versions less than 0.1:
+                  {glue::glue_collapse(names(package_version_check)[package_version_check < '0.1'], sep=', ')}"))
+}
+
+library(dpi)
+library(dpbuild)
+library(dpdeploy)
+library(daapr)
+
+# Require a GITHUB_PAT is set
+# Sys.setenv("GITHUB_PAT" = Sys.getenv("GITHUBdotCOM_PAT"))
+if (Sys.getenv("GITHUB_PAT") == ""){
+  stop("You must set your GITHUB_PAT environment variable to proceed")
+}
+
+dp_fixture_path <- testthat::test_path("fixtures", "dp-test")
+dp_fixture_board <- testthat::test_path("fixtures", "dp-test_deployed")
+# dp_fixture_path <- file.path("~/devel", "daapr-combined", "tests", "testthat", "fixtures", "dp-test")
+# dp_fixture_board <- file.path("~/devel", "daapr-combined", "tests", "testthat", "fixtures", "dp-test_deployed")
+
+# Initialize the new test daap within a temp dir, and then copy it to the final
+# fixtures location (because dp_repository_check() won't init a daap within an
+# existing git repo, within an existing daap repo, or within dir that already
+# has an renv)
+temp_dp_dir <- tempdir()
+temp_dp_project_dir <- file.path(temp_dp_dir, "dp-test")
+
+board_params_set_dried <- fn_dry(board_params_set_local(
+  folder = dp_fixture_board
+))
+
+dp_repo <- dp_init(
+  project_path = temp_dp_project_dir,
+  project_description = "Example daap test fixture",
+  branch_name = "main",
+  branch_description = "Main",
+  readme_general_note = "",
+  board_params_set_dried = board_params_set_dried,
+  github_repo_url = "https://github.com/daapr-team/dp-test.git"
+)
+# This makes the first 2 commits, "project init" and "dp init", but doesn't push them
+
+# Now you're in the dp-test renv, but still in the wd where you started.
+# You likely had an error from renv about a failure to install daapr from the
+# public PPM. Install it now and snapshot.
+
+# allow installing any dependencies from source (git2r)
+options("install.packages.compile.from.source" = "yes")
+renv::install("remotes", prompt=FALSE)
+remotes::install_github("camorosi/pinsLabkey@main", upgrade="never")
+remotes::install_github("amashadihossein/dpi@main", upgrade="never")
+remotes::install_github("amashadihossein/dpbuild@main", upgrade="never")
+remotes::install_github("amashadihossein/dpdeploy@main", upgrade="never")
+remotes::install_github("amashadihossein/daapr@main", upgrade="never")
+renv::remove("remotes")
+renv::snapshot(prompt=FALSE)
+# Only public PPM is in the renv.lock repositories list, but these packages are
+# all either installed from RSPM (majority) or CRAN (1)???
+
+# Create default code
+dpcode_add(project_path=temp_dp_project_dir)
+# This creates another local commit, "Added template code to dp project", but
+# doesn't include dp_journal.RMD??? Commit this RMD separately.
+git2r::add(repo=temp_dp_project_dir,
+           path=file.path(temp_dp_project_dir, "dp_journal.RMD"))
+git2r::commit(repo=temp_dp_project_dir,
+              message="Add dp_journal RMD")
+
+# Push the new test daap to the remote on GitHub
+dp_push(temp_dp_project_dir)
