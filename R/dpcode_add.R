@@ -88,7 +88,7 @@ dpcode_add <- function(project_path, use_targets = T) {
   )
   git2r::add(
     repo = repo, path =
-      fs::path_tidy(glue::glue("{project_path}/{flname_dpjournal}"))
+      fs::path_tidy(glue::glue("{project_path}/dp_journal.Rmd"))
   )
   git2r::add(
     repo = repo, path =
