@@ -16,6 +16,17 @@
 # remotes::install_github("amashadihossein/dpdeploy@main", upgrade="never")
 # remotes::install_github("amashadihossein/daapr@main", upgrade="never")
 
+
+# Require a GITHUB_PAT is set
+# Sys.setenv("GITHUB_PAT" = Sys.getenv("GITHUBdotCOM_PAT"))
+if (Sys.getenv("GITHUB_PAT") == ""){
+  stop("You must set your GITHUB_PAT environment variable to proceed")
+}
+
+# Delete and re-create the dp-test repo so it's empty for dp_init
+gh::gh("DELETE /repos/{owner}/{repo}", owner="daapr-team", repo="dp-test")
+new_repo <- gh::gh("POST /orgs/{orgname}/repos", orgname="daapr-team", name="dp-test")
+
 # Require daapr packages after migration to pins v1
 package_version_check <- c(
   daapr = packageVersion("daapr"),
@@ -33,26 +44,18 @@ library(dpbuild)
 library(dpdeploy)
 library(daapr)
 
-# Require a GITHUB_PAT is set
-# Sys.setenv("GITHUB_PAT" = Sys.getenv("GITHUBdotCOM_PAT"))
-if (Sys.getenv("GITHUB_PAT") == ""){
-  stop("You must set your GITHUB_PAT environment variable to proceed")
-}
-
 dp_fixture_path <- testthat::test_path("fixtures", "dp-test")
 dp_fixture_board <- testthat::test_path("fixtures", "dp-test_deployed")
 # dp_fixture_path <- file.path("~/devel", "daapr-combined", "tests", "testthat", "fixtures", "dp-test")
 # dp_fixture_board <- file.path("~/devel", "daapr-combined", "tests", "testthat", "fixtures", "dp-test_deployed")
 
-# Initialize the new test daap within a temp dir, and then copy it to the final
-# fixtures location (because dp_repository_check() won't init a daap within an
-# existing git repo, within an existing daap repo, or within dir that already
-# has an renv)
+# Initialize the new test daap within a temp dir
 temp_dp_dir <- tempdir()
 temp_dp_project_dir <- file.path(temp_dp_dir, "dp-test")
 
+# folder can't be set as a variable here even though it's not a real secret
 board_params_set_dried <- fn_dry(board_params_set_local(
-  folder = dp_fixture_board
+  folder = "tests/testthat/fixtures/dp-test_deployed"
 ))
 
 dp_repo <- dp_init(
@@ -69,6 +72,15 @@ dp_repo <- dp_init(
 # Now you're in the dp-test renv, but still in the wd where you started.
 # You likely had an error from renv about a failure to install daapr from the
 # public PPM. Install it now and snapshot.
+getwd()
+.libPaths()
+(package_version_check <- c(
+  daapr = packageVersion("daapr"),
+  dpi = packageVersion("dpi"),
+  dpbuild = packageVersion("dpbuild"),
+  dpdeploy = packageVersion("dpdeploy")
+))
+
 
 # allow installing any dependencies from source (git2r)
 options("install.packages.compile.from.source" = "yes")
@@ -94,3 +106,13 @@ git2r::commit(repo=temp_dp_project_dir,
 
 # Push the new test daap to the remote on GitHub
 dp_push(temp_dp_project_dir)
+
+
+# Copy the test dp to the final location in fixtures and remove git artifacts
+file.copy(temp_dp_project_dir, dirname(dp_fixture_path), recursive=TRUE)
+unlink(file.path(dp_fixture_path, ".git"), recursive=TRUE)
+unlink(file.path(dp_fixture_path, "renv/library"), recursive=TRUE)
+
+
+# TODO: Remove daapr from your development renv at the end
+# renv::remove(c("dpi", "pinsLabkey", "dpbuild", "dpdeploy", "daapr"))
