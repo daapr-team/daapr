@@ -34,3 +34,20 @@ test_that("Empty region raises error", {
     regexp = "region"
   )
 })
+
+test_that("Prefix without trailing slash raises warning", {
+  expect_error(
+    board_params_set_s3(bucket_name = "bucket_name", prefix = "data-products", region = "us-east-1"),
+    regexp = "trailing slash"
+  )
+  
+  # No warning when prefix has trailing slash
+  expect_no_error(
+    board_params_set_s3(bucket_name = "bucket_name", prefix = "data-products/", region = "us-east-1")
+  )
+  
+  # No warning when prefix is NULL
+  expect_no_error(
+    board_params_set_s3(bucket_name = "bucket_name", prefix = NULL, region = "us-east-1")
+  )
+})
