@@ -24,6 +24,10 @@ dp_write <- function(data_object, type = "rds", project_path = ".") {
 
   dataobj_path <- save_object(data_object, project_path = project_path, type = type)
 
+  # Do not remove this object_read call, it is crucial for getting the correct data object hash
+  # due to the way rds and other object types are serialized
+  data_object <- object_read(project_path = project_path, type = type)
+
   log_note <- dplognote_get(
     data_object = data_object,
     dataobj_path = dataobj_path,
