@@ -15,7 +15,7 @@ dpinput_map <- function(project_path) {
     )))
   }
 
-  check_pins_compatibility()
+  check_pins_compatibility(project_path = project_path)
 
   if (length(fs::dir_ls(input_dir)) == 0) {
     message("input_files directory is empty. It is OK to have an empty input_files directory if there is no need to update input data.")
