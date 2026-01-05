@@ -83,12 +83,19 @@ getwd()
 # # all either installed from RSPM (majority) or CRAN (1)???
 
 # Create default code
-dpcode_add(project_path=temp_dp_project_dir)
+dpcode_add(project_path = temp_dp_project_dir)
 # This creates another local commit, "Added template code to dp project"
 # if you have the latest version there shouldn't be an issue with uncommited files
 
-# Push the new test daap to the remote on GitHub
-# dp_push(temp_dp_project_dir)
+# Add input files and derivation code
+config <- dpconf_get(project_path = temp_dp_project_dir)
+
+file.copy(testthat::test_path("fixtures", "sdtm/dm.csv"),
+          file.path(temp_dp_project_dir, "input_files"))
+file.copy(testthat::test_path("fixtures", "sdtm/rs_onco_imwg.csv"),
+          file.path(temp_dp_project_dir, "input_files"))
+# TODO error here assuming wd is project dir
+input_map <- dpinput_map(project_path = temp_dp_project_dir)
 
 # Copy the test dp to the final location in fixtures and remove git artifacts
 file.copy(temp_dp_project_dir, dirname(dp_fixture_path), recursive=TRUE)
@@ -97,5 +104,3 @@ unlink(file.path(dp_fixture_path, "renv/library"), recursive=TRUE)
 
 # restart R to exit the temporary renv
 
-# TODO: Remove daapr from your development renv at the end
-# renv::remove(c("dpi", "pinsLabkey", "dpbuild", "dpdeploy", "daapr"))

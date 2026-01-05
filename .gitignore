@@ -63,3 +63,5 @@ renv/
 # daap
 .daap/
 /.quarto/
+
+tests/testthat/fixtures/sdtm/
