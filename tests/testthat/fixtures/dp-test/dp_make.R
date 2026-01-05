@@ -32,7 +32,7 @@ list(
   # Initial Set up
   tar_target(
     name = data_files_read,
-    command =  dpbuild::dpinput_read(),
+    command =  dpinput_read(),
     cue = tar_cue(mode = "always", command = TRUE, depend = TRUE)
   ),
 
@@ -51,6 +51,6 @@ list(
   # Structure output and add metadata
   tar_target(
     name = data_is_written,
-    command = dpbuild::dp_write(data_object = data_object, project_path = ".")
+    command = dp_write(data_object = data_object, project_path = ".")
   )
 )

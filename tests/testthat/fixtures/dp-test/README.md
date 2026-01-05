@@ -9,7 +9,7 @@ Clone the project, set working directory to project top folder and
 activate
 
 ``` r
-dpbuild::dp_activate(project_path = ".")
+dp_activate(project_path = ".")
 ```
 
 ### STEP 2: Set environment variables
