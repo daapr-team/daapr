@@ -11,7 +11,7 @@
 remove.packages(c("dpi",  "dpbuild", "dpdeploy", "daapr"))
 # # Don't use internal PPM for this as it's not publicly available
 remotes::install_github("camorosi/pinsLabkey@main", upgrade="never")
-remotes::install_github("daapr-team/daapr@dev", upgrade="never")
+remotes::install_github("daapr-team/daapr@leslem/test-fixtures", upgrade="never")
 
 # Require a GITHUB_PAT is set
 Sys.setenv("GITHUB_PAT" = Sys.getenv("GITHUBdotCOM_PAT"))
@@ -94,13 +94,38 @@ file.copy(testthat::test_path("fixtures", "sdtm/dm.csv"),
           file.path(temp_dp_project_dir, "input_files"))
 file.copy(testthat::test_path("fixtures", "sdtm/rs_onco_imwg.csv"),
           file.path(temp_dp_project_dir, "input_files"))
-# TODO error here assuming wd is project dir
+
 input_map <- dpinput_map(project_path = temp_dp_project_dir)
+input_map <- inputmap_clean(input_map = input_map)
+synced_map <- dpinput_sync(conf = config, input_map = input_map) # board_params_set_local(folder = "tests/testthat/fixtures/dp-test_deployed")
+dpinput_write(project_path = temp_dp_project_dir, input_d = synced_map)
+# input_yaml_file <- file.path(temp_dp_project_dir, ".daap/daap_input.yaml")
+# data_files_read <- dpinput_read(daap_input_yaml = yaml::read_yaml(file = input_yaml_file))
+
+file.copy(testthat::test_path("fixtures", "derive_subjects.R"),
+          file.path(temp_dp_project_dir, "R"))
+file.copy(testthat::test_path("fixtures", "derive_bor.R"),
+          file.path(temp_dp_project_dir, "R"))
+file.copy(testthat::test_path("fixtures", "dp_make_test.R"),
+          file.path(temp_dp_project_dir, "dp_make.R"), overwrite = T)
+
+# Setting an env var here so I don't have to cd
+Sys.setenv(TEMP_DP_PROJECT_DIR = temp_dp_project_dir)
+targets::tar_make(script = file.path(temp_dp_project_dir, "dp_make.R"),
+                  store = file.path(temp_dp_project_dir, "_targets")) # TODO this should store in temp dir
+dp_commit(project_path = temp_dp_project_dir, commit_description = "First dp build")
+# skip push step
+library(lifecycle) # TODO had to load this; are dependencies not managed correctly?
+dp_deploy(project_path = temp_dp_project_dir)
+# Warning message: (coming from dpboardlog_update?)
+# Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
+# ℹ Please use `"dp_name"` instead of `.data$dp_name`
 
 # Copy the test dp to the final location in fixtures and remove git artifacts
 file.copy(temp_dp_project_dir, dirname(dp_fixture_path), recursive=TRUE)
 unlink(file.path(dp_fixture_path, ".git"), recursive=TRUE)
 unlink(file.path(dp_fixture_path, "renv/library"), recursive=TRUE)
+unlink(file.path(dp_fixture_path, "_targets"), recursive=TRUE)
 
 # restart R to exit the temporary renv
 

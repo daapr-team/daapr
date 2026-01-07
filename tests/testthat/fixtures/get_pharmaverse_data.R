@@ -1,6 +1,6 @@
 # Get test ADaM or SDTM data from pharmaverse
 library(readr)
-install.packages("pharmaversesdtm")
+# install.packages("pharmaversesdtm")
 library(pharmaversesdtm)
 
 # write the dm and rs_onco_imwg datasets to sdtm directory within fixtures
