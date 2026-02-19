@@ -1,4 +1,4 @@
-# Use the development version of combined daapr to create a
+# Use the released version of daaprverse to create a
 # canonical daap to test against. The daap will exist in the fixtures directory
 
 # Run this in a terminal with RScript, because it will screw up your active renv
@@ -6,28 +6,34 @@
 # By the end of this script the new daap's renv will be active, but you'll still be
 # in the wd you started in.
 
-# options(renv.config.install.remotes=FALSE)
-# Remove older versions of daapr pacakges if they are installed 
-remove.packages(c("dpi",  "dpbuild", "dpdeploy", "daapr"))
-# # Don't use internal PPM for this as it's not publicly available
+options(renv.config.install.remotes=FALSE)
+renv::remove(c("pinsLabkey", "dpi", "dpbuild", "dpdeploy", "daapr"))
+# Don't use internal PPM for this as it's not publicly available
 remotes::install_github("camorosi/pinsLabkey@main", upgrade="never")
-remotes::install_github("daapr-team/daapr@leslem/test-fixtures", upgrade="never")
+remotes::install_github("amashadihossein/dpi@main", upgrade="never")
+remotes::install_github("amashadihossein/dpbuild@main", upgrade="never")
+remotes::install_github("amashadihossein/dpdeploy@main", upgrade="never")
+remotes::install_github("amashadihossein/daapr@main", upgrade="never")
 
 # Require a GITHUB_PAT is set
-Sys.setenv("GITHUB_PAT" = Sys.getenv("GITHUBdotCOM_PAT"))
+# Sys.setenv("GITHUB_PAT" = Sys.getenv("GITHUBdotCOM_PAT")) # TODO change envvar name
 if (Sys.getenv("GITHUB_PAT") == ""){
   stop("You must set your GITHUB_PAT environment variable to proceed")
 }
 
+# TODO only include this step if we run into issues
 # # Delete and re-create the dp-test repo so it's empty for dp_init
 # gh::gh("DELETE /repos/{owner}/{repo}", owner="daapr-team", repo="dp-test")
 # new_repo <- gh::gh("POST /orgs/{orgname}/repos", orgname="daapr-team", name="dp-test")
 
 # Require daapr packages after migration to pins v1
 package_version_check <- c(
-  daapr = packageVersion("daapr")
+  daapr = packageVersion("daapr"),
+  dpi = packageVersion("dpi"),
+  dpbuild = packageVersion("dpbuild"),
+  dpdeploy = packageVersion("dpdeploy")
 )
-if (!all(package_version_check >= "0.2")){
+if (!all(package_version_check >= "0.1")){
   stop(glue::glue("The following packages have versions less than 0.1:
                   {glue::glue_collapse(names(package_version_check)[package_version_check < '0.1'], sep=', ')}"))
 }
@@ -39,11 +45,12 @@ dp_fixture_board <- testthat::test_path("fixtures", "dp-test_deployed")
 
 # Initialize the new test daap within a temp dir
 temp_dp_dir <- tempdir()
-temp_dp_project_dir <- file.path(temp_dp_dir, "dp-test")
+temp_dp_project_dir <- file.path(temp_dp_dir, "dp-test") # TODO create variables for these folder names
+temp_dp_board_dir <- file.path(temp_dp_dir, "dp-test_deployed")
 
 # folder can't be set as a variable here even though it's not a real secret
 board_params_set_dried <- fn_dry(board_params_set_local(
-  folder = "tests/testthat/fixtures/dp-test_deployed"
+  folder = "../dp-test_deployed"
 ))
 
 # Initialize a new dp repo in temp directory
@@ -54,78 +61,82 @@ dp_repo <- dp_init(
   branch_description = "Main",
   readme_general_note = "",
   board_params_set_dried = board_params_set_dried,
-  github_repo_url = "https://github.com/daapr-team/dp-test.git"
+  github_repo_url = "https://github.com/daapr-team/dp-test2.git" # TODO does this need to be a valid repo?
 )
 # This makes the first 2 commits, "project init" and "dp init", but doesn't push them
 
 # Now you're in the dp-test renv, but still in the wd where you started.
-# You likely had an error from renv about a failure to install daapr from the
-# public PPM. Install it now and snapshot.
-# Note: it seems to have the correct combined version of daapr, so proceeding without the reinstall step
+# Change directories to tmp dp project dir
+daapr_dir <- getwd()
+daapr_fixtures_dir <- file.path(daapr_dir, testthat::test_path("fixtures"))
+setwd(temp_dp_project_dir) # TODO restart?
 getwd()
-.libPaths()
+.libPaths() # confirm that we've switched to dp-test renv
 (package_version_check <- c(
   daapr = packageVersion("daapr"),
-  pinsLabkey = packageVersion("pinsLabkey")
-  # dpi = packageVersion("dpi"),
-  # dpbuild = packageVersion("dpbuild"),
-  # dpdeploy = packageVersion("dpdeploy")
+  pinsLabkey = packageVersion("pinsLabkey"),
+  dpi = packageVersion("dpi"),
+  dpbuild = packageVersion("dpbuild"),
+  dpdeploy = packageVersion("dpdeploy")
 ))
 
-# # allow installing any dependencies from source (git2r)
-# options("install.packages.compile.from.source" = "yes")
-# renv::install("remotes", prompt=FALSE)
-# # renv::install("httr2", prompt=FALSE)
-# remotes::install_github("daapr-team/daapr@dev", upgrade="never")
-# renv::remove("remotes")
-# renv::snapshot(prompt=FALSE)
-# # Only public PPM is in the renv.lock repositories list, but these packages are
-# # all either installed from RSPM (majority) or CRAN (1)???
+# TODO make sure we're using the "right" daaprverse versions
 
 # Create default code
-dpcode_add(project_path = temp_dp_project_dir)
-# This creates another local commit, "Added template code to dp project"
-# if you have the latest version there shouldn't be an issue with uncommited files
+dpcode_add(project_path = ".")
+# This creates another local commit, "Added template code to dp project", but
+# doesn't include dp_journal.RMD??? Commit this RMD separately.
+git2r::add(path=file.path(temp_dp_project_dir, "dp_journal.RMD"))
+git2r::commit(message="Add dp_journal RMD")
 
 # Add input files and derivation code
-config <- dpconf_get(project_path = temp_dp_project_dir)
+config <- dpconf_get(project_path = ".")
 
-file.copy(testthat::test_path("fixtures", "sdtm/dm.csv"),
-          file.path(temp_dp_project_dir, "input_files"))
-file.copy(testthat::test_path("fixtures", "sdtm/rs_onco_imwg.csv"),
-          file.path(temp_dp_project_dir, "input_files"))
+# copy input files to tmp dp dir
+file.copy(file.path(daapr_fixtures_dir, "sdtm/dm.csv"),
+          "input_files/")
+file.copy(file.path(daapr_fixtures_dir, "sdtm/rs_onco_imwg.csv"),
+          "input_files/")
 
-input_map <- dpinput_map(project_path = temp_dp_project_dir)
+input_map <- dpinput_map(project_path = ".")
 input_map <- inputmap_clean(input_map = input_map)
-synced_map <- dpinput_sync(conf = config, input_map = input_map) # board_params_set_local(folder = "tests/testthat/fixtures/dp-test_deployed")
-dpinput_write(project_path = temp_dp_project_dir, input_d = synced_map)
-# input_yaml_file <- file.path(temp_dp_project_dir, ".daap/daap_input.yaml")
-# data_files_read <- dpinput_read(daap_input_yaml = yaml::read_yaml(file = input_yaml_file))
+synced_map <- dpinput_sync(conf = config, input_map = input_map)
+dpinput_write(project_path = ".", input_d = synced_map)
 
-file.copy(testthat::test_path("fixtures", "derive_subjects.R"),
-          file.path(temp_dp_project_dir, "R"))
-file.copy(testthat::test_path("fixtures", "derive_bor.R"),
-          file.path(temp_dp_project_dir, "R"))
-file.copy(testthat::test_path("fixtures", "dp_make_test.R"),
-          file.path(temp_dp_project_dir, "dp_make.R"), overwrite = T)
+# copy derivation files to tmp dp dir
+file.copy(file.path(daapr_fixtures_dir, "derive_subjects.R"),
+          "R/")
+file.copy(file.path(daapr_fixtures_dir, "derive_bor.R"),
+          "R/")
+file.copy(file.path(daapr_fixtures_dir, "dp_make_test.R"),
+          "dp_make.R", overwrite = T)
 
-# Setting an env var here so I don't have to cd
-Sys.setenv(TEMP_DP_PROJECT_DIR = temp_dp_project_dir)
-targets::tar_make(script = file.path(temp_dp_project_dir, "dp_make.R"),
-                  store = file.path(temp_dp_project_dir, "_targets")) # TODO this should store in temp dir
-dp_commit(project_path = temp_dp_project_dir, commit_description = "First dp build")
+# run dp_make script
+targets::tar_make(script = "dp_make.R")
+dp_commit(project_path = ".", commit_description = "First dp build")
 # skip push step
-library(lifecycle) # TODO had to load this; are dependencies not managed correctly?
-dp_deploy(project_path = temp_dp_project_dir)
+
+dp_deploy(project_path = ".")
 # Warning message: (coming from dpboardlog_update?)
 # Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
 # ℹ Please use `"dp_name"` instead of `.data$dp_name`
 
 # Copy the test dp to the final location in fixtures and remove git artifacts
-file.copy(temp_dp_project_dir, dirname(dp_fixture_path), recursive=TRUE)
-unlink(file.path(dp_fixture_path, ".git"), recursive=TRUE)
-unlink(file.path(dp_fixture_path, "renv/library"), recursive=TRUE)
-unlink(file.path(dp_fixture_path, "_targets"), recursive=TRUE)
+file.copy("../dp-test_deployed/", file.path(daapr_fixtures_dir, "dp-test_deployed"), recursive = TRUE)
+# TODO copy everything over and exclude below files
+# to exclude: input and output files, R, renv/ tests/?
+file.copy("./.daap/", file.path(daapr_fixtures_dir, "dp-test"), recursive = TRUE)
+file.copy(".gitignore", file.path(daapr_fixtures_dir, "dp-test"))
+file.copy(".renvignore", file.path(daapr_fixtures_dir, "dp-test"))
+file.copy("renv.lock", file.path(daapr_fixtures_dir, "dp-test"))
+file.copy("README.Rmd", file.path(daapr_fixtures_dir, "dp-test"))
+file.copy("README.md", file.path(daapr_fixtures_dir, "dp-test"))
 
-# restart R to exit the temporary renv
+# unlink(file.path(dp_fixture_path, ".git"), recursive=TRUE)
+# unlink(file.path(dp_fixture_path, "renv/library"), recursive=TRUE)
+
+# TODO other cleanup?
+# TODO change back to daapr dir and exit renv?
+
+# TODO make_local_test_daap function containing everything above except last copy step
 
