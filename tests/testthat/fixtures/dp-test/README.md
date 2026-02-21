@@ -9,7 +9,7 @@ Clone the project, set working directory to project top folder and
 activate
 
 ``` r
-dp_activate(project_path = ".")
+dpbuild::dp_activate(project_path = ".")
 ```
 
 ### STEP 2: Set environment variables
@@ -27,9 +27,9 @@ Set environment variables as needed to enable evaluation of
 
 and order to access the data board
 
-| board_type  | folder                                   |
-|:------------|:-----------------------------------------|
-| local_board | tests/testthat/fixtures/dp-test_deployed |
+| board_type  | folder              |
+|:------------|:--------------------|
+| local_board | ../dp-test_deployed |
 
 ### STEP 3: Build
 

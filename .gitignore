@@ -65,3 +65,4 @@ renv/
 /.quarto/
 
 tests/testthat/fixtures/sdtm/
+scratch/

@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, eval = FALSE, results = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = TRUE, eval=FALSE, results = FALSE, message=FALSE)
 library(daapr)
 ```
 
@@ -33,7 +33,7 @@ library(daapr)
 **Goal:** Ensure, we are in a properly set up `daap` project
 
 ```{r check_dp_init, results= TRUE }
-is_valid_dp_repository(path = ".")
+dpbuild::is_valid_dp_repository(path = ".")
 ```
 
 ## Remote data platform credentials
@@ -73,7 +73,7 @@ We get all configuration needed to interact with remote.
 
 
 ```{r dpconf_get}
-config <- dpconf_get(project_path = ".")
+config <- dpbuild::dpconf_get(project_path = ".")
 ```
 
 
@@ -97,19 +97,19 @@ The following captures datasets from which this data product draws from
 Data was added to the `input_files` folder and mapped
 
 ```{r input_map}
-input_map <- dpinput_map(project_path = ".")
+input_map <- dpbuild::dpinput_map(project_path = ".")
 ```
 
 ## Evaluating the `input_map`
 
-**Goal:** Get the right subset of all data synced to remote. To this end, using `dpinput_map` we check the content of the data uploaded into `input_file`, if needed, change names, remove dataset that need to be excluded from the sync.
+**Goal:** Get the right subset of all data synced to remote. To this end, using `dpbuild::dpinput_map` we check the content of the data uploaded into `input_file`, if needed, change names, remove dataset that need to be excluded from the sync.
 
 <!-- **Workflow NOTE**: describe what was modified in the metadata to affect what gets synced-->
 
 ```{r input_map_eval, results= TRUE}
 renv::install("DT")
 # Reverse sync status by id as needed
-# input_map <- dpinput_syncflag_reset(input_map = input_map, input_id = c("dataset_id_to_be_reset1","dataset_id_to_rest2")
+# input_map <- dpbuild::dpinput_syncflag_reset(input_map = input_map, input_id = c("dataset_id_to_be_reset1","dataset_id_to_rest2")
 # Optionally clean input_map prunning not-to-be-synced and simplify list names and associated metadata
 # input_map <- inputmap_clean(input_map = input_map)
 print(DT::datatable(input_map$input_manifest))
@@ -120,7 +120,7 @@ print(DT::datatable(input_map$input_manifest))
 **Goal:** sync staged data to remote
 
 ```{r dpinput_sync}
-synced_map <- dpinput_sync(conf = config, input_map = input_map)
+synced_map <- dpdeploy::dpinput_sync(conf = config, input_map = input_map)
 ```
 
 
@@ -142,13 +142,14 @@ clin$trtdur <- synced_map$trtdur
 clin$vits <- synced_map$vits
 data_def <- synced_map$spec
 input_d <- list(clin = clin, data_def = data_def)
+
 ```
 
 ## `dp_input` ->  metadata 
 Here I converted `dp_input` to its metadata representation
 
 ```{r dpinput_write}
-dpinput_write(project_path = ".", input_d = input_d)
+dpbuild::dpinput_write(project_path = ".", input_d = input_d)
 ```
 
 
@@ -184,7 +185,7 @@ targets::tar_visnetwork(script = "./dp_make.R")
 Committed the dp with just input data.
 
 ```{r dpcommit, eval= FALSE}
-dp_commit(project_path = ".", commit_description = "First dp build: only input data")
+dpbuild::dp_commit(project_path = ".", commit_description = "First dp build: only input data")
 ```
 
 <!-- **Workflow NOTE:** This step requires a remote git repo (i.e. a repo on either GitHub). If a new project, you'll need to create this repo prior to completing `dp_push` -->

@@ -19,11 +19,9 @@
 #'==============================================================================
 
 options(stringsAsFactors = F)
-message(Sys.getenv("TEMP_DP_PROJECT_DIR"))
-project_path <- Sys.getenv("TEMP_DP_PROJECT_DIR")
-R.utils::sourceDirectory(file.path(project_path, "R"), modifiedOnly = F)
+R.utils::sourceDirectory("R", modifiedOnly = F)
 
-config <- dpconf_get(project_path = project_path)
+config <- dpconf_get(project_path = "./")
 
 conflict_prefer("filter", "dplyr")
 conflict_prefer("mutate", "dplyr")
@@ -34,7 +32,7 @@ list(
   # Initial Set up
   tar_target(
     name = data_files_read,
-    command =  dpinput_read(yaml::read_yaml(file = file.path(project_path, ".daap/daap_input.yaml"))),
+    command =  dpinput_read(),
     cue = tar_cue(mode = "always", command = TRUE, depend = TRUE)
   ),
 
@@ -54,6 +52,6 @@ list(
   # Structure output and add metadata
   tar_target(
     name = data_is_written,
-    command = dp_write(data_object = data_object, project_path = project_path)
+    command = dp_write(data_object = data_object, project_path = ".")
   )
 )
