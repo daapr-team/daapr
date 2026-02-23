@@ -61,7 +61,7 @@ renv/
 /Meta/
 
 # daap
-.daap/
+^.daap/
 /.quarto/
 
 tests/testthat/fixtures/sdtm/

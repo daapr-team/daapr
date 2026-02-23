@@ -1,0 +1,9 @@
+project_path: /var/folders/x8/7dlmmntj6v79n8_ff3ylmdsm0000gn/T//RtmpQs6pST/dp-test
+project_name: dp-test
+project_description: Example daap test fixture
+branch_name: main
+branch_description: Main
+readme_general_note: ''
+board_params_set_dried: board_params_set_local(folder = "../dp-test_deployed")
+creds_set_dried: NA
+is_legacy: no

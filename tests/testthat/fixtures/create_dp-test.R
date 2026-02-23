@@ -6,7 +6,7 @@
 # By the end of this script the new daap's renv will be active, but you'll still be
 # in the wd you started in.
 
-# Require a GITHUB_PAT is set
+# Require a valid GITHUB_PAT is set
 if (Sys.getenv("GITHUB_PAT") == ""){
   stop("You must set your GITHUB_PAT environment variable to proceed")
 }
@@ -47,21 +47,23 @@ daapr_dir <- getwd()
 daapr_fixtures_dir <- file.path(daapr_dir, testthat::test_path("fixtures"))
 dev_fixtures_deployed_dir <- file.path(daapr_fixtures_dir, deployed_dir_name)
 dev_fixtures_daap_dir <- file.path(daapr_fixtures_dir, daap_dir_name)
-setwd(temp_dp_project_dir) # TODO restart?
+setwd(temp_dp_project_dir)
 
-# TODO make sure we're using the "right" daaprverse versions
+# TODO make sure we're using the "right" daaprverse versions. Clara: I think it's ok to leave this out for now
 
 # Create default code
 dpcode_add(project_path = ".")
 # TODO: do we want to do this "fix" here? Maybe we should leave it as-is and this will give us a way
 # to test that we've fixed the bug later
-git2r::add(path=file.path(temp_dp_project_dir, "dp_journal.RMD"))
-git2r::commit(message="Add dp_journal RMD")
+# Clara: I tried without the fix and it still works. I'm fine to remove this extra fix
+# git2r::add(path=file.path(temp_dp_project_dir, "dp_journal.RMD"))
+# git2r::commit(message="Add dp_journal RMD")
 
 # Add input files and derivation code
 config <- dpconf_get(project_path = ".")
 
 # copy input files to tmp dp dir
+# TODO tests/testthat/fixtures/sdtm/ dir is ignored; should we remove this from gitconfig so that we have a copy of these files?
 file.copy(file.path(daapr_fixtures_dir, "sdtm/dm.csv"),
           "input_files/")
 file.copy(file.path(daapr_fixtures_dir, "sdtm/rs_onco_imwg.csv"),
@@ -71,6 +73,7 @@ input_map <- dpinput_map(project_path = ".")
 input_map <- inputmap_clean(input_map = input_map)
 synced_map <- dpinput_sync(conf = config, input_map = input_map)
 dpinput_write(project_path = ".", input_d = synced_map)
+# TODO the normal workflow doesn't include these commits, do we need to have them?
 git2r::add(path=file.path(temp_dp_project_dir, ".daap"))
 git2r::commit(message="Add sdtm inputs")
 
@@ -92,7 +95,7 @@ dp_deploy(project_path = ".")
 # Use of .data in tidyselect expressions was deprecated in tidyselect 1.2.0.
 # ℹ Please use `"dp_name"` instead of `.data$dp_name`
 # Leslie: I don't get this error and I have tidyselect version 1.2.1
-
+# Clara: I tried again and didn't get this error
 
 # Copy the test dp to the final location in fixtures and remove git artifacts
 
@@ -107,7 +110,10 @@ file.copy(file.path("..", deployed_dir_name), daapr_fixtures_dir, recursive = TR
 
 # Leslie: I think it's actually good to only copy over exactly what we want here
 # less chance for accidental data/secrets committed that way
-# TODO: Do we want to empty out the fixtures dir every time to prevent accidental file/data persistence?
+# Clara: agree: I also wiped the test dir first before copying things over, I think it's best this way
+if (dir.exists(dev_fixtures_daap_dir)){
+  unlink(dev_fixtures_daap_dir, recursive = TRUE)
+}
 if (!dir.exists(dev_fixtures_daap_dir)){dir.create(dev_fixtures_daap_dir)}
 file.copy(".daap", dev_fixtures_daap_dir, recursive = TRUE, overwrite = TRUE)
 file.copy(".gitignore", dev_fixtures_daap_dir, overwrite = TRUE)
@@ -115,14 +121,14 @@ file.copy(".renvignore", dev_fixtures_daap_dir, overwrite = TRUE)
 file.copy("renv.lock", dev_fixtures_daap_dir, overwrite = TRUE)
 file.copy("README.Rmd", dev_fixtures_daap_dir, overwrite = TRUE)
 file.copy("dp_make.R", dev_fixtures_daap_dir, overwrite = TRUE)
-file.copy(paste0(daap_dir_name, ".Rproj"), dev_fixtures_daap_dir, overwrite = TRUE)
+file.copy(paste0(daap_dir_name, ".Rproj"), dev_fixtures_daap_dir, overwrite = TRUE) # TODO: got a warning here, doesn't exist
 file.copy("dp_journal.RMD", dev_fixtures_daap_dir, overwrite = TRUE) # TODO: update this when the file ext is fixed
 
 # Leslie: I'm trying this circular setup of storing the derive functions in the dp-test
 # fixture and also copying them from the fixture to the temp daap dir
 # but maybe we don't need to include this step every time, since it's redundant
+# Clara: this just seems like an extra step/redundant to me, but I could go either way
 file.copy("R", dev_fixtures_daap_dir, recursive = TRUE, overwrite = TRUE)
-
 
 # TODO other cleanup?
 # TODO change back to daapr dir and exit renv?
