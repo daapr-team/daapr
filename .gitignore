@@ -63,5 +63,4 @@ renv/
 # daap
 /.quarto/
 
-tests/testthat/fixtures/sdtm/
 scratch/

@@ -8,7 +8,7 @@ rs_onco_imwg:
   file_read_fail: no
   class: data.frame
   description: rs_onco_imwg.csv_sha1_8d26d21
-  pin_version: a0144
+  pin_version: 0323a
   synced: yes
 dm:
   id: dm
@@ -20,5 +20,5 @@ dm:
   file_read_fail: no
   class: data.frame
   description: dm.csv_sha1_9f1358c
-  pin_version: c1e37
+  pin_version: '18830'
   synced: yes

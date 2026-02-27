@@ -1,5 +1,5 @@
-HEAD: rds_log_39e3e97
-rds_log_39e3e97:
+HEAD: rds_log_be03f91
+rds_log_be03f91:
   project_name: dp-test
   project_description: Example daap test fixture
   branch_name: main
@@ -8,6 +8,6 @@ rds_log_39e3e97:
   class:
   - dp
   - list
-  rds_file_sha1: 39e3e97cf78786a6d358ac9c21d389de84e4ef2f
-  pin_version: cda0a
+  rds_file_sha1: be03f91683b908d0433b5b59870ee53f7fa3c3ef
+  pin_version: 20e0b
   commit_description: First dp build
