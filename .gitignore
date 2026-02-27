@@ -55,13 +55,12 @@ Meta
 docs/
 
 # renv
-^renv.lock
+/renv.lock
 renv/
 /doc/
 /Meta/
 
 # daap
-^.daap/
 /.quarto/
 
 tests/testthat/fixtures/sdtm/
