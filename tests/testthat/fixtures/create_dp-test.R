@@ -2,6 +2,8 @@
 # The daap will exist in the fixtures directory.
 # By the end of this script the new daap's renv will be active, but you'll still be
 # in the wd you started in.
+# Run from R session: source("create_dp-test.R", echo = TRUE)
+# Run from Terminal: Rscript -e "pkgload::load_all(); source('tests/testthat/fixtures/create_dp-test.R')"
 
 library(daapr)  # TODO: decide where to setup daapr package sources for testing
 
