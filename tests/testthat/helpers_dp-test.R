@@ -15,7 +15,7 @@ init_local_test_daap <- function(){
   # Initialize the new test daap within a temp dir
   temp_dp_dir <- tempdir()
   temp_dp_project_dir <- file.path(temp_dp_dir, daap_dir_name)
-  temp_dp_board_dir <- file.path(temp_dp_dir, deployed_dir_name) # TODO is this used?
+  temp_dp_board_dir <- file.path(temp_dp_dir, deployed_dir_name)
 
   # folder can't be set as a variable here even though it's not a real secret
   board_params_set_dried <- fn_dry(board_params_set_local(
@@ -23,6 +23,7 @@ init_local_test_daap <- function(){
   ))
 
   # Initialize a new dp repo in temp directory
+  withr::local_options(list(renv.verbose = FALSE))
   dp_repo <- dp_init(
     project_path = temp_dp_project_dir,
     project_description = "Example daap test fixture",
@@ -42,6 +43,7 @@ init_local_test_daap <- function(){
 
   return(list(
     temp_dp_project_dir = temp_dp_project_dir,
+    temp_dp_board_dir = temp_dp_board_dir,
     dev_fixtures_deployed_dir = dev_fixtures_deployed_dir,
     daapr_fixtures_dir = daapr_fixtures_dir,
     dev_fixtures_daap_dir = dev_fixtures_daap_dir
