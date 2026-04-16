@@ -15,7 +15,8 @@ test_that("everything works end to end", {
     "renv.lock"
   )
   # TODO: can we make label more informative?
-  # TODO: there is no package called waldo error
+  # TODO: there is no package called waldo error: tmp renv does not have this dependency
+  renv::install("waldo", prompt = FALSE)
   purrr::walk(expected_files, .f=function(f){
     expect_true(file.exists(file.path(tmp_dirs$temp_dp_project_dir, f)), label=f)
   })
@@ -102,11 +103,35 @@ test_that("everything works end to end", {
   deployed_output_fixture_files <- list.files(file.path(tmp_dirs$dev_fixtures_deployed_dir, "daap/dp-test-main"), full.names = TRUE)
   deployed_output_fixture <- file.path(rev(sort(deployed_output_fixture_files))[1], "dp-test-main.rds")
   deployed_output_rds <- readRDS(deployed_output_fixture)
+  # TODO: Use expect_equal (not expect_identical) to allow for IDate integer/double
+  # storage differences across data.table versions
   expect_identical(temp_output_rds$output, deployed_output_rds$output)
 
+  # Test reading from deployed daap
+  # TODO is this deactivate step needed? Not sure whether developer daapr version is actually active
+  renv::deactivate()
+  daap_config_hydrated <- dpconf_get()
+  expect_s3_class(daap_config_hydrated, "local_board") # NOTE: it's weird this is a board class and not a config class
+  expect_equal(daap_config_hydrated$project_name, daap_dir_name)
+  tmp_board <- dp_connect(board_params = daap_config_hydrated$board_params, 
+                          creds = daap_config_hydrated$creds)
+  expect_s3_class(tmp_board, "pins_board_folder")
+  expect_equal(as.character(tmp_board$path), file.path(daap_config_hydrated$board_params$folder, "daap"))
+  tmp_board_list <- dp_list(board_object = tmp_board)
+  expect_equal(nrow(tmp_board_list), 1)
+  # TODO check metadata in board log, such as version
+  tmp_daap <- dp_get(board_object = tmp_board, data_name = tmp_board_list$dp_name)
+  expect_setequal(names(tmp_daap), c("README", "input", "output"))
+  tmp_daap_input1 <- tmp_daap$input$dm(config = daap_config_hydrated)
+  expect_s3_class(tmp_daap_input1, "data.frame")
+  expect_identical(tmp_daap_input1, readRDS(temp_input_pin_dm))
+  expect_identical(tmp_daap$output, temp_output_rds$output)
+
+  # Cleanup
+  setwd(starting_dir)
   # TODO: the better approach is to use withr::with_tempdir(), but it's complicated since the temp dir
   # is created in init_local_test_daap. Maybe we should add an arg to init_local_test_daap to specify
   # a temp dir name?
   fs::dir_delete(tmp_dirs$temp_dp_project_dir)
-  fs::dir_delete(file.path(tempdir(), deployed_dir_name))
+  fs::dir_delete(tmp_dirs$temp_dp_board_dir)
 })
