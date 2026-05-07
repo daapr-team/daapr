@@ -103,9 +103,7 @@ test_that("everything works end to end", {
   deployed_output_fixture_files <- list.files(file.path(tmp_dirs$dev_fixtures_deployed_dir, "daap/dp-test-main"), full.names = TRUE)
   deployed_output_fixture <- file.path(rev(sort(deployed_output_fixture_files))[1], "dp-test-main.rds")
   deployed_output_rds <- readRDS(deployed_output_fixture)
-  # TODO: Use expect_equal (not expect_identical) to allow for IDate integer/double
-  # storage differences across data.table versions
-  expect_identical(temp_output_rds$output, deployed_output_rds$output)
+  expect_equal(temp_output_rds$output, deployed_output_rds$output) # equal instead of idential to allow for IDate integer/double differences
 
   # Test reading from deployed daap
   # TODO is this deactivate step needed? Not sure whether developer daapr version is actually active

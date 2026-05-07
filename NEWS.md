@@ -1,3 +1,7 @@
+# daapr 0.3.0
+
+* First development version of combined daapr
+
 # daapr 0.2.0
 
 * Add back support for LabKey boards. `pinsLabkey` is now required to work with LabKey boards
