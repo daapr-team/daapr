@@ -11,6 +11,7 @@ test_that("dp_get reads the local test fixture daap", {
     expect_s3_class(dp$output[[x]], "data.frame")
   })
   expect_setequal(names(dp$input), tools::file_path_sans_ext(list.files(testthat::test_path("fixtures/sdtm"))))
+  # Currently fails due to known incompatibility with daaprverse inputs
   dm <- dp$input$dm(board_params = fixture_board_params)
   expect_s3_class(dm, "data.frame")
 })
