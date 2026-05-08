@@ -54,7 +54,9 @@ test_that("everything works end to end", {
   setwd(tmp_dirs$temp_dp_project_dir)
 
   # Create default code
-  withr::local_options(list(renv.verbose = FALSE)) # suppress renv messages
+  # suppress renv messages and pre-flight validation (daapr may be installed from
+  # an unknown/local source during dev/testing, which renv::snapshot() rejects)
+  withr::local_options(list(renv.verbose = FALSE, renv.config.snapshot.validate = FALSE))
   dpcode_add(project_path = ".")
   temp_daap_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$temp_dp_project_dir, "R/global.R")))
   fixture_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$dev_fixtures_daap_dir, "R/global.R")))
