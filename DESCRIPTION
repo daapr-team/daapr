@@ -64,6 +64,7 @@ Imports:
 Remotes:
     github::camorosi/pinsLabkey
 Suggests: 
+    callr,
     knitr,
     paws.storage,
     qs,

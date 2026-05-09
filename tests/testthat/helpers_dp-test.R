@@ -3,7 +3,7 @@ daap_dir_name <- "dp-test"
 deployed_dir_name <- "dp-test_deployed"
 
 # Initialize a local test daap in a tempdir
-init_local_test_daap <- function(){
+init_local_test_daap <- function(temp_dp_dir){
   # Require a valid GITHUB_PAT is set
   if (Sys.getenv("GITHUB_PAT") == ""){
     stop("You must set your GITHUB_PAT environment variable to proceed")
@@ -13,13 +13,11 @@ init_local_test_daap <- function(){
   dp_fixture_board <- testthat::test_path("fixtures", deployed_dir_name)
 
   # Initialize the new test daap within a temp dir
-  temp_dp_dir <- tempdir()
   temp_dp_project_dir <- file.path(temp_dp_dir, daap_dir_name)
   temp_dp_board_dir <- file.path(temp_dp_dir, deployed_dir_name)
 
-  # folder can't be set as a variable here even though it's not a real secret
   board_params_set_dried <- fn_dry(board_params_set_local(
-    folder = "../dp-test_deployed"
+    folder = !!temp_dp_board_dir
   ))
 
   # Initialize a new dp repo in temp directory
