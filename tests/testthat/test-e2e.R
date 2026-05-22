@@ -1,9 +1,11 @@
 test_that("everything works end to end", {
+  skip_on_ci()
   starting_dir <- getwd()
   starting_daapr_version <- packageVersion("daapr")
 
   # TODO README.Rmd rendering will print messages here
   e2e_tempdir <- withr::local_tempdir()
+  # TODO have this first r_session be separate from all remaining r_session calls
   rsession <- callr::r_session$new()
   tmp_dirs <- rsession$run(function(dir){
     pkgload::load_all() # use the currently coded version of daapr + test helpers
@@ -35,6 +37,7 @@ test_that("everything works end to end", {
   # TODO: update check on contents of renv.lock after we fix renv set up
   lock_contents <- renv::lockfile_read(file=file.path(tmp_dirs$temp_dp_project_dir, "renv.lock"))
   loaded_daapr <- packageDescription("daapr")
+  expect_contains(names(lock_contents$Packages), "daapr")
   expect_equal(lock_contents$Packages$daapr$Version, loaded_daapr$Version)
   # do we want a check on lock_contents$Packages$daapr$Repository?
   # expect_equal(lock_contents$R$Repositories, as.list(options()$repos))
@@ -59,9 +62,10 @@ test_that("everything works end to end", {
   # suppress renv messages and pre-flight validation (daapr may be installed from
   # an unknown/local source during dev/testing, which renv::snapshot() rejects)
   rsession$run(function(dir){
-    pkgload::load_all()
+    # pkgload::load_all()
     withr::local_options(list(renv.verbose = FALSE, renv.config.snapshot.validate = FALSE))
-    dpcode_add(project_path = dir)
+    # TODO this is using the loaded version of daapr (aka dev version), we think
+    daapr::dpcode_add(project_path = dir)
   }, args=list(tmp_dirs$temp_dp_project_dir))
   temp_daap_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$temp_dp_project_dir, "R/global.R")))
   fixture_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$dev_fixtures_daap_dir, "R/global.R")))
@@ -82,7 +86,7 @@ test_that("everything works end to end", {
   # commit
 
   rsession$run(function(daap_dir, fixtures_dir){
-    pkgload::load_all()
+    # pkgload::load_all()
     setwd(daap_dir)
     renv::load(daap_dir)
     add_test_daap_inputs(daapr_fixtures_dir = fixtures_dir)

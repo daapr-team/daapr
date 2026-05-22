@@ -7,7 +7,8 @@
 
 library(daapr)  # TODO: decide where to setup daapr package sources for testing
 
-tmp_dirs <- init_local_test_daap()
+temp_dp_dir <- withr::local_tempdir()
+tmp_dirs <- init_local_test_daap(temp_dp_dir)
 
 # change to tmp test daap directory
 setwd(tmp_dirs$temp_dp_project_dir)
@@ -43,6 +44,7 @@ fs::dir_copy("R", file.path(tmp_dirs$dev_fixtures_daap_dir, "R"), overwrite = TR
 # .Rproj is not created unless you're working interactively from RStudio
 # fs::file_copy(paste0(daap_dir_name, "x.Rproj"), tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE)
 
+# TODO we end in the tempdir and tempdir renv project at the end of this script
 if (interactive()){
-  warning("Check your library paths and current working directory before proceeding!")
+  warning("Updated test fixture in interactive session. Check your library paths and current working directory before proceeding!", call. = FALSE)
 }
