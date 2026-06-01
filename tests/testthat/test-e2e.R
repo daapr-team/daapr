@@ -5,12 +5,22 @@ test_that("everything works end to end", {
 
   # TODO README.Rmd rendering will print messages here
   e2e_tempdir <- withr::local_tempdir()
+  helpers_file <- testthat::test_path("helpers_dp-test.R")
   # TODO have this first r_session be separate from all remaining r_session calls
   rsession <- callr::r_session$new()
-  tmp_dirs <- rsession$run(function(dir){
-    pkgload::load_all() # use the currently coded version of daapr + test helpers
+  tmp_dirs <- rsession$run(function(dir, helpers_file){
+    # Try load_all() for dev testing; fall back to installed package during R CMD check
+    # where the source tree isn't available
+    loaded <- tryCatch(
+      { pkgload::load_all(); TRUE },
+      error = function(e) FALSE
+    )
+    if (!loaded) {
+      library(daapr)
+      source(helpers_file, local = FALSE)
+    }
     init_local_test_daap(dir)
-  }, args=list(e2e_tempdir))
+  }, args=list(e2e_tempdir, helpers_file))
   # structure/contents of daap config
   expected_files <- c(
     ".daap/daap_config.yaml",
