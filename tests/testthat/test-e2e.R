@@ -8,7 +8,7 @@ test_that("everything works end to end", {
   helpers_file <- testthat::test_path("helpers_dp-test.R")
   # TODO have this first r_session be separate from all remaining r_session calls
   rsession <- callr::r_session$new()
-  tmp_dirs <- rsession$run(function(dir, helpers_file){
+  session1_output <- rsession$run(function(dir, helpers_file){
     # Try load_all() for dev testing; fall back to installed package during R CMD check
     # where the source tree isn't available
     loaded <- tryCatch(
@@ -19,8 +19,11 @@ test_that("everything works end to end", {
       library(daapr)
       source(helpers_file, local = FALSE)
     }
-    init_local_test_daap(dir)
+    tmp_dirs <- init_local_test_daap(dir)
+    list(tmp_dirs, packageVersion("daapr"))
   }, args=list(e2e_tempdir, helpers_file))
+  tmp_dirs <- session1_output[[1]]
+  session1_daapr_version <- session1_output[[2]]
   # structure/contents of daap config
   expected_files <- c(
     ".daap/daap_config.yaml",
@@ -65,17 +68,25 @@ test_that("everything works end to end", {
   expect_equal(getwd(), starting_dir)
 
   # On Mac, the temp dir in /var is a symlink to /private/var that needs to be normalized
-  rsession_renv_project <- rsession$run(function(){renv::project()})
+  session2_output <- rsession$run(function(){
+    list(
+      renv::project(),
+      packageVersion("daapr")
+    )
+  })
+  rsession_renv_project <- session2_output[[1]]
+  session2_daapr_version <- session2_output[[2]]
   expect_equal(rsession_renv_project, normalizePath(tmp_dirs$temp_dp_project_dir))
 
   # Create default code
   # suppress renv messages and pre-flight validation (daapr may be installed from
   # an unknown/local source during dev/testing, which renv::snapshot() rejects)
-  rsession$run(function(dir){
+  session3_daapr_version <- rsession$run(function(dir){
     # pkgload::load_all()
     withr::local_options(list(renv.verbose = FALSE, renv.config.snapshot.validate = FALSE))
     # TODO this is using the loaded version of daapr (aka dev version), we think
     daapr::dpcode_add(project_path = dir)
+    packageVersion("daapr")
   }, args=list(tmp_dirs$temp_dp_project_dir))
   temp_daap_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$temp_dp_project_dir, "R/global.R")))
   fixture_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$dev_fixtures_daap_dir, "R/global.R")))
@@ -95,11 +106,12 @@ test_that("everything works end to end", {
   expect_false(is.null(lock_contents_2$Packages$targets))
   # commit
 
-  rsession$run(function(daap_dir, fixtures_dir){
+  session4_daapr_version <- rsession$run(function(daap_dir, fixtures_dir){
     # pkgload::load_all()
     setwd(daap_dir)
     renv::load(daap_dir)
     add_test_daap_inputs(daapr_fixtures_dir = fixtures_dir)
+    packageVersion("daapr")
   }, args=list(tmp_dirs$temp_dp_project_dir, tmp_dirs$daapr_fixtures_dir))
   # Check contents of pinned data vs fixture
   temp_input_pin_dm_files <- list.files(file.path(tmp_dirs$temp_dp_board_dir, "dpinput/dm/"), full.names = TRUE)
@@ -117,8 +129,9 @@ test_that("everything works end to end", {
   temp_input_yaml <- yaml::read_yaml(file.path(tmp_dirs$temp_dp_project_dir, ".daap/daap_input.yaml"))
   expect_setequal(names(temp_input_yaml), c("dm", "rs_onco_imwg"))
 
-  rsession$run(function(daap_dir, fixtures_dir){
+  session5_daapr_version <- rsession$run(function(daap_dir, fixtures_dir){
     build_and_deploy_local_test_daap(dev_fixtures_daap_dir = fixtures_dir)
+    packageVersion("daapr")
   }, args=list(tmp_dirs$temp_dp_project_dir, tmp_dirs$dev_fixtures_daap_dir))
   rsession$kill()
   temp_log_yaml <- yaml::read_yaml(file.path(tmp_dirs$temp_dp_project_dir, ".daap/daap_log.yaml"))
@@ -153,6 +166,12 @@ test_that("everything works end to end", {
   expect_identical(tmp_daap_input1, readRDS(temp_input_pin_dm))
   expect_identical(tmp_daap$output, temp_output_rds$output)
 
+  cat("\ndaapr versions", sep="\n")
+  print(session1_daapr_version, sep="\n")
+  print(session2_daapr_version, sep="\n")
+  print(session3_daapr_version, sep="\n")
+  print(session4_daapr_version, sep="\n")
+  print(session5_daapr_version, sep="\n")
   # Cleanup
   # fs::dir_delete(tmp_dirs$temp_dp_project_dir)
   # fs::dir_delete(tmp_dirs$temp_dp_board_dir)
