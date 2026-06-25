@@ -49,13 +49,9 @@ test_that("everything works end to end", {
   # TODO: expect project_path is NOT in the config
   # TODO: update check on contents of renv.lock after we fix renv set up
   lock_contents <- renv::lockfile_read(file=file.path(tmp_dirs$temp_dp_project_dir, "renv.lock"))
-  loaded_daapr <- packageDescription("daapr")
+  loaded_daapr_version <- packageDescription("daapr")$Version
   expect_contains(names(lock_contents$Packages), "daapr")
-  expect_equal(lock_contents$Packages$daapr$Version, loaded_daapr$Version)
-  # do we want a check on lock_contents$Packages$daapr$Repository?
-  # expect_equal(lock_contents$R$Repositories, as.list(options()$repos))
-  # if using a local dev version from devtools::load_all, packageDescription and 
-  # RemoteType/RemoteUrl will be NA and Version will be from DESCRIPTION file
+  expect_equal(lock_contents$Packages$daapr$Version, loaded_daapr_version)
 
   # Compare contents of any files that are in inst to tmp folder (global.R, README.Rmd)
   temp_daap_global0_hash <- unname(tools::md5sum(file.path(tmp_dirs$temp_dp_project_dir, "R/global.R")))
@@ -84,7 +80,6 @@ test_that("everything works end to end", {
   session3_daapr_version <- rsession$run(function(dir){
     # pkgload::load_all()
     withr::local_options(list(renv.verbose = FALSE, renv.config.snapshot.validate = FALSE))
-    # TODO this is using the loaded version of daapr (aka dev version), we think
     daapr::dpcode_add(project_path = dir)
     packageVersion("daapr")
   }, args=list(tmp_dirs$temp_dp_project_dir))
@@ -166,12 +161,12 @@ test_that("everything works end to end", {
   expect_identical(tmp_daap_input1, readRDS(temp_input_pin_dm))
   expect_identical(tmp_daap$output, temp_output_rds$output)
 
-  cat("\ndaapr versions", sep="\n")
-  print(session1_daapr_version, sep="\n")
-  print(session2_daapr_version, sep="\n")
-  print(session3_daapr_version, sep="\n")
-  print(session4_daapr_version, sep="\n")
-  print(session5_daapr_version, sep="\n")
+  # Checking that daapr versions used in each R session match the version used to launch tests
+  expect_equal(as.character(session1_daapr_version), loaded_daapr_version)
+  expect_equal(as.character(session2_daapr_version), loaded_daapr_version)
+  expect_equal(as.character(session3_daapr_version), loaded_daapr_version)
+  expect_equal(as.character(session4_daapr_version), loaded_daapr_version)
+  expect_equal(as.character(session5_daapr_version), loaded_daapr_version)
   # Cleanup
   # fs::dir_delete(tmp_dirs$temp_dp_project_dir)
   # fs::dir_delete(tmp_dirs$temp_dp_board_dir)

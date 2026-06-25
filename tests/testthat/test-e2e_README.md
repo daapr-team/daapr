@@ -163,6 +163,15 @@ workflow in order and asserts correctness at each stage:
 At the end of the test, both the temp daap directory and the temp deployed board
 directory are deleted with `fs::dir_delete()`.
 
+### `daapr` version used
+
+* packageVersion error if not installed
+* packageDescription warns + returns NA if not installed
+* packageDescription + packageVersion has dev version after devtools::load_all
+* packageVersion and packageDescription have consistent behavior for detecting version from loaded vs. installed version
+* renv.lock RemoteSha is just the sha from the installed version from remote, so won't exist if not installed via GH
+* The test we really want would need to give us a hash of the entirety of the package's currently loaded code
+
 ---
 
 ## When to Update the Fixture
