@@ -1,5 +1,5 @@
 test_that("everything works end to end", {
-  skip_on_ci()
+  # skip_on_ci()
   starting_dir <- getwd()
   starting_daapr_version <- packageVersion("daapr")
 
