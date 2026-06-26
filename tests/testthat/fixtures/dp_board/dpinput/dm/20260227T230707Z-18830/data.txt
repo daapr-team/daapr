@@ -1,0 +1,10 @@
+file: dm.rds
+file_size: 8232
+pin_hash: 188306f38ed25ba5
+type: rds
+title: 'dm: a pinned 306 x 25 data frame'
+description: dm.csv_sha1_9f1358c
+tags: ~
+urls: ~
+created: 20260227T230707Z
+api_version: 1

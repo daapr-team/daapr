@@ -4,6 +4,7 @@
 #' @param project_path path to the project
 #' @return input_map a data.frame that maps the content of the input_files to be
 #'  evaluated
+#' @importFrom dplyr .data
 #' @export
 dpinput_map <- function(project_path) {
   input_dir <- glue::glue("{project_path}/input_files/")
@@ -15,7 +16,7 @@ dpinput_map <- function(project_path) {
     )))
   }
 
-  check_pins_compatibility()
+  check_pins_compatibility(project_path = project_path)
 
   if (length(fs::dir_ls(input_dir)) == 0) {
     message("input_files directory is empty. It is OK to have an empty input_files directory if there is no need to update input data.")
@@ -65,17 +66,17 @@ dpinput_map <- function(project_path) {
     dplyr::ungroup() |>
     dplyr::arrange(.data$data_sha1, dplyr::desc(.data$synced)) |>
     dplyr::mutate(to_be_synced = !duplicated(.data$data_sha1)) |>
-    dplyr::rename(n_dupe_datasha1 = .data$n) |>
+    dplyr::rename(n_dupe_datasha1 = "n") |>
     dplyr::group_by(.data$data_sha1) |>
     dplyr::mutate(n_name_per_datasha1 = dplyr::n_distinct(.data$name)) |>
     dplyr::ungroup() |>
     dplyr::group_by(.data$name) |>
     dplyr::mutate(n_datasha1_per_name = dplyr::n_distinct(.data$data_sha1)) |>
     dplyr::select(
-      .data$id, .data$path, .data$name, .data$file_name, .data$file_sha1,
-      .data$data_sha1, .data$file_read_fail, .data$n_dupe_datasha1,
-      .data$n_name_per_datasha1, .data$n_datasha1_per_name, .data$description,
-      .data$pin_version, .data$synced, .data$to_be_synced
+      "id", "path", "name", "file_name", "file_sha1",
+      "data_sha1", "file_read_fail", "n_dupe_datasha1",
+      "n_name_per_datasha1", "n_datasha1_per_name", "description",
+      "pin_version", "synced", "to_be_synced"
     ) |>
     dplyr::mutate(synced = tidyr::replace_na(.data$synced, F)) |>
     dplyr::ungroup()
@@ -103,7 +104,7 @@ dir_ls_tidy <- function(current_dir) {
       is_file & ext == "zip" ~ "zip",
       is_dir ~ "dir"
     )) |>
-    dplyr::select(.data$path, .data$ext, .data$content_type)
+    dplyr::select("path", "ext", "content_type")
 
   return(ls_tidy)
 }
@@ -128,7 +129,7 @@ dir_process <- function(current_dir, junk_path = character(0)) {
   if ("file" %in% ls_tidy$content_type) {
     tmp <- ls_tidy |>
       dplyr::filter(.data$content_type == "file") |>
-      dplyr::select(.data$path) |>
+      dplyr::select("path") |>
       purrr::pmap(.f = function(path) {
         # TODO: change the tibble data.frame. need to deal with better plucking
         # so it can handle inherited classes
@@ -158,7 +159,7 @@ dir_process <- function(current_dir, junk_path = character(0)) {
   if ("zip" %in% ls_tidy$content_type) {
     tmp <- ls_tidy |>
       dplyr::filter(.data$content_type == "zip") |>
-      dplyr::select(.data$path) |>
+      dplyr::select("path") |>
       purrr::pmap(.f = function(path) dir_process_zip(zip_dir = path))
 
     if (length(junk_path) > 0) {
@@ -172,7 +173,7 @@ dir_process <- function(current_dir, junk_path = character(0)) {
   if ("dir" %in% ls_tidy$content_type) {
     tmp <- ls_tidy |>
       dplyr::filter(.data$content_type == "dir") |>
-      dplyr::select(.data$path) |>
+      dplyr::select("path") |>
       purrr::pmap(.f = function(path) {
         dir_process(
           current_dir = path,
@@ -264,9 +265,9 @@ dirTree_build <- function(flattened_dirTree) {
         dplyr::mutate(id = as.character(.data$id)) |>
         dplyr::mutate(description = NA, pin_version = NA, synced = NA) |>
         dplyr::select(
-          .data$id, .data$name, .data$path, .data$file_name,
-          .data$file_sha1, .data$data_sha1, .data$file_read_fail,
-          .data$class, .data$description, .data$pin_version, .data$synced
+          "id", "name", "path", "file_name",
+          "file_sha1", "data_sha1", "file_read_fail",
+          "class", "description", "pin_version", "synced"
         )
 
       attr(tmp$data, "data_sha1") <- NULL

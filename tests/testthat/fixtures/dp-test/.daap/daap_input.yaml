@@ -1,0 +1,24 @@
+rs_onco_imwg:
+  id: rs_onco_imwg
+  name: rs_onco_imwg
+  path: ./input_files/rs_onco_imwg.csv
+  file_name: rs_onco_imwg.csv
+  file_sha1: 8d26d215f1970d42e5a595e4c67b50db248a7a34
+  data_sha1: 6e8851c31059ff773a0d0fe782b7fc3637e81461
+  file_read_fail: no
+  class: data.frame
+  description: rs_onco_imwg.csv_sha1_8d26d21
+  pin_version: 0323a
+  synced: yes
+dm:
+  id: dm
+  name: dm
+  path: ./input_files/dm.csv
+  file_name: dm.csv
+  file_sha1: 9f1358c6e415dbe8e03f3c75e7ca45cba5e58ca6
+  data_sha1: e38147ab5cf6bc55be92354715656a71ad8544bd
+  file_read_fail: no
+  class: data.frame
+  description: dm.csv_sha1_9f1358c
+  pin_version: '18830'
+  synced: yes

@@ -1,0 +1,13 @@
+HEAD: rds_log_be03f91
+rds_log_be03f91:
+  project_name: dp-test
+  project_description: Example daap test fixture
+  branch_name: main
+  branch_description: Main
+  dp_name: dp-test-main
+  class:
+  - dp
+  - list
+  rds_file_sha1: be03f91683b908d0433b5b59870ee53f7fa3c3ef
+  pin_version: 20e0b
+  commit_description: First dp build
