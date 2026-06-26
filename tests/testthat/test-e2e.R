@@ -77,7 +77,10 @@ test_that("everything works end to end", {
   })
   rsession_renv_project <- session2_output[[1]]
   session2_daapr_version <- session2_output[[2]]
-  expect_equal(rsession_renv_project, normalizePath(tmp_dirs$temp_dp_project_dir))
+  expect_equal(
+    normalizePath(rsession_renv_project, winslash = "/"),
+    normalizePath(tmp_dirs$temp_dp_project_dir, winslash = "/")
+  )
 
   # Create default code
   # suppress renv messages and pre-flight validation (daapr may be installed from
