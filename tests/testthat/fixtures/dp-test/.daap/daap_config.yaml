@@ -4,6 +4,6 @@ project_description: Example daap test fixture
 branch_name: main
 branch_description: Main
 readme_general_note: ''
-board_params_set_dried: board_params_set_local(folder = "../dp-test_deployed")
+board_params_set_dried: board_params_set_local(folder = "../dp_board")
 creds_set_dried: NA
 is_legacy: no

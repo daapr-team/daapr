@@ -27,7 +27,7 @@ tests/testthat/
 │   │   ├── renv.lock             #   locked package dependencies
 │   │   ├── .gitignore
 │   │   └── .renvignore
-│   ├── dp-test_deployed/         # Reference pins board output (fixture)
+│   ├── dp_board/         # Reference pins board output (fixture)
 │   ├── sdtm/                     # Input data used to build the test daap
 │   │   ├── dm.csv
 │   │   └── rs_onco_imwg.csv
@@ -46,7 +46,7 @@ and the test suite:
 
 ```r
 daap_dir_name      <- "dp-test"
-deployed_dir_name  <- "dp-test_deployed"
+deployed_dir_name  <- "dp_board"
 ```
 
 ### `init_local_test_daap()`
@@ -55,7 +55,7 @@ Initialises a fresh daap in `tempdir()`. Specifically it:
 
 - Checks that `GITHUB_PAT` is set (required by `dp_init()`)
 - Constructs paths to the fixture and temp directories
-- Creates a dried board configuration pointing to a local `../dp-test_deployed`
+- Creates a dried board configuration pointing to a local `../dp_board`
   directory relative to the temp daap
 - Calls `dp_init()` with a fixed project name, description, branch, and GitHub
   remote URL to produce a reproducible daap skeleton
@@ -66,7 +66,7 @@ Returns a named list of paths used by the other helpers and the test suite:
 |---|---|
 | `temp_dp_project_dir` | Absolute path to the new daap in `tempdir()` |
 | `dev_fixtures_daap_dir` | Path to `fixtures/dp-test/` in the daapr source tree |
-| `dev_fixtures_deployed_dir` | Path to `fixtures/dp-test_deployed/` in the daapr source tree |
+| `dev_fixtures_deployed_dir` | Path to `fixtures/dp_board/` in the daapr source tree |
 | `daapr_fixtures_dir` | Path to the `fixtures/` directory itself |
 
 > **Note:** After `dp_init()` returns, the active renv project has switched to
@@ -114,7 +114,7 @@ subset of the output into the `fixtures/` directory.
 
 Then saves the outputs to `fixtures/`:
 
-- **`dp-test_deployed/`** — The entire deployed board is wiped and replaced.
+- **`dp_board/`** — The entire deployed board is wiped and replaced.
   This is necessary because `pins` creates version subdirectories with
   timestamp-based names that change on every run.
 - **`dp-test/`** — The daap directory is wiped and then a curated subset of
@@ -203,11 +203,6 @@ Ensure `GITHUB_PAT` is available as a repository secret.
 ### Locally before a PR
 
 ```r
-# Option 1: against an installed version
-devtools::install()
-testthat::test_file("tests/testthat/test-e2e.R")
-
-# Option 2: against your current source tree
 pkgload::load_all()
 testthat::test_file("tests/testthat/test-e2e.R")
 ```

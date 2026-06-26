@@ -1,6 +1,6 @@
 # Define constants
 daap_dir_name <- "dp-test"
-deployed_dir_name <- "dp-test_deployed"
+deployed_dir_name <- "dp_board" # dp-test board
 
 # Initialize a local test daap in a tempdir
 init_local_test_daap <- function(temp_dp_dir){

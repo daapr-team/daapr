@@ -22,7 +22,7 @@ build_and_deploy_local_test_daap(dev_fixtures_daap_dir = tmp_dirs$dev_fixtures_d
 
 # Copy the test dp to the final location in fixtures and remove git artifacts
 
-# Wipe existing dp-test_deployed dir every time due to different pins version names
+# Wipe existing dp-test deployed board dir every time due to different pins version names
 if (dir.exists(tmp_dirs$dev_fixtures_deployed_dir)){
   unlink(tmp_dirs$dev_fixtures_deployed_dir, recursive = TRUE)
 }
