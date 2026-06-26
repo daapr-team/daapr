@@ -1,4 +1,5 @@
 test_that("everything works end to end", {
+  
   # skip_on_ci()
   starting_dir <- getwd()
   starting_daapr_version <- packageVersion("daapr")
@@ -7,7 +8,11 @@ test_that("everything works end to end", {
   e2e_tempdir <- withr::local_tempdir()
   helpers_file <- testthat::test_path("helpers_dp-test.R")
   # TODO have this first r_session be separate from all remaining r_session calls
-  rsession <- callr::r_session$new()
+  # Use R's file.copy() instead of cp -PR so renv doesn't fail on extended
+  # attribute permissions in the temp library created by R CMD check on macOS.
+  rsession <- callr::r_session$new(options = callr::r_session_options(
+    env = c(RENV_CONFIG_COPY_METHOD = "R")
+  ))
   session1_output <- rsession$run(function(dir, helpers_file){
     # Try load_all() for dev testing; fall back to installed package during R CMD check
     # where the source tree isn't available
