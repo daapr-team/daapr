@@ -85,19 +85,20 @@ test_that("everything works end to end", {
   # Create default code
   # suppress renv messages and pre-flight validation (daapr may be installed from
   # an unknown/local source during dev/testing, which renv::snapshot() rejects)
-  session3_daapr_version <- rsession$run(function(dir){
+  # Capture parent session lib paths here (before passing to subprocess), so
+  # renv.config.external.libraries points at the real system library even after
+  # renv has replaced .libPaths() inside the subprocess with the project library.
+  parent_lib_paths <- .libPaths()
+  session3_daapr_version <- rsession$run(function(dir, lib_paths){
     # pkgload::load_all()
-    # renv.config.external.libraries allows renv to find packages already
-    # installed in the system library (e.g. by r-lib/actions/setup-r-dependencies
-    # in CI), avoiding a fresh download/compile of e.g. "targets" on Ubuntu.
     withr::local_options(list(
       renv.verbose = FALSE,
       renv.config.snapshot.validate = FALSE,
-      renv.config.external.libraries = .libPaths()
+      renv.config.external.libraries = lib_paths
     ))
     daapr::dpcode_add(project_path = dir)
     packageVersion("daapr")
-  }, args=list(tmp_dirs$temp_dp_project_dir))
+  }, args=list(tmp_dirs$temp_dp_project_dir, parent_lib_paths))
   temp_daap_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$temp_dp_project_dir, "R/global.R")))
   fixture_global1_hash <- unname(tools::md5sum(file.path(tmp_dirs$dev_fixtures_daap_dir, "R/global.R")))
   expect_equal(temp_daap_global1_hash, fixture_global1_hash)
