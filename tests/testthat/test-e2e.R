@@ -1,6 +1,12 @@
 test_that("everything works end to end", {
   
   # skip_on_ci()
+  # renv::install() inside the subprocess cannot find binaries for R-devel
+  # since the RSPM release-binary user-agent trick only applies to the parent session
+  skip_if(
+    grepl("devel|unstable", R.version$status, ignore.case = TRUE),
+    "Skipping e2e test on R-devel"
+  )
   starting_dir <- getwd()
   starting_daapr_version <- packageVersion("daapr")
 
