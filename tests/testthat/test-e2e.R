@@ -87,7 +87,14 @@ test_that("everything works end to end", {
   # an unknown/local source during dev/testing, which renv::snapshot() rejects)
   session3_daapr_version <- rsession$run(function(dir){
     # pkgload::load_all()
-    withr::local_options(list(renv.verbose = FALSE, renv.config.snapshot.validate = FALSE))
+    # renv.config.external.libraries allows renv to find packages already
+    # installed in the system library (e.g. by r-lib/actions/setup-r-dependencies
+    # in CI), avoiding a fresh download/compile of e.g. "targets" on Ubuntu.
+    withr::local_options(list(
+      renv.verbose = FALSE,
+      renv.config.snapshot.validate = FALSE,
+      renv.config.external.libraries = .libPaths()
+    ))
     daapr::dpcode_add(project_path = dir)
     packageVersion("daapr")
   }, args=list(tmp_dirs$temp_dp_project_dir))
