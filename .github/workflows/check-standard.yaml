@@ -44,6 +44,12 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install system dependencies needed by renv during e2e tests
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libglpk-dev libxml2-dev libgit2-dev libssl-dev libcurl4-openssl-dev zlib1g-dev libssh2-1-dev
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: any::rcmdcheck
