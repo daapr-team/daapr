@@ -165,6 +165,11 @@ test_that("everything works end to end", {
   expect_equal(temp_output_rds$output, deployed_output_rds$output) # equal instead of idential to allow for IDate integer/double differences
 
   # Test reading from deployed daap
+  # dpconf_validate results in warnings on CI, so mocking here
+  local_mocked_bindings(
+    dpconf_validate = function(...) invisible(NULL),
+    .package = "daapr"
+  )
   daap_config_hydrated <- dpconf_get(project_path = tmp_dirs$temp_dp_project_dir)
   expect_s3_class(daap_config_hydrated, "local_board") # NOTE: it's weird this is a board class and not a config class
   expect_equal(daap_config_hydrated$project_name, daap_dir_name)
