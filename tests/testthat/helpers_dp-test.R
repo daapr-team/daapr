@@ -15,9 +15,13 @@ init_local_test_daap <- function(temp_dp_dir){
   # Initialize the new test daap within a temp dir
   temp_dp_project_dir <- file.path(temp_dp_dir, daap_dir_name)
   temp_dp_board_dir <- file.path(temp_dp_dir, deployed_dir_name)
+  
+  # Local board path should be relative to dp project dir, rather than in a user's
+  # session temp dir, which varies by OS
+  params_board_dir <- file.path("..", deployed_dir_name)
 
   board_params_set_dried <- fn_dry(board_params_set_local(
-    folder = !!temp_dp_board_dir
+    folder = !!params_board_dir
   ))
 
   # Initialize a new dp repo in temp directory

@@ -169,20 +169,23 @@ test_that("everything works end to end", {
     dpconf_validate = function(...) invisible(NULL),
     .package = "daapr"
   )
-  daap_config_hydrated <- dpconf_get(project_path = tmp_dirs$temp_dp_project_dir)
-  expect_s3_class(daap_config_hydrated, "local_board") # NOTE: it's weird this is a board class and not a config class
+  # Do all of this in the dp project dir because the local board path is ../dp_board (relative path)
+  withr::with_dir(tmp_dirs$temp_dp_project_dir, {
+    daap_config_hydrated <- dpconf_get(project_path = tmp_dirs$temp_dp_project_dir)
+    tmp_board <- dp_connect(board_params = daap_config_hydrated$board_params, 
+                            creds = daap_config_hydrated$creds)
+    tmp_board_list <- dp_list(board_object = tmp_board)
+    tmp_daap <- dp_get(board_object = tmp_board, data_name = tmp_board_list$dp_name)
+    tmp_daap_input1 <- tmp_daap$input$dm(config = daap_config_hydrated)
+})
+  expect_s3_class(daap_config_hydrated, "local_board")
   expect_equal(daap_config_hydrated$project_name, daap_dir_name)
-  tmp_board <- dp_connect(board_params = daap_config_hydrated$board_params, 
-                          creds = daap_config_hydrated$creds)
   expect_s3_class(tmp_board, "pins_board_folder")
   expect_equal(normalizePath(as.character(tmp_board$path)), 
                normalizePath(file.path(daap_config_hydrated$board_params$folder, "daap")))
-  tmp_board_list <- dp_list(board_object = tmp_board)
   expect_equal(nrow(tmp_board_list), 1)
   # TODO check metadata in board log, such as version
-  tmp_daap <- dp_get(board_object = tmp_board, data_name = tmp_board_list$dp_name)
   expect_setequal(names(tmp_daap), c("README", "input", "output"))
-  tmp_daap_input1 <- tmp_daap$input$dm(config = daap_config_hydrated)
   expect_s3_class(tmp_daap_input1, "data.frame")
   expect_identical(tmp_daap_input1, readRDS(temp_input_pin_dm))
   expect_identical(tmp_daap$output, temp_output_rds$output)
