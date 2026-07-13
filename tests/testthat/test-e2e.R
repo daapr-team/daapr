@@ -177,12 +177,15 @@ test_that("everything works end to end", {
     tmp_board_list <- dp_list(board_object = tmp_board)
     tmp_daap <- dp_get(board_object = tmp_board, data_name = tmp_board_list$dp_name)
     tmp_daap_input1 <- tmp_daap$input$dm(config = daap_config_hydrated)
+    # Resolve the relative board path (../dp_board) while still in the dp project
+    # dir, otherwise normalizePath() can't find it and warns
+    tmp_board_path <- normalizePath(as.character(tmp_board$path))
+    tmp_board_path_expected <- normalizePath(file.path(daap_config_hydrated$board_params$folder, "daap"))
 })
   expect_s3_class(daap_config_hydrated, "local_board")
   expect_equal(daap_config_hydrated$project_name, daap_dir_name)
   expect_s3_class(tmp_board, "pins_board_folder")
-  expect_equal(normalizePath(as.character(tmp_board$path)), 
-               normalizePath(file.path(daap_config_hydrated$board_params$folder, "daap")))
+  expect_equal(tmp_board_path, tmp_board_path_expected)
   expect_equal(nrow(tmp_board_list), 1)
   # TODO check metadata in board log, such as version
   expect_setequal(names(tmp_daap), c("README", "input", "output"))
