@@ -65,6 +65,7 @@ Returns a named list of paths used by the other helpers and the test suite:
 | Name | Description |
 |---|---|
 | `temp_dp_project_dir` | Absolute path to the new daap in `tempdir()` |
+| `temp_dp_board_dir` | Absolute path to the deployed board in `tempdir()` (sibling of the temp daap) |
 | `dev_fixtures_daap_dir` | Path to `fixtures/dp-test/` in the daapr source tree |
 | `dev_fixtures_deployed_dir` | Path to `fixtures/dp_board/` in the daapr source tree |
 | `daapr_fixtures_dir` | Path to the `fixtures/` directory itself |
@@ -137,10 +138,22 @@ pkgload::load_all()
 source("tests/testthat/fixtures/create_dp-test.R")
 ```
 
-> After the script completes, your active renv project will have switched to the
-> temp daap. If working interactively, check your library paths and working
-> directory before continuing (a warning is issued automatically in interactive
-> sessions).
+### Reverting a local fixture update
+
+If you ran `create_dp-test.R` to test but don't want to move forward with
+your fixture changes, make sure to follow the below steps to properly revert
+all fixture pin files and folders to the previous version of the fixture. This
+is necessary because each new pin version will create a timestamped subdirectory 
+that will need to be cleaned up. 
+
+Don't manually delete these pin files: leaving a pin version directory in place
+without its data files produces an empty (malformed) pin version that `pins`
+can't read. Instead run the following commands: 
+
+```bash
+git restore tests/testthat/fixtures/    # restore deleted + modified tracked files
+git clean -fd tests/testthat/fixtures/  # remove new untracked version directories
+```
 
 ---
 
