@@ -1,11 +1,10 @@
 test_that("everything works end to end", {
+  # Optionally skip the e2e test
+  skip_if(
+      Sys.getenv("SKIP_E2E_TEST") == "1",
+    "Skipping e2e tests; unset SKIP_E2E_TEST=1 to re-enable"
+  )
   
-  # renv::install() inside the subprocess cannot find binaries for R-devel
-  # since the RSPM release-binary user-agent trick only applies to the parent session
-  # skip_if(
-  #   grepl("devel|unstable", R.version$status, ignore.case = TRUE),
-  #   "Skipping e2e test on R-devel"
-  # )
   starting_dir <- getwd()
   starting_daapr_version <- packageVersion("daapr")
 

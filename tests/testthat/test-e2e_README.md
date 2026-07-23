@@ -215,6 +215,7 @@ the **expected output** of a daap. Common cases:
 
 ### As a GitHub Actions workflow
 
+The `R-CMD-check` action runs `R CMD check`, which will include the e2e test.
 The action uses whatever version of daapr is current on the branch under test.
 Ensure `GITHUB_PAT` is available as a repository secret.
 
@@ -222,12 +223,22 @@ Ensure `GITHUB_PAT` is available as a repository secret.
 
 ```r
 pkgload::load_all()
+# Run all tests, including e2e
+devtools::test()
+# Run only the e2e test
 testthat::test_file("tests/testthat/test-e2e.R")
+# Run all tests, excluding e2e
+devtools::test(filter = "e2e", invert=TRUE)
 ```
 
 When using `devtools::load_all()`, `packageDescription("daapr")` will return
 `NA` for `Repository` and `RemoteType`/`RemoteUrl`. Only `Version` (sourced from
 `DESCRIPTION`) is reliable for the `renv.lock` version check.
+
+If you want to run `devtools::check()` without the e2e test, use the opt-out env variable `SKIP_E2E_TEST`:
+```
+withr::with_envvar(c(SKIP_E2E_TEST = "1"), devtools::check())
+```
 
 ---
 
