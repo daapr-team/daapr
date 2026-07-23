@@ -49,7 +49,7 @@ daap_dir_name      <- "dp-test"
 deployed_dir_name  <- "dp_board"
 ```
 
-### `init_local_test_daap()`
+### `init_local_test_daap(temp_dp_dir)`
 
 Initialises a fresh daap in `tempdir()`. Specifically it:
 
@@ -101,11 +101,13 @@ Must be called from within the temp daap directory.
 
 ## Fixture Creation (`fixtures/create_dp-test.R`)
 
-Run this script to (re)generate the committed fixture files. It orchestrates the
-three helpers above to build a complete daap end-to-end, then copies a curated
-subset of the output into the `fixtures/` directory.
+Run this script to (re)generate the committed fixture files. It creates a fresh
+daap in a `callr::r_session`, builds it end-to-end using the helpers above, and
+copies a curated subset of the output into the `fixtures/` directory.
 
 ### What it does
+
+Inside the subprocess it:
 
 1. Calls `init_local_test_daap()` to create a fresh daap in `tempdir()`
 2. `setwd()`s into the temp daap
@@ -160,21 +162,24 @@ git clean -fd tests/testthat/fixtures/  # remove new untracked version directori
 ## E2E Tests (`test-e2e.R`)
 
 The single test (`"everything works end to end"`) steps through the full daap
-workflow in order and asserts correctness at each stage:
+workflow in order and asserts correctness at each stage. It uses a single
+`callr::r_session` across setup, code generation, input loading, build, and
+deploy so the temp daap's active `renv` project is preserved across steps.
 
 | Stage | What is checked |
 |---|---|
 | `dp_init()` | Expected files (`renv.lock`, `R/global.R`, `README.Rmd`, etc.) and directories (`input_files/`, `output_files/`) exist |
 | Config | `daap_config.yaml` has the correct `project_name` and a valid `board_params_set_dried` string |
-| Package version | `renv.lock` daapr version matches `packageDescription("daapr")$Version` |
+| Package version | `renv.lock` contains `daapr`, and its version matches `packageDescription("daapr")$Version` |
 | `dp_init()` file contents | `R/global.R` and `README.Rmd` match the installed `inst/` copies via MD5 hash |
 | Working directory | `getwd()` is restored to `starting_dir` after `dp_init()` |
 | renv project | Active renv project points to the temp daap (path normalised for macOS `/var` → `/private/var` symlink) |
 | `dpcode_add()` | `R/global.R` matches the fixture; `dp_journal.Rmd` matches `inst/dp_journal_targets.Rmd`; `dp_make.R` matches `inst/_targets.R` |
-| Full build & deploy | `add_test_daap_inputs()` and `build_and_deploy_local_test_daap()` complete without error |
-
-At the end of the test, both the temp daap directory and the temp deployed board
-directory are deleted with `fs::dir_delete()`.
+| `dpcode_add()` lockfile update | `renv.lock` no longer contains `drake` and does contain `targets` |
+| Input ingestion | `add_test_daap_inputs()` creates `.daap/daap_input.yaml` entries for `dm` and `rs_onco_imwg`, and the deployed input pins match the fixture |
+| Full build & deploy | `build_and_deploy_local_test_daap()` completes, `.daap/daap_log.yaml` contains a single non-`HEAD` `rds_log_*` entry, and the deployed output pin matches the fixture output |
+| Reading deployed daap | `dpconf_get()`, `dp_connect()`, `dp_list()`, and `dp_get()` work against the local board, and the recovered input/output objects match the deployed artifacts |
+| Package version consistency | The `daapr` version used in each `callr` step matches the version used to launch the test |
 
 ### `daapr` version used
 
@@ -228,11 +233,12 @@ When using `devtools::load_all()`, `packageDescription("daapr")` will return
 
 ## Known Limitations and TODOs
 
-- `withr::with_tempdir()` would be a cleaner approach than manual
-  `fs::dir_delete()` cleanup, but requires passing the temp dir path into
-  `init_local_test_daap()` — see TODO in `test-e2e.R`
-- `dp_journal.RMD` has an uppercase `.RMD` extension that needs to be fixed
-- The `renv.lock` version check TODO (comparison against the fixture lockfile)
-  is deferred until after the combined daapr release 1
+- The e2e test explicitly reuses a single `callr::r_session`; cleanup of the
+  temp directories is not currently done with `fs::dir_delete()` at the end of
+  the test
+- `dp_journal.RMD` has an uppercase `.RMD` extension in the fixture that needs
+  to be fixed
+- The `renv.lock` content check TODO is still limited to targeted package checks
+  rather than a fuller fixture comparison
 - The `.Rproj` file is only created in interactive RStudio sessions and is
   therefore excluded from the fixture
