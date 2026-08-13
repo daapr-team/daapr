@@ -1,45 +1,42 @@
-# test_that("dp_connect with s3 board", {
-#   s3_bucket_name <- "daapr-test"
-#   board_params <- board_params_set_s3(
-#     bucket_name = s3_bucket_name,
-#     region = "us-east-1"
-#   )
-#   creds <- creds_set_aws(
-#     key = Sys.getenv("AWS_KEY"),
-#     secret = Sys.getenv("AWS_SECRET")
-#   )
+# Without the NA guard on the prefix, these tests see a literal "NA" pasted into
+# the board prefix.
+test_that("dp_connect.s3_board builds prefix correctly when prefix is absent", {
+  skip_if_not_installed("paws.storage")
+  local_mocked_board_s3()
 
-#   # check board object is structured as expected
-#   board_obj <- dp_connect(board_params = board_params, creds = creds)
-#   expect_s3_class(board_obj, "pins_board_s3")
-#   expect_named(board_obj, c(
-#     "board", "api", "cache", "versioned", "name",
-#     "bucket", "prefix", "svc"
-#   ))
-#   expect_equal(board_obj$bucket, s3_bucket_name)
-#   expect_match(board_obj$prefix, "daap")
-# })
+  board <- dp_connect(
+    board_params = s3_test_board_params(prefix = NULL), creds = s3_test_creds()
+  )
 
-# # Need to generate snapshot first before adding this test
-# test_that("dp_connect with s3 board with bad creds", {
-#   board_params <- board_params_set_s3(
-#     bucket_name = "daapr-test",
-#     region = "us-east-1"
-#   )
+  expect_equal(board$prefix, "daap/")
+  expect_no_match(board$prefix, "NA")
+})
 
-#   # invalid key/secret
-#   withr::local_envvar(c(
-#     "AWS_KEY" = "12345678",
-#     "AWS_SECRET" = "1234567890"
-#   ))
-#   creds <- creds_set_aws(
-#     key = Sys.getenv("AWS_KEY"),
-#     secret = Sys.getenv("AWS_SECRET")
-#   )
+test_that("dp_connect.s3_board builds prefix correctly when prefix is provided", {
+  skip_if_not_installed("paws.storage")
+  local_mocked_board_s3()
 
-#   # Should get a message here, but not an actual error. Only matching part of the error message
-#   suppressMessages(expect_message(
-#     dp_connect(board_params = board_params, creds = creds),
-#     "Encountered error in dp_connect"
-#   ))
-# })
+  board <- dp_connect(
+    board_params = s3_test_board_params(prefix = "data-products/"),
+    creds = s3_test_creds()
+  )
+
+  expect_equal(board$prefix, "data-products/daap/")
+})
+
+test_that("dp_connect.s3_board NA-guards the prefix for an explicit board_subdir", {
+  skip_if_not_installed("paws.storage")
+  local_mocked_board_s3()
+
+  board_no_prefix <- dp_connect(
+    board_params = s3_test_board_params(prefix = NULL),
+    creds = s3_test_creds(), board_subdir = "dpinput/"
+  )
+  expect_equal(board_no_prefix$prefix, "dpinput/")
+
+  board_with_prefix <- dp_connect(
+    board_params = s3_test_board_params(prefix = "data-products/"),
+    creds = s3_test_creds(), board_subdir = "dpinput/"
+  )
+  expect_equal(board_with_prefix$prefix, "data-products/dpinput/")
+})
