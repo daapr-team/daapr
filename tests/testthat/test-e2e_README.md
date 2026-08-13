@@ -142,6 +142,9 @@ source("tests/testthat/fixtures/create_dp-test.R")
 
 ### Reverting a local fixture update
 
+See (#when-to-update-the-fixture) for more details on deciding whether 
+to update the fixture.
+
 If you ran `create_dp-test.R` to test but don't want to move forward with
 your fixture changes, make sure to follow the below steps to properly revert
 all fixture pin files and folders to the previous version of the fixture. This
@@ -209,6 +212,10 @@ the **expected output** of a daap. Common cases:
 > the regression first — a fixture update should be a deliberate, reviewed
 > change.
 
+If you are updating the test fixture, make sure to include the update fixture 
+in your feature pull request, along with a justification for the fixture update
+and details on what's changing in the fixture. 
+
 ---
 
 ## Running the E2E Tests
@@ -221,10 +228,21 @@ Ensure `GITHUB_PAT` is available as a repository secret.
 
 ### Locally before a PR
 
+Before opening a PR, make sure to check your changes using either `devtools::test()` 
+or `devtools::check()`. If you want to run a subset of the test suite or a particular
+test, see additional options below. 
+
 ```r
-pkgload::load_all()
 # Run all tests, including e2e
+pkgload::load_all()
 devtools::test()
+# Run all all package checks including full test suite
+devtools::check()
+```
+
+#### More e2e testing options
+
+```r
 # Run only the e2e test
 testthat::test_file("tests/testthat/test-e2e.R")
 # Run all tests, excluding e2e
@@ -236,7 +254,8 @@ When using `devtools::load_all()`, `packageDescription("daapr")` will return
 `DESCRIPTION`) is reliable for the `renv.lock` version check.
 
 If you want to run `devtools::check()` without the e2e test, use the opt-out env variable `SKIP_E2E_TEST`:
-```
+
+```r
 withr::with_envvar(c(SKIP_E2E_TEST = "1"), devtools::check())
 ```
 
