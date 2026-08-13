@@ -527,7 +527,7 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
     dplyr::bind_rows(.id = "rdsid") |>
     dplyr::mutate(rdsid = gsub("rds_", "", .data$rdsid)) |>
     dplyr::mutate(dp_name = gsub(pattern = "_", replacement = "-", x = .data$dp_name)) |>
-    dplyr::relocate(.data$dp_name) |>
+    dplyr::relocate("dp_name") |>
     dplyr::mutate(last_deployed = format(Sys.time(), tz = "GMT", usetz = TRUE)) |>
     dplyr::mutate(archived = FALSE)
 

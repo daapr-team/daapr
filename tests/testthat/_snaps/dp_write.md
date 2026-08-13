@@ -1,7 +1,7 @@
 # properly checks valid repository 
 
     Code
-      data_object = list()
+      data_object <- list()
       path <- "."
       dp_write(data_object, project_path = path)
     Condition
@@ -11,7 +11,7 @@
 # properly checks data object class
 
     Code
-      data_object = list()
+      data_object <- list()
       path <- withr::local_tempdir()
       dp_write(data_object, project_path = path)
     Condition

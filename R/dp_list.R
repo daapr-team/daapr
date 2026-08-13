@@ -51,12 +51,12 @@ dp_list <- function(board_object) {
   }
 
   dpls <- dpboard_log |>
-    dplyr::rename(version = .data$pin_version) |>
+    dplyr::rename(version = "pin_version") |>
     dplyr::mutate(commit_time = as_datetime(.data$commit_time)) |>
     dplyr::mutate(last_deployed = as_datetime(.data$last_deployed)) |>
     dplyr::mutate(commit_time = with_tz(.data$commit_time)) |>
     dplyr::mutate(last_deployed = with_tz(.data$last_deployed)) |>
-    dplyr::relocate(.data$dp_name, .data$version)
+    dplyr::relocate("dp_name", "version")
 
   return(dpls)
 }
