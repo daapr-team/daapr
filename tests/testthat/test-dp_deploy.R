@@ -48,31 +48,19 @@ local_mocked_deploy_writes <- function(.env = parent.frame()) {
   )
 }
 
-# Without the NA guard on the prefix, the pin is written to "NAdaap/".
-# dp_deployCore.s3_board() returns TRUE rather than the board it builds, so the
-# prefix is read back off the recorded pins::board_s3() call.
-test_that("dp_deployCore.s3_board builds prefix correctly when prefix is absent", {
+# Prefix construction itself is unit-tested in test-s3_board_prefix.R. This test
+# only confirms the S3-specific wiring: the constructed prefix reaches
+# pins::board_s3(). dp_deployCore.s3_board() returns TRUE rather than the board
+# it builds, so the prefix is read back off the recorded pins::board_s3() call.
+test_that("dp_deployCore.s3_board passes the constructed prefix through to board_s3", {
   mocked_board <- local_mocked_board_s3()
   local_mocked_deploy_writes()
 
   expect_true(
     dp_deployCore.s3_board(
-      conf = s3_test_conf(prefix = NULL), project_path = ".", d = s3_test_dp(),
-      dlog = NULL, git_info = NULL, type = "rds"
+      conf = s3_test_conf(prefix = "data-products/"), project_path = ".",
+      d = s3_test_dp(), dlog = NULL, git_info = NULL, type = "rds"
     )
-  )
-
-  expect_equal(mocked_board$prefix, "daap/")
-  expect_no_match(mocked_board$prefix, "NA")
-})
-
-test_that("dp_deployCore.s3_board builds prefix correctly when prefix is provided", {
-  mocked_board <- local_mocked_board_s3()
-  local_mocked_deploy_writes()
-
-  dp_deployCore.s3_board(
-    conf = s3_test_conf(prefix = "data-products/"), project_path = ".",
-    d = s3_test_dp(), dlog = NULL, git_info = NULL, type = "rds"
   )
 
   expect_equal(mocked_board$prefix, "data-products/daap/")
