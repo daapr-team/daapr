@@ -15,6 +15,20 @@ downgrade_message <- function() {
 }
 
 
+#' @title Build an S3 board prefix
+#' @description Prepends a (possibly absent) board prefix to a subdir. An absent
+#' prefix is stored as `NA_character_` by `board_params_set_s3()`; it is guarded
+#' here so it collapses to `""` rather than being pasted in as the literal "NA".
+#' @param prefix a length-1 board prefix, either `NA_character_` or a
+#' slash-terminated string
+#' @param subdir the subdir to append, defaults to `"daap/"`
+#' @return the constructed prefix string
+#' @noRd
+s3_board_prefix <- function(prefix, subdir = "daap/") {
+  paste0(if (is.na(prefix)) "" else prefix, subdir)
+}
+
+
 #' @title Hydrate a dried called function
 #' @description execute and returns the value of function call given its textual
 #'  (dried) representation
