@@ -104,7 +104,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
 
   tryCatch(
     {
-      flname <- flname_xos_get(fl = "README.RMD")
+      flname <- flname_xos_get(fl = "README.Rmd")
       conf_read <- dpconf_read(project_path = project_path)
       dp_title <- glue::glue("Data Product {conf_read$project_name}_{conf_read$branch_name}")
       github_repo_url <- git2r::remote_url()

@@ -86,7 +86,7 @@ via File > Open Project and select the relevant .Rproj file.
 
 This step is optional, but highly recommended. The starter code includes:
 
-1. `dp_journal.RMD`: A dev journal which will help both guide one through and 
+1. `dp_journal.Rmd`: A dev journal which will help both guide one through and 
 document the steps in building the data product
 2. `dp_make.R`: The main workflow management script. Sourcing this script will build 
 the data product
@@ -95,7 +95,7 @@ the data product
 dpcode_add(project_path = dp_repo)
 ```
 
-After adding code, the steps in `dp_journal.RMD` will walk you through how to
+After adding code, the steps in `dp_journal.Rmd` will walk you through how to
 add and sync input data, build the data product, and deploy it to a remote location.
 
 ## Step 3: Add input data and sync to remote
@@ -172,7 +172,7 @@ The output can contain many datasets, structured as desired in the form of a nam
 ### Execute `dp_make.R`
 
 Once satisfied with changes needed to derived features, execute the workflow plan 
-(this is included `dp_journal.RMD`)
+(this is included `dp_journal.Rmd`)
 
 ```{r make_plan, eval= FALSE}
 source("dp_make.R")

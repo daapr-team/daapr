@@ -197,4 +197,4 @@ dp_push(project_path = ".")
 ```
 
 <!-- **RMarkdown NOTE:** When ready to render as html the following can execute the following -->
-<!-- rmarkdown::render(input = "./dp_journal.RMD", params = list(dp_name = gsub("_","-",glue::glue("{config$project_name}_{config$branch_name}")) )) -->
+<!-- rmarkdown::render(input = "./dp_journal.Rmd", params = list(dp_name = gsub("_","-",glue::glue("{config$project_name}_{config$branch_name}")) )) -->
