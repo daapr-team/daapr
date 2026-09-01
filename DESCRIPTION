@@ -1,5 +1,5 @@
 Package: daapr
-Title: Toolset for implemeting the framework of Data-as-a-Product
+Title: Toolset for implementing the framework of Data-as-a-Product
 Version: 1.0.0
 Authors@R: c(
     person(given = "Afshin",
@@ -26,7 +26,7 @@ Authors@R: c(
            role = c("ctb"))
     )
 Description: Build and manage data products in R.
-URLs: https://daapr-team.github.io/daapr
+URL: https://daapr-team.github.io/daapr
 BugReports: https://github.com/daapr-team/daapr/issues
 License: GPL (>= 3)
 Encoding: UTF-8

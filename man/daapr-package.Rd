@@ -4,7 +4,7 @@
 \name{daapr-package}
 \alias{daapr}
 \alias{daapr-package}
-\title{daapr: Toolset for implemeting the framework of Data-as-a-Product}
+\title{daapr: Toolset for implementing the framework of Data-as-a-Product}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
@@ -13,6 +13,7 @@ Build and manage data products in R.
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://daapr-team.github.io/daapr}
   \item Report bugs at \url{https://github.com/daapr-team/daapr/issues}
 }
 
