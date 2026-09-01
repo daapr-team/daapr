@@ -4,7 +4,7 @@
 \alias{dp_activate}
 \title{Activate data product project}
 \usage{
-dp_activate(project_path = .)
+dp_activate(project_path = ".")
 }
 \arguments{
 \item{project_path}{path to the project folder}
