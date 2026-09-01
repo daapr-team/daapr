@@ -21,7 +21,7 @@ tests/testthat/
 │   ├── dp-test/                  # Reference daap files (fixture)
 │   │   ├── .daap/                #   daap config, input map, and build log
 │   │   ├── R/                    #   derivation scripts (derive_subjects.R, derive_bor.R, global.R)
-│   │   ├── dp_journal.RMD        #   analysis journal template
+│   │   ├── dp_journal.Rmd        #   analysis journal template
 │   │   ├── dp_make.R             #   targets pipeline script
 │   │   ├── README.Rmd            #   daap README template
 │   │   ├── renv.lock             #   locked package dependencies
@@ -266,8 +266,6 @@ withr::with_envvar(c(SKIP_E2E_TEST = "1"), devtools::check())
 - The e2e test explicitly reuses a single `callr::r_session`; cleanup of the
   temp directories is not currently done with `fs::dir_delete()` at the end of
   the test
-- `dp_journal.RMD` has an uppercase `.RMD` extension in the fixture that needs
-  to be fixed
 - The `renv.lock` content check TODO is still limited to targeted package checks
   rather than a fuller fixture comparison
 - The `.Rproj` file is only created in interactive RStudio sessions and is
