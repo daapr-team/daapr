@@ -1,4 +1,4 @@
-# daapr 0.3.0
+# daapr 1.0.0
 
 First release of the combined daapr. The `dpi`, `dpbuild`, and `dpdeploy`
 packages have been merged into daapr itself, so daapr is now a single
