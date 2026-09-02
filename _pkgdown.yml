@@ -12,13 +12,11 @@ articles:
   navbar: ~
   contents:
   - min_wrkfl
+  - min_workflow_local
+  - dp_get
   - input_data_update
   - dp_update
-  - min_workflow_local
-  - dp_merge
   - faq
-  - dpi
-
 
 reference:
 - title: Credential functions

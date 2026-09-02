@@ -1,8 +1,8 @@
 ---
-title: "dpi"
+title: "Read a data product"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{dpi}
+  %\VignetteIndexEntry{Read a data product}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -20,13 +20,17 @@ library(daapr)
 
 # Background
 
-This package aims to provide a minimalist and uniform interface for retrieving 
-data products and the associated metadata no matter where the data product is 
-housed. Currently, s3, local, and LabKey are three types of remote repositories for 
-housing data products. 
+daapr provides a minimalist and uniform interface for retrieving
+data products and the associated metadata no matter where the data product is
+housed. Currently, s3, local, and LabKey are three types of remote repositories for
+housing data products.
 
-This packages leverages the `pins` package for accessing data. As such, it 
-leverage the concept of `boards` for organizing data into **data spaces**. As 
+This vignette covers reading a data product that already exists. To build and
+deploy one, see the
+[new project workflow](https://daapr-team.github.io/daapr/articles/daapr.html).
+
+daapr leverages the `pins` package for accessing data. As such, it
+leverages the concept of `boards` for organizing data into **data spaces**. As
 an example, a team working on multiple clinical studies, may consider defining 
 a data space or `board` for each study, each of which defined by a governance 
 policy. In this example, a `board` is not dissimilar to the 
@@ -74,11 +78,34 @@ board_params <- board_params_set_s3(
 )
 ```
 
+If the data product is stored under a prefix within the bucket rather than at
+the bucket root, pass that prefix as well. The prefix must end with a trailing
+slash.
+
+```{r, eval=FALSE}
+board_params <- board_params_set_s3(
+  bucket_name = "bucket_name",
+  prefix = "data-products/",
+  region = "us-east-1"
+)
+```
+
 For local, you need to provide the absolute folder path
 
 ```{r, eval=FALSE}
 board_params <- board_params_set_local(
   folder = "/project_folder/subfolder"
+)
+```
+
+For LabKey, you need to provide the server url and the path of the study folder
+on that server. A `cache_alias` can optionally be given to name the local cache
+folder.
+
+```{r, eval=FALSE}
+board_params <- board_params_set_labkey(
+  url = "https://learn.labkey.com/",
+  folder = "folder_name"
 )
 ```
 
@@ -89,22 +116,32 @@ This can be done with `cred_set_aws` or `cred_set_labkey` functions. The
 cred_set function signatures informs you of the type of parameters needed.
 
 **NOTE:** For security reasons, avoid putting your credentials inside your 
-script. It is highly recommended to establish a habit of using environment 
-variables in conjunction with secret management packages like `keyring`. Below,
-exemplifies this pattern, where the env variables are set using 
-`Sys.setenv("AWS_KEY" = "xxxx")` in console, or using `keyring`,
-`Sys.setenv("AWS_KEY" = keyring::key_get(service = "AWS_KEY")`. Similarly, 
-"AWS_SECRET" can be set as an environment variable.
-
+script or inside any files that are version-controlled. It is highly recommended 
+to establish a habit of using environment variables in conjunction with secret 
+management packages like `keyring`. Credentials can be set as an environment variable
+via an `.Renviron` file or via a secret manager package such as `keyring`. 
+For AWS credentials, users can also store these through standard aws configuration files
+and load them into their session using the `aws.signature` package.
 
 The signature for creds for AWS s3 is takes two parameters.
 
 ```{r, eval=FALSE}
 aws_creds <- creds_set_aws(
-  key = Sys.getenv("AWS_KEY"),
-  secret = Sys.getenv("AWS_SECRET")
+  key = Sys.getenv("AWS_ACCESS_KEY_ID"),
+  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY")
 )
 ```
+
+For LabKey, a single API key is needed. See the
+[LabKey documentation on API keys](https://www.labkey.org/Documentation/wiki-page.view?name=apikey)
+for how to generate one.
+
+```{r, eval=FALSE}
+labkey_creds <- creds_set_labkey(api_key = Sys.getenv("LABKEY_API_KEY"))
+```
+
+Local boards need no credentials, so `creds` can be omitted when connecting to
+one.
 
 
 # Connect and interact with data product
