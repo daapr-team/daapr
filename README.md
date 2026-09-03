@@ -22,6 +22,12 @@ from. In daapr, all of that is captured as code and tracked in git, so a
 data product can be rebuilt from its configuration alone rather than
 passed around as a loose file.
 
+daapr was developed for clinical data science, where data is updated
+frequently and teams struggle to locate the current data, keep track of
+which inputs and wrangling code produced each file, and govern who can
+access and change it. While it grew out of that setting, it fits any use
+case that needs reproducible, versioned data.
+
 A built data product is an R object containing `README`, `input`,
 `output`, and `metadata`, annotated with the project and branch it was
 built from.
