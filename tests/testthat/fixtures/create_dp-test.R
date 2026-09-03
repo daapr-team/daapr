@@ -57,7 +57,7 @@ withr::with_dir(tmp_dirs$temp_dp_project_dir, {
   fs::file_copy("renv.lock", tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE)
   fs::file_copy("README.Rmd", tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE)
   fs::file_copy("dp_make.R", tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE)
-  fs::file_copy("dp_journal.RMD", tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE) # TODO: update this when the file ext is fixed
+  fs::file_copy("dp_journal.Rmd", tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE)
   fs::dir_copy("R", file.path(tmp_dirs$dev_fixtures_daap_dir, "R"), overwrite = TRUE)
   # .Rproj is not created unless you're working interactively from RStudio
   # fs::file_copy(paste0(daap_dir_name, "x.Rproj"), tmp_dirs$dev_fixtures_daap_dir, overwrite = TRUE)

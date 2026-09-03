@@ -1,5 +1,5 @@
-HEAD: rds_log_12417a2
-rds_log_12417a2:
+HEAD: rds_log_ce0c4f7
+rds_log_ce0c4f7:
   project_name: dp-test
   project_description: Example daap test fixture
   branch_name: main
@@ -8,6 +8,6 @@ rds_log_12417a2:
   class:
   - dp
   - list
-  rds_file_sha1: 12417a27e7d19203b189e573779ff762e5892f03
-  pin_version: ff945
+  rds_file_sha1: ce0c4f701469a2cdbdcf66e93553348c82a7ddea
+  pin_version: 6f2c4
   commit_description: First dp build

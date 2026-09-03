@@ -32,8 +32,8 @@ environment as shown below.
 
 ```{r dpclone, eval=FALSE}
 # Set up "promised" env variables
-Sys.setenv("AWS_KEY" = "<BUCKETS AWS KEY>")
-Sys.setenv("AWS_SECRET" = "<BUCKETS AWS SECRET>")
+Sys.setenv("AWS_ACCESS_KEY_ID" = "<BUCKETS AWS KEY>")
+Sys.setenv("AWS_SECRET_ACCESS_KEY" = "<BUCKETS AWS SECRET>")
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB_PAT>")
 
 dp_clone(remote_url = "<GIT PATH/dp_cars.git>", branch = "us001")

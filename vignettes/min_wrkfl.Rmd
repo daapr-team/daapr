@@ -39,8 +39,8 @@ board_params_set_dried <- fn_dry(board_params_set_s3(
 
 # Dry function call to setting credentials
 creds_set_dried <- fn_dry(creds_set_aws(
-  key = Sys.getenv("AWS_KEY"),
-  secret = Sys.getenv("AWS_SECRET")
+  key = Sys.getenv("AWS_ACCESS_KEY_ID"),
+  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY")
 ))
 
 # Initialize dp repo
@@ -73,8 +73,8 @@ if (!"daapr" %in% (.packages())) {
 }
 
 # Set up "promised" env variables for remote data repository
-Sys.setenv("AWS_KEY" = "<BUCKETS AWS KEY>")
-Sys.setenv("AWS_SECRET" = "<BUCKETS AWS SECRET>")
+Sys.setenv("AWS_ACCESS_KEY_ID" = "<BUCKETS AWS KEY>")
+Sys.setenv("AWS_SECRET_ACCESS_KEY" = "<BUCKETS AWS SECRET>")
 
 # Set up env variables for remote code repository
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB PAT>")

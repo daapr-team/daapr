@@ -20,14 +20,12 @@ Any standard flat tabular data format can be added to the `input_files` when add
 data. This includes .csv, .tsv, .xlsx, .rds, and .sas7bdat files. Data can also be provided
 in zipped format, as `dpinput_map` will unzip your files for you. 
 
-## Should I use targets with `dpcode_add()`?
+## Should I use targets or drake with `dpcode_add()`?
 
-Since version 0.0.0.9014, `dpcode_add()` has a parameter `use_targets` (default FALSE)
-where the user can specify whether to use [targets](https://books.ropensci.org/targets/)
-instead of [drake](https://github.com/ropensci/drake) for building 
-data product targets. Since drake is superceded, we recommend
-using targets by specifying `dpcode_add(use_targets = TRUE)` when starting
-any new projects. 
+To structure and build data product object, daapr uses 
+[targets](https://books.ropensci.org/targets/) by default, 
+though it also supports [drake](https://github.com/ropensci/drake). We recommend using targets
+as drake is now superceded. 
 
 If you have an existing project that uses drake and you'd like to switch
 to using targets, you can use `dpcode_add()` to get the relevant `targets` template
