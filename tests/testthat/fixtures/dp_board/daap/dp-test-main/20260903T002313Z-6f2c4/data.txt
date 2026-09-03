@@ -1,10 +1,10 @@
 file: dp-test-main.rds
-file_size: 5140
-pin_hash: 595b3af635096e5e
+file_size: 5094
+pin_hash: 6f2c4cb54535a4f0
 type: rds
 title: 'dp-test-main: a pinned list'
 description: Main
 tags: ~
 urls: ~
-created: 20260901T213922Z
+created: 20260903T002313Z
 api_version: 1
