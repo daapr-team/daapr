@@ -1,0 +1,14 @@
+# Conflict management
+library(conflicted)
+
+# DaaP core packages
+library(daapr)
+
+# Daap build dependencies
+library(knitr)
+library(rmarkdown)
+library(R.utils)
+library(glue)
+
+# Convenience and other required packages
+library(dplyr)

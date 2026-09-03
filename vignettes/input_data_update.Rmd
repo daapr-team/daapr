@@ -21,13 +21,13 @@ Update `input_data` content of a data product
 ## User story
 
 We would like to update the cars data product built in the 
-[minimalist example](https://amashadihossein.github.io/daapr/articles/min_wrkfl.html)
+[minimalist example](https://daapr-team.github.io/daapr/articles/min_wrkfl.html)
 , excluding the last 5 rows as we have learned of issues with those records. 
 
 ## Step 1: Navigate to `dp_cars` project
 
 NOTE: If you don't have this project, you can clone it using 
-`dpbuild::dp_clone()`. See more details in [dp update vignette](https://amashadihossein.github.io/daapr/articles/dp_update.html). Make
+`dp_clone()`. See more details in [dp update vignette](https://daapr-team.github.io/daapr/articles/dp_update.html). Make
 sure you have the folder `input_files` in your project directory as the location 
 for depositing data
 
@@ -50,8 +50,8 @@ if (!"daapr" %in% (.packages())) {
 }
 
 # Set up "promised" env variables for remote data repository
-Sys.setenv("AWS_KEY" = "<BUCKETS AWS KEY>")
-Sys.setenv("AWS_SECRET" = "<BUCKETS AWS SECRET>")
+Sys.setenv("AWS_ACCESS_KEY_ID" = "<BUCKETS AWS KEY>")
+Sys.setenv("AWS_SECRET_ACCESS_KEY" = "<BUCKETS AWS SECRET>")
 
 # Set up env variables for remote code repository
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB PAT>")

@@ -1,6 +1,6 @@
 Package: daapr
-Title: Toolset for implemeting the framework of Data-as-a-Product
-Version: 0.2.0
+Title: Toolset for implementing the framework of Data-as-a-Product
+Version: 1.0.0
 Authors@R: c(
     person(given = "Afshin",
            family = "Mashadi-Hossein",
@@ -10,30 +10,66 @@ Authors@R: c(
     person(given = "Clara",
            family = "Amorosi",
            role = c("aut"),
-           comment = c(ORCID = "0000-0002-0730-2576"))
+           comment = c(ORCID = "0000-0002-0730-2576")),
+    person(given = "Yue",
+           family = "Jiang",
+           role = c("aut"),
+           email = "rivehill@gmail.com"),
+    person(given = "Burak",
+           family = "Kutlu",
+           role = c("ctb")),
+    person(given = "Leslie",
+           family = "Emery",
+           role = c("ctb")),
+    person(given = "Som",
+           family = "Bohora",
+           role = c("ctb"))
     )
-Description: Collection of packages to build and manage data products.
+Description: Build and manage data products in R.
+URL: https://daapr-team.github.io/daapr
+BugReports: https://github.com/daapr-team/daapr/issues
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
+Depends:
+    R (>= 4.1)
 Imports:
-    pins (>= 1.2.0),
-    dpi (>= 0.2.0),
-    dpbuild (>= 0.2.0),
-    dpdeploy (>= 0.2.0),
+    aws.signature,
     cli,
-    crayon,
+    digest,
+    dplyr,
+    ellipsis,
+    fs,
+    gh,
+    git2r,
     glue,
-    utils,
-    rstudioapi
-Remotes:
-    amashadihossein/dpi,
-    amashadihossein/dpbuild,
-    amashadihossein/dpdeploy
-Suggests: 
+    httr,
+    jsonlite,
+    lifecycle,
+    lubridate,
+    pins (>= 1.2.0),
+    pinsLabkey (>= 0.2.0),
+    purrr,
+    renv,
+    rio,
+    rlang,
     rmarkdown,
-    knitr
-BugReports: https://github.com/amashadihossein/daapr/issues
+    tibble,
+    tidyr,
+    utils,
+    withr,
+    yaml
+Remotes:
+    github::camorosi/pinsLabkey
+Suggests: 
+    callr,
+    knitr,
+    paws.storage,
+    pkgload,
+    stringr,
+    targets,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

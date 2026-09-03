@@ -4,25 +4,34 @@
 \name{daapr-package}
 \alias{daapr}
 \alias{daapr-package}
-\title{daapr: Toolset for implemeting the framework of Data-as-a-Product}
+\title{daapr: Toolset for implementing the framework of Data-as-a-Product}
 \description{
-\if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Collection of packages to build and manage data products.
+Build and manage data products in R.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item Report bugs at \url{https://github.com/amashadihossein/daapr/issues}
+  \item \url{https://daapr-team.github.io/daapr}
+  \item Report bugs at \url{https://github.com/daapr-team/daapr/issues}
 }
 
 }
 \author{
-\strong{Maintainer}: Afshin Mashadi-Hossein \email{afshin.mashadi-hossein@bms.com} (\href{https://orcid.org/0000-0002-2337-2195}{ORCID})
+\strong{Maintainer}: Afshin Mashadi-Hossein \email{amashadihossein@gmail.com} (\href{https://orcid.org/0000-0002-2337-2195}{ORCID})
 
 Authors:
 \itemize{
   \item Clara Amorosi (\href{https://orcid.org/0000-0002-0730-2576}{ORCID})
+  \item Yue Jiang \email{rivehill@gmail.com}
+}
+
+Other contributors:
+\itemize{
+  \item Burak Kutlu [contributor]
+  \item Leslie Emery [contributor]
+  \item Som Bohora [contributor]
 }
 
 }
