@@ -19,7 +19,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/daapr-team/daapr/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/daapr-team/daapr/blob/v1.0.0/DESCRIPTION)
 
 Amorosi C, Mashadi-Hossein A, Jiang Y (2026). *daapr: Toolset for
 implementing the framework of Data-as-a-Product*. R package version
