@@ -1,0 +1,22 @@
+# Frequently Asked Questions
+
+## What file types are accepted?
+
+Any standard flat tabular data format can be added to the `input_files`
+when adding data. This includes .csv, .tsv, .xlsx, .rds, and .sas7bdat
+files. Data can also be provided in zipped format, as `dpinput_map` will
+unzip your files for you.
+
+## Should I use targets or drake with `dpcode_add()`?
+
+To structure and build data product object, daapr uses
+[targets](https://books.ropensci.org/targets/) by default, though it
+also supports [drake](https://github.com/ropensci/drake). We recommend
+using targets as drake is now superceded.
+
+If you have an existing project that uses drake and you’d like to switch
+to using targets, you can use
+[`dpcode_add()`](https://daapr-team.github.io/daapr/reference/dpcode_add.md)
+to get the relevant `targets` template files, but you will have to
+delete or rename your existing `dp_make.R` and `dp_journal.Rmd` files
+first.

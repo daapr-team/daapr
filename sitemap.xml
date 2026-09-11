@@ -1,48 +1,88 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/404.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/daapr.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/dp_merge.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/dp_update.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/faq.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/input_data_update.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/min_workflow_local.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/articles/min_wrkfl.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/index.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/reference/daapr-package.html</loc>
-  </url>
-  <url>
-    <loc>https://amashadihossein.github.io/daapr/reference/index.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://daapr-team.github.io/daapr/404.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/LICENSE.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/daapr.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/dp_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/dp_update.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/faq.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/index.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/input_data_update.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/min_workflow_local.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/articles/min_wrkfl.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/authors.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/index.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/news/index.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/add_readme.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/board_params_set_labkey.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/board_params_set_local.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/board_params_set_s3.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/check_pins_compatibility.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/creds_set_aws.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/creds_set_labkey.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/daapr-package.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dirTree_build.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dirTree_flatten.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dir_ls_tidy.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dir_process.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dir_process_zip.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_activate.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_clone.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_commit.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_connect.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_deploy.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_deployCore.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_git_init.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_init.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_list.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_make_params.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_pull.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_push.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_repository_check.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_structure.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_tolink.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dp_write.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpboardlog_update.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpcode_add.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpconf_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpconf_init.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpconf_read.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpconf_update.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpconf_validate.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpconf_write.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_flatten.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_make.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_map.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_map0.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_read.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_sync.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_syncflag_reset.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinput_write.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpinputnames_simplify.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dplognote_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpname_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dpname_make.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/dppkg_modify.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/flname_xos_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/fn_dry.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/fn_hydrate.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/get_dlog.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/get_pin_version.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/get_pin_versions.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/get_rspm_pkgmeta.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/gitinfo_validate.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/index.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/inputmap_clean.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/is_dpinput_board.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/is_valid_dp_repository.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/make_names_codefriendly.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/make_pinlink.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/make_sha1_compatible.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/pathnames_reroot.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/purge_local_cache.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/read_pin_from_board.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/readme_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/tbsig_get.html</loc></url>
+<url><loc>https://daapr-team.github.io/daapr/reference/tidyeval.html</loc></url>
 </urlset>
+

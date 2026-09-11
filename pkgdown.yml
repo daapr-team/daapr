@@ -1,16 +1,15 @@
-pandoc: 3.1.11
-pkgdown: 2.0.9
+pandoc: 3.8.3
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   daapr: daapr.html
-  dp_merge: dp_merge.html
+  dp_get: dp_get.html
   dp_update: dp_update.html
   faq: faq.html
   input_data_update: input_data_update.html
   min_workflow_local: min_workflow_local.html
   min_wrkfl: min_wrkfl.html
-last_built: 2024-04-23T17:33Z
+last_built: 2026-09-11T20:06Z
 urls:
-  reference: https://amashadihossein.github.io/daapr/reference
-  article: https://amashadihossein.github.io/daapr/articles
-
+  reference: https://daapr-team.github.io/daapr/reference
+  article: https://daapr-team.github.io/daapr/articles
