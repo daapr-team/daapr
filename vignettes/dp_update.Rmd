@@ -22,7 +22,7 @@ the input data remains unchanged.
 ## User story
 
 We are interested in updating the previously built data product `dp-cars-us001` 
-so that it provides distances in cars dataset in cm. See [minimalist example](https://amashadihossein.github.io/daapr/articles/min_wrkfl.html) 
+so that it provides distances in cars dataset in cm. See [minimalist example](https://daapr-team.github.io/daapr/articles/min_wrkfl.html) 
 
 ## Step 1 Clone the existing `dp_cars` project, set env and activate
 
@@ -32,8 +32,8 @@ environment as shown below.
 
 ```{r dpclone, eval=FALSE}
 # Set up "promised" env variables
-Sys.setenv("AWS_KEY" = "<BUCKETS AWS KEY>")
-Sys.setenv("AWS_SECRET" = "<BUCKETS AWS SECRET>")
+Sys.setenv("AWS_ACCESS_KEY_ID" = "<BUCKETS AWS KEY>")
+Sys.setenv("AWS_SECRET_ACCESS_KEY" = "<BUCKETS AWS SECRET>")
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB_PAT>")
 
 dp_clone(remote_url = "<GIT PATH/dp_cars.git>", branch = "us001")
@@ -57,8 +57,8 @@ Open `dp_make.R` and edit to add a single line
 data_files_read <- dpinput_read()
 
 # build your ouput data
-output <- data_files_read$cars(config = config) %>%
-  dplyr::mutate(dist_m = 0.3048 * dist) %>%
+output <- data_files_read$cars(config = config) |>
+  dplyr::mutate(dist_m = 0.3048 * dist) |>
   dplyr::mutate(dist_cm = 100 * dist_m)
 
 # Structure the input, output, metadata ... you wish to have in your data product

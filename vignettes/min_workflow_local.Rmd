@@ -27,8 +27,8 @@ dataset in metric unit. See `?cars` for additional detail about the dataset.
 
 ## Step 1: Initialize the project
 
-As this is a new project, we initialize the project using `dpbuild::dp_init`. See
-the getting started [vignette](https://amashadihossein.github.io/daapr/articles/daapr.html) 
+As this is a new project, we initialize the project using `dp_init`. See
+the getting started [vignette](https://daapr-team.github.io/daapr/articles/daapr.html) 
 for details of what the initialization does.
 
 Note: when providing board params to `board_params_set_local`, make sure to specify 
@@ -108,7 +108,7 @@ product is built.
 data_files_read <- dpinput_read()
 
 # build your output data
-output <- data_files_read$cars(config = config) %>%
+output <- data_files_read$cars(config = config) |>
   dplyr::mutate(dist_m = 0.3048 * dist)
 
 # Structure the input, output, metadata ... you wish to have in your data product

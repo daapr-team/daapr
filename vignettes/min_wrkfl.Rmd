@@ -26,8 +26,8 @@ dataset in metric unit. See `?cars` for additional detail about the dataset.
 
 ## Step 1: Initialize the project
 
-As this is a new project, we initialize the project using `dpbuild::dp_init`. See
-the getting started [vignette](https://amashadihossein.github.io/daapr/articles/daapr.html) for details of what the initialization does.
+As this is a new project, we initialize the project using `dp_init`. See
+the getting started [vignette](https://daapr-team.github.io/daapr/articles/daapr.html) for details of what the initialization does.
 
 ```{r dp_init_, eval = F}
 library(daapr)
@@ -39,8 +39,8 @@ board_params_set_dried <- fn_dry(board_params_set_s3(
 
 # Dry function call to setting credentials
 creds_set_dried <- fn_dry(creds_set_aws(
-  key = Sys.getenv("AWS_KEY"),
-  secret = Sys.getenv("AWS_SECRET")
+  key = Sys.getenv("AWS_ACCESS_KEY_ID"),
+  secret = Sys.getenv("AWS_SECRET_ACCESS_KEY")
 ))
 
 # Initialize dp repo
@@ -73,8 +73,8 @@ if (!"daapr" %in% (.packages())) {
 }
 
 # Set up "promised" env variables for remote data repository
-Sys.setenv("AWS_KEY" = "<BUCKETS AWS KEY>")
-Sys.setenv("AWS_SECRET" = "<BUCKETS AWS SECRET>")
+Sys.setenv("AWS_ACCESS_KEY_ID" = "<BUCKETS AWS KEY>")
+Sys.setenv("AWS_SECRET_ACCESS_KEY" = "<BUCKETS AWS SECRET>")
 
 # Set up env variables for remote code repository
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB PAT>")
@@ -114,7 +114,7 @@ product is built.
 data_files_read <- dpinput_read()
 
 # build your output data
-output <- data_files_read$cars(config = config) %>%
+output <- data_files_read$cars(config = config) |>
   dplyr::mutate(dist_m = 0.3048 * dist)
 
 # Structure the input, output, metadata ... you wish to have in your data product
