@@ -19,12 +19,12 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Afshin Mashadi-Hossein \email{amashadihossein@gmail.com} (\href{https://orcid.org/0000-0002-2337-2195}{ORCID})
+\strong{Maintainer}: Clara Amorosi \email{camorosi42@gmail.com} (\href{https://orcid.org/0000-0002-0730-2576}{ORCID})
 
 Authors:
 \itemize{
-  \item Clara Amorosi (\href{https://orcid.org/0000-0002-0730-2576}{ORCID})
-  \item Yue Jiang \email{rivehill@gmail.com}
+  \item Afshin Mashadi-Hossein (\href{https://orcid.org/0000-0002-2337-2195}{ORCID})
+  \item Yue Jiang
 }
 
 Other contributors:
