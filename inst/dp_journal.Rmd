@@ -24,11 +24,11 @@ library(daapr)
 <!-- **Workflow NOTE:** This dev journal, while not a required step in building a data product, can help document steps in building each data product and assist with traceability and collaboration and such is recommended -->
 
 
-# Pre-requisite configuraion and setup
+# Pre-requisite configuration and setup
 
 <!-- **Workflow NOTE:** In this step we set up all the credentials and requirements for being able to connect to remote locations be it GitHub or the remote for dp deployment  -->
 
-## Validte project set up (optional)
+## Validate project set up (optional)
 
 **Goal:** Ensure, we are in a properly set up `daap` project
 
