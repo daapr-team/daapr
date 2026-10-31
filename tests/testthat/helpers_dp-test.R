@@ -68,6 +68,28 @@ add_test_daap_inputs <- function(daapr_fixtures_dir) {
   dpinput_write(project_path = ".", input_d = synced_map)
 }
 
+load_use_derive_fns <- function() {
+  # Remove even on error so later build, commit, and fixture comparisons are unaffected
+  on.exit(unlink(c(file.path("R", "derive_dm.R"), file.path("R", "safety")), recursive = TRUE), add = TRUE)
+  use_derive_fn("dm")
+  use_derive_fn("dm", subdir = "safety")
+
+  # Like tar_make(), evaluate dp_make.R (minus the final list of targets) in a fresh process
+  callr::r(function() {
+    env <- new.env()
+    exprs <- parse("dp_make.R")
+    last <- exprs[[length(exprs)]]
+    if (!is.call(last) || !identical(last[[1]], as.name("list"))) {
+      stop("Expected dp_make.R to end with a list() of targets")
+    }
+    for (e in utils::head(exprs, -1)) eval(e, envir = env)
+    c(
+      derive_dm = is.function(env$derive_dm),
+      derive_dm_safety = is.function(env$derive_dm_safety)
+    )
+  }, wd = getwd())
+}
+
 build_and_deploy_local_test_daap <- function(dev_fixtures_daap_dir) {
   # copy derivation files to tmp dp dir
   fs::file_copy(file.path(dev_fixtures_daap_dir, "R", "derive_subjects.R"),
