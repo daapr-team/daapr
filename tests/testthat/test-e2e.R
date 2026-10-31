@@ -144,6 +144,13 @@ test_that("everything works end to end", {
   temp_input_yaml <- yaml::read_yaml(file.path(tmp_dirs$temp_dp_project_dir, ".daap/daap_input.yaml"))
   expect_setequal(names(temp_input_yaml), c("dm", "rs_onco_imwg"))
 
+  # Functions created by use_derive_fn are available to dp_make.R
+  derive_fns_available <- rsession$run(function() load_use_derive_fns())
+  expect_true(derive_fns_available[["derive_dm"]])
+  expect_true(derive_fns_available[["derive_dm_safety"]])
+  expect_false(file.exists(file.path(tmp_dirs$temp_dp_project_dir, "R/derive_dm.R")))
+  expect_false(dir.exists(file.path(tmp_dirs$temp_dp_project_dir, "R/safety")))
+
   session5_daapr_version <- rsession$run(function(daap_dir, fixtures_dir){
     build_and_deploy_local_test_daap(dev_fixtures_daap_dir = fixtures_dir)
     packageVersion("daapr")
