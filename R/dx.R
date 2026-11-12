@@ -55,8 +55,8 @@ is_valid_dp_repository <- function(path,
 dp_repository_check <- function(path) {
   dx <- list()
   dx$git_initialized <- git2r::in_repository(path = path)
-  dx$dp_initialized <- unname(fs::file_exists(glue::glue("{path}/.daap/daap_config.yaml")))
-  dx$renv_initialized <- unname(fs::dir_exists(glue::glue("{path}/renv")))
+  dx$dp_initialized <- unname(fs::file_exists(fs::path(path, ".daap", "daap_config.yaml")))
+  dx$renv_initialized <- unname(fs::dir_exists(fs::path(path, "renv")))
   dx$branch_name_matches <- NA
   dp_repository <- unname(dx$git_initialized & dx$dp_initialized & dx$renv_initialized)
   if (!dp_repository) {

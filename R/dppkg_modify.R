@@ -75,7 +75,7 @@ dppkg_modify <- function(project_path = ".",
   }
 
 
-  renv_manifest_path <- glue::glue("{project_path}/renv.lock")
+  renv_manifest_path <- fs::path(project_path, "renv.lock")
   renv_manifest <- jsonlite::read_json(path = renv_manifest_path)
   repo_names_manifest <- sapply(renv_manifest$R$Repositories, function(x) x$Name)
   repo_urls_manifest <- sapply(renv_manifest$R$Repositories, function(x) x$URL)

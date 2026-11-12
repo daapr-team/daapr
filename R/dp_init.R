@@ -146,16 +146,16 @@ dp_init <- function(project_path = fs::path_wd(),
   last_commit <- git2r::last_commit(repo = repo)
 
 
-  if (!fs::dir_exists(path = glue::glue("{project_path}/.daap"))) {
-    fs::dir_create(glue::glue("{project_path}/.daap"))
+  if (!fs::dir_exists(path = fs::path(project_path, ".daap"))) {
+    fs::dir_create(fs::path(project_path, ".daap"))
   }
 
-  if (!fs::dir_exists(path = glue::glue("{project_path}/input_files"))) {
-    fs::dir_create(glue::glue("{project_path}/input_files"))
+  if (!fs::dir_exists(path = fs::path(project_path, "input_files"))) {
+    fs::dir_create(fs::path(project_path, "input_files"))
   }
 
-  if (!fs::dir_exists(path = glue::glue("{project_path}/output_files"))) {
-    fs::dir_create(glue::glue("{project_path}/output_files"))
+  if (!fs::dir_exists(path = fs::path(project_path, "output_files"))) {
+    fs::dir_create(fs::path(project_path, "output_files"))
   }
 
   pins_version <- utils::packageVersion("pins")
@@ -174,13 +174,13 @@ dp_init <- function(project_path = fs::path_wd(),
     is_legacy = is_legacy, ...
   )
 
-  if (!fs::dir_exists(fs::path_tidy(glue::glue("{project_path}/R")))) {
-    fs::dir_create(fs::path_tidy(glue::glue("{project_path}/R")))
+  if (!fs::dir_exists(fs::path(project_path, "R"))) {
+    fs::dir_create(fs::path(project_path, "R"))
   }
 
   fs::file_copy(
     path = system.file("global.R", package = "daapr"),
-    new_path = fs::path_tidy(glue::glue("{project_path}/R")),
+    new_path = fs::path(project_path, "R"),
     overwrite = TRUE
   )
 
@@ -195,7 +195,7 @@ dp_init <- function(project_path = fs::path_wd(),
   # commit git
   repo <- git2r::repository(path = fs::path_tidy(project_path))
   add_these <- unlist(git2r::status(repo = repo))
-  git2r::add(repo = repo, path = glue::glue("{project_path}/{add_these}"))
+  git2r::add(repo = repo, path = fs::path(project_path, add_these))
   git2r::commit(repo = repo, all = TRUE, message = commit_description)
 
 
@@ -235,8 +235,8 @@ dpconf_init <- function(project_path,
                         creds_set_dried,
                         is_legacy,
                         ...) {
-  if (!fs::dir_exists(path = glue::glue("{project_path}/.daap"))) {
-    fs::dir_create(glue::glue("{project_path}/.daap"))
+  if (!fs::dir_exists(path = fs::path(project_path, ".daap"))) {
+    fs::dir_create(fs::path(project_path, ".daap"))
   }
 
   dpconf <- c(
@@ -365,9 +365,9 @@ dp_git_init <- function(project_path, project_name, branch_name,
         },
         sep = "\n"
       ),
-      file.path(project_path, ".gitignore")
+      fs::path(project_path, ".gitignore")
     )
-    git2r::add(repo = repo, path = glue::glue("{project_path}/.gitignore"))
+    git2r::add(repo = repo, path = fs::path(project_path, ".gitignore"))
 
     add_readme(
       project_path = project_path,
@@ -377,7 +377,7 @@ dp_git_init <- function(project_path, project_name, branch_name,
       creds_set_dried = creds_set_dried
     )
 
-    git2r::add(repo = repo, path = glue::glue("{project_path}/README.md"))
+    git2r::add(repo = repo, path = fs::path(project_path, "README.md"))
 
     commit_1 <- git2r::commit(repo, message = "project init")
 
@@ -426,7 +426,7 @@ add_readme <- function(project_path, dp_title, github_repo_url,
   board_params_set <- fn_hydrate(board_params_set_dried)
 
   rendered <- try(rmarkdown::render(
-    input = glue::glue("{project_path}/{flname}"),
+    input = fs::path(project_path, flname),
     params = list(
       dp_title = dp_title, github_repo_url = github_repo_url,
       board_params_set = board_params_set,
@@ -437,7 +437,7 @@ add_readme <- function(project_path, dp_title, github_repo_url,
   if ("try-error" %in% class(rendered)) {
     writeLines(
       glue::glue("## {dp_title}"),
-      file.path(project_path, "README.md")
+      fs::path(project_path, "README.md")
     )
   }
 }

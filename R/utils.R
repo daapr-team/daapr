@@ -607,7 +607,7 @@ project_path_resolve <- function(project_path = ".") {
 #' @return dlog
 #' @keywords internal
 get_dlog <- function(project_path) {
-  dlog <- yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_log.yaml"))
+  dlog <- yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_log.yaml"))
   dlog <- purrr::modify_depth(
     .x = dlog, .depth = 2, .ragged = TRUE,
     .f = function(x) paste0(x, collapse = " > ")
