@@ -581,6 +581,26 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
 }
 
 
+#' @title Resolve project path
+#' @description Validates `project_path` and resolves it to an absolute,
+#' tidy path against the current working directory. Exported functions call
+#' this once on entry so that later working-directory changes (e.g. by
+#' `renv::init()`) cannot change which folder `project_path` refers to.
+#' @param project_path Path to the data product project folder. Defaults to
+#' the current working directory (`"."`).
+#' @return An absolute `fs_path`
+#' @keywords internal
+project_path_resolve <- function(project_path = ".") {
+  if (!rlang::is_string(project_path) || !nzchar(project_path)) {
+    stop(cli::format_error(glue::glue(
+      "`project_path` must be a single non-empty string, not ",
+      "{paste(deparse(project_path), collapse = '')}."
+    )))
+  }
+  fs::path_abs(fs::path_expand(project_path))
+}
+
+
 #' @title Get dlog
 #' @description Reads and format daap_log.yml pasting values in key:value
 #' pairs at depth 2 with delimitter " > "
