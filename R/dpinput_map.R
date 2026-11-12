@@ -7,7 +7,7 @@
 #' @importFrom dplyr .data
 #' @export
 dpinput_map <- function(project_path) {
-  input_dir <- glue::glue("{project_path}/input_files/")
+  input_dir <- fs::path(project_path, "input_files")
   # TODO: extend the same workflow seamlessly to a single data file
   if (!fs::dir_exists(input_dir)) {
     stop(cli::format_error(glue::glue(

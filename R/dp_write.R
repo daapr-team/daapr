@@ -37,11 +37,8 @@ dp_write <- function(data_object, type = "rds", project_path = ".") {
 
   log_history <- log_note
 
-  if (file.exists(glue::glue("{project_path}/.daap/daap_log.yaml"))) {
-    log_history <- yaml::read_yaml(file = glue::glue(
-      "{project_path}/",
-      ".daap/daap_log.yaml"
-    ))
+  if (file.exists(fs::path(project_path, ".daap", "daap_log.yaml"))) {
+    log_history <- yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_log.yaml"))
 
     if (log_label %in% names(log_history)) {
       if (!identical(log_history[log_label], log_note)) {
@@ -52,10 +49,7 @@ dp_write <- function(data_object, type = "rds", project_path = ".") {
     }
   }
 
-  yaml::write_yaml(x = log_history, file = glue::glue(
-    "{project_path}/",
-    ".daap/daap_log.yaml"
-  ))
+  yaml::write_yaml(x = log_history, file = fs::path(project_path, ".daap", "daap_log.yaml"))
 
   return(TRUE)
 }
@@ -80,7 +74,7 @@ save_object <- function(data_object, project_path, type = "rds") {
   for (other_type in object_types) {
     if (other_type != type) {
       other_format_dir <- format_dirs[[other_type]]
-      other_dir_path <- glue::glue("{project_path}/output_files/{other_format_dir}")
+      other_dir_path <- fs::path(project_path, "output_files", other_format_dir)
 
       if (dir.exists(other_dir_path)) {
         # Display format for error message (preserve case as in directory name)
@@ -121,10 +115,7 @@ save_object <- function(data_object, project_path, type = "rds") {
 #' will create the directory if it does not exist
 #' @noRd
 write_rds <- function(data_object, project_path) {
-  dataobj_path <- glue::glue(
-    "{project_path}/",
-    "output_files/RDS_format/data_object.RDS"
-  )
+  dataobj_path <- fs::path(project_path, "output_files", "RDS_format", "data_object.RDS")
   check_dir(dataobj_path)
   saveRDS(object = data_object, file = dataobj_path, version = 2)
   return(dataobj_path)

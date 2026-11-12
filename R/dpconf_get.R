@@ -40,7 +40,7 @@ dpconf_get <- function(project_path = ".") {
 #' @keywords internal
 dpconf_read <- function(project_path) {
   dpconf <-
-    yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_config.yaml"))
+    yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_config.yaml"))
   return(dpconf)
 }
 
@@ -54,7 +54,7 @@ dpconf_read <- function(project_path) {
 dpconf_write <- function(project_path, dpconf) {
   yaml::write_yaml(
     x = dpconf,
-    file = glue::glue("{project_path}/.daap/daap_config.yaml")
+    file = fs::path(project_path, ".daap", "daap_config.yaml")
   )
   return(dpconf)
 }

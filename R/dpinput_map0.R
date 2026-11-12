@@ -5,12 +5,12 @@
 #' input content or NULL if no `.daap/daap_input.yaml`
 #' @keywords internal
 dpinput_map0 <- function(project_path = ".") {
-  if (!fs::file_exists(glue::glue("{project_path}/.daap/daap_input.yaml"))) {
+  if (!fs::file_exists(fs::path(project_path, ".daap", "daap_input.yaml"))) {
     return(NULL)
   }
 
   daap_input_yaml <-
-    yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_input.yaml"))
+    yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_input.yaml"))
   read_dpinput0 <-
     dpinput_read(daap_input_yaml = daap_input_yaml, add_metadata = T)
   input_obj0 <- dpinput_flatten(read_dpinput0)

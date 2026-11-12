@@ -36,7 +36,7 @@ dp_deploy <- function(project_path = ".", ...) {
 #' @description Determines the saved data output object type (rds vs qs etc.)
 #' @noRd
 detect_type <- function(project_path) {
-  fs::dir_ls(file.path(project_path, "output_files/"), recurse = TRUE, regexp = "data_object") |>
+  fs::dir_ls(fs::path(project_path, "output_files"), recurse = TRUE, regexp = "data_object") |>
     tools::file_ext() |>
     tolower()
 }
@@ -47,7 +47,7 @@ detect_type <- function(project_path) {
 object_read <- function(project_path, type) {
   type <- rlang::arg_match0(type, c("rds")) #, "qs"))
   switch(type,
-    rds = readRDS(file = glue::glue("{project_path}/output_files/RDS_format/data_object.RDS")) #,
+    rds = readRDS(file = fs::path(project_path, "output_files", "RDS_format", "data_object.RDS")) #,
     # qs = read_qs(project_path)
   )
 }
