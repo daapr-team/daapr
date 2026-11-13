@@ -5,7 +5,7 @@
 \title{Modify data product configuration}
 \usage{
 dpconf_update(
-  project_path = fs::path_wd(),
+  project_path = ".",
   project_description = character(0),
   branch_name = character(0),
   branch_description = character(0),

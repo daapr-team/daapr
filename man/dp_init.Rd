@@ -5,7 +5,7 @@
 \title{Initialize data product project}
 \usage{
 dp_init(
-  project_path = fs::path_wd(),
+  project_path = ".",
   project_description,
   branch_name,
   branch_description,

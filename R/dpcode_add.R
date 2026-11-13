@@ -4,7 +4,8 @@
 #' @param use_targets T/F when TRUE, uses targets instead of drake (recommended)
 #' @return repo
 #' @export
-dpcode_add <- function(project_path, use_targets = T) {
+dpcode_add <- function(project_path = ".", use_targets = T) {
+  project_path <- project_path_resolve(project_path)
   if (!fs::dir_exists(project_path)) {
     stop("project_path does not exist")
   }

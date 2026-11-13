@@ -4,7 +4,7 @@
 \alias{dpinput_map}
 \title{Map data input into data product workflow}
 \usage{
-dpinput_map(project_path)
+dpinput_map(project_path = ".")
 }
 \arguments{
 \item{project_path}{path to the project}

@@ -4,7 +4,7 @@
 \alias{dp_commit}
 \title{Commit data product}
 \usage{
-dp_commit(project_path = fs::path_wd(), commit_description)
+dp_commit(project_path = ".", commit_description)
 }
 \arguments{
 \item{project_path}{Path to the project folder (default is working directory)}

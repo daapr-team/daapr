@@ -2,7 +2,7 @@ test_that("properly checks valid repository ", {
   local_mocked_bindings(is_valid_dp_repository = function(path) FALSE)
   expect_snapshot(error = TRUE, {
     data_object <- list()
-    path <- "."
+    path <- "/nonexistent/dp"
     dp_write(data_object, project_path = path)
   })
 })

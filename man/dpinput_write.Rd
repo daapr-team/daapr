@@ -4,7 +4,7 @@
 \alias{dpinput_write}
 \title{Write data product input manifest}
 \usage{
-dpinput_write(project_path, input_d, verbose = F)
+dpinput_write(project_path = ".", input_d, verbose = F)
 }
 \arguments{
 \item{project_path}{Project path}
