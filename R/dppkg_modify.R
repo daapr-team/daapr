@@ -37,6 +37,7 @@ dppkg_modify <- function(project_path = ".",
                          repo_url,
                          force_repo_overwrite = FALSE,
                          verbose = TRUE) {
+  project_path <- project_path_resolve(project_path)
   if (length(pkg_version) == 0 || length(pkg_sha) == 0) {
     if (length(pkg_version) != 0) {
       warning(cli::format_warning(glue::glue(

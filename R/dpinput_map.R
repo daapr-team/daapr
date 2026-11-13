@@ -6,7 +6,8 @@
 #'  evaluated
 #' @importFrom dplyr .data
 #' @export
-dpinput_map <- function(project_path) {
+dpinput_map <- function(project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   input_dir <- fs::path(project_path, "input_files")
   # TODO: extend the same workflow seamlessly to a single data file
   if (!fs::dir_exists(input_dir)) {
@@ -22,7 +23,12 @@ dpinput_map <- function(project_path) {
     message("input_files directory is empty. It is OK to have an empty input_files directory if there is no need to update input data.")
   }
 
-  read_files <- dir_process(current_dir = input_dir)
+  # Scan relative to the project so paths recorded in daap_input.yaml stay
+  # "./input_files/..." rather than machine-specific absolute paths
+  read_files <- withr::with_dir(
+    project_path,
+    dir_process(current_dir = fs::path(".", "input_files"))
+  )
   flattened_dirTree <- dirTree_flatten(read_files = read_files)
   input_obj <- dirTree_build(flattened_dirTree = flattened_dirTree)
 

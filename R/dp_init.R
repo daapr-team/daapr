@@ -54,7 +54,7 @@
 #' )
 #' }
 #' @export
-dp_init <- function(project_path = fs::path_wd(),
+dp_init <- function(project_path = ".",
                     project_description,
                     branch_name,
                     branch_description,
@@ -73,6 +73,7 @@ dp_init <- function(project_path = fs::path_wd(),
                       ".vscode/", "rsconnect/", "*_cache/"
                     ),
                     ...) {
+  project_path <- project_path_resolve(project_path)
   commit_description <- "dp init"
   wd0 <- fs::path_wd()
 

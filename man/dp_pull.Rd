@@ -4,7 +4,7 @@
 \alias{dp_pull}
 \title{Pull data product from a remote repo}
 \usage{
-dp_pull(project_path = fs::path_wd())
+dp_pull(project_path = ".")
 }
 \arguments{
 \item{project_path}{Path to the project folder (default is working directory)}

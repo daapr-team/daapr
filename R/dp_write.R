@@ -6,6 +6,7 @@
 #' @return TRUE
 #' @export
 dp_write <- function(data_object, type = "rds", project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   if (!is_valid_dp_repository(path = project_path)) {
     stop(glue::glue(
       "Not a dp repsitory. ",

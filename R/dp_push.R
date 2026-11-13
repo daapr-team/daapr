@@ -13,6 +13,7 @@
 dp_push <- function(project_path = ".",
                     remote_alias = character(0),
                     remote_url = character(0)) {
+  project_path <- project_path_resolve(project_path)
   if (nchar(Sys.getenv("GITHUB_PAT")) == 0) {
     stop(cli::format_error(glue::glue(
       "Could not push as it did not find ",

@@ -5,6 +5,7 @@
 #' input content or NULL if no `.daap/daap_input.yaml`
 #' @keywords internal
 dpinput_map0 <- function(project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   if (!fs::file_exists(fs::path(project_path, ".daap", "daap_input.yaml"))) {
     return(NULL)
   }

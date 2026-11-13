@@ -8,6 +8,7 @@
 #' @return a list dpconf
 #' @export
 dpconf_get <- function(project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   check_pins_compatibility(project_path = project_path)
 
   dpconf <- dpconf_read(project_path = project_path)

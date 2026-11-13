@@ -7,13 +7,13 @@
 #' dp_commit(commit_description = "First dp commit")
 #' }
 #' @export
-dp_commit <- function(project_path = fs::path_wd(),
+dp_commit <- function(project_path = ".",
                       commit_description) {
+  project_path <- project_path_resolve(project_path)
   if (length(commit_description) == 0) {
     stop("commit_description needs to have length > 0")
   }
 
-  project_path <- fs::path_tidy(project_path)
   log_path <- fs::path(project_path, ".daap", "daap_log.yaml")
   object_path <- get_data_object_path(project_path)
 

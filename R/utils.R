@@ -326,6 +326,7 @@ flname_xos_get <- function(fl, package = "daapr") {
 #' @param project_path path to project folder
 #' @keywords internal
 check_pins_compatibility <- function(project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   read_conf_file <- dpconf_read(project_path = project_path)
 
   if ("is_legacy" %in% names(read_conf_file)) {

@@ -6,7 +6,8 @@
 #' @param verbose T/F
 #' @return TRUE
 #' @export
-dpinput_write <- function(project_path, input_d, verbose = F) {
+dpinput_write <- function(project_path = ".", input_d, verbose = F) {
+  project_path <- project_path_resolve(project_path)
   if (verbose) {
     print("Writing daap input yaml")
   }

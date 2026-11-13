@@ -2,11 +2,11 @@
 
     Code
       data_object <- list()
-      path <- "."
+      path <- "/nonexistent/dp"
       dp_write(data_object, project_path = path)
     Condition
       Error in `dp_write()`:
-      ! Not a dp repsitory. Run `dp_repository_check(".")` for details
+      ! Not a dp repsitory. Run `dp_repository_check("/nonexistent/dp")` for details
 
 # properly checks data object class
 

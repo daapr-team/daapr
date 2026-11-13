@@ -6,6 +6,7 @@
 #' @return TRUE
 #' @export
 dp_deploy <- function(project_path = ".", ...) {
+  project_path <- project_path_resolve(project_path)
   if (!is_valid_dp_repository(path = project_path)) {
     stop(cli::format_error(glue::glue(
       "project_path, {project_path},",

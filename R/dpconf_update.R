@@ -21,7 +21,7 @@
 #' @param ... any other metadata to be captured in the config file
 #' @return project path
 #' @export
-dpconf_update <- function(project_path = fs::path_wd(),
+dpconf_update <- function(project_path = ".",
                           project_description = character(0),
                           branch_name = character(0),
                           branch_description = character(0),
@@ -31,6 +31,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
                           commit_description = "dp_conf modified",
                           git_ignore = character(0),
                           ...) {
+  project_path <- project_path_resolve(project_path)
   if (!is_valid_dp_repository(path = project_path)) {
     message("Invalid, incomplete or incosistent dp repository:")
     ck <- dp_repository_check(path = project_path)
