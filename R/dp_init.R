@@ -75,7 +75,8 @@ dp_init <- function(project_path = ".",
                     ...) {
   project_path <- project_path_resolve(project_path)
   commit_description <- "dp init"
-  wd0 <- fs::path_wd()
+  # renv::init() changes the working directory; restore it on exit, even on error
+  withr::local_dir(fs::path_wd())
 
   # Validate data repo params
   # TODO: to be moved upstream as part of creds and board param validation
@@ -190,11 +191,10 @@ dp_init <- function(project_path = ".",
     new_path = project_path, overwrite = TRUE
   )
   # add renv
-  renv::init(project = fs::path_tidy(project_path), restart = FALSE)
-  setwd(wd0)
+  renv::init(project = project_path, restart = FALSE)
 
   # commit git
-  repo <- git2r::repository(path = fs::path_tidy(project_path))
+  repo <- git2r::repository(path = project_path)
   add_these <- unlist(git2r::status(repo = repo))
   git2r::add(repo = repo, path = fs::path(project_path, add_these))
   git2r::commit(repo = repo, all = TRUE, message = commit_description)
