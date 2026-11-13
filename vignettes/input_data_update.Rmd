@@ -57,7 +57,7 @@ Sys.setenv("AWS_SECRET_ACCESS_KEY" = "<BUCKETS AWS SECRET>")
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB PAT>")
 
 # Retrieve configuration
-config <- dpconf_get(project_path = ".")
+config <- dpconf_get()
 ```
 
 
@@ -72,7 +72,7 @@ to metadata representation of the read datasets. Given the goal to update the
 readr::write_csv(x = cars[1:45, ], file = "./input_files/cars.csv")
 
 # Map all input_files content and optionally clean file labels in the map
-input_map <- dpinput_map(project_path = ".")
+input_map <- dpinput_map()
 ```
 
 Examine `input_map`. Not only it contains the newly uploaded data, it also
@@ -93,7 +93,7 @@ input_map <- inputmap_clean(input_map = input_map, remove_id = "cars")
 synced_map <- dpinput_sync(conf = config, input_map = input_map, verbose = T)
 
 # For each sync'd dataset, record info that will help you retrieve as needed
-dpinput_write(project_path = ".", input_d = synced_map)
+dpinput_write(input_d = synced_map)
 ```
 
 
@@ -114,10 +114,9 @@ At this point, you can commit and push your code.
 
 ```{r dpcommit_, eval = F}
 dp_commit(
-  project_path = ".",
   commit_description = "Updated input cars, dropping the last 5 rows"
 )
-dp_push(project_path = ".")
+dp_push()
 ```
 
 

@@ -93,14 +93,14 @@ dp_repo <- dp_init(
 )
 
 setwd(dp_repo)
-config <- dpconf_get(project_path = ".")
+config <- dpconf_get()
 
 # 2. Sync input data to the board and record what was synced
 write.csv(cars, "./input_files/cars.csv", row.names = FALSE)
 
-input_map <- dpinput_map(project_path = ".") |> inputmap_clean()
+input_map <- dpinput_map() |> inputmap_clean()
 synced_map <- dpinput_sync(conf = config, input_map = input_map)
-dpinput_write(project_path = ".", input_d = synced_map)
+dpinput_write(input_d = synced_map)
 
 # 3. Build the data product
 data_files_read <- dpinput_read()
@@ -114,11 +114,11 @@ data_object <- dp_structure(
   config = config
 )
 
-dp_write(data_object = data_object, project_path = ".")
+dp_write(data_object = data_object)
 
 # 4. Commit, push, and deploy
-dp_commit(project_path = ".", commit_description = "First dp build")
-dp_push(project_path = ".")
+dp_commit(commit_description = "First dp build")
+dp_push()
 dp_deploy()
 ```
 
