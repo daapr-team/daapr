@@ -5,13 +5,14 @@
 \title{Determine if valid dp repository}
 \usage{
 is_valid_dp_repository(
-  path,
+  path = ".",
   checks = c("all", "git", "dp", "renv", "branch"),
   verbose = F
 )
 }
 \arguments{
-\item{path}{Path to be evaluated}
+\item{path}{Path to the folder to be evaluated. Relative paths are resolved
+against the current working directory.}
 
 \item{checks}{any combination of c("all","git","dp","renv","branch"). default
 is all.}

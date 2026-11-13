@@ -4,15 +4,17 @@
 #' @details All diagnostic tests to check validity of dp repository are run
 #' regardless of choice of checks. Checks determines what subset is considered
 #' in return T/F.
-#' @param path Path to be evaluated
+#' @param path Path to the folder to be evaluated. Relative paths are resolved
+#' against the current working directory.
 #' @param checks any combination of c("all","git","dp","renv","branch"). default
 #' is all.
 #' @param verbose If TRUE, it will print which tests passed/failed
 #' @return TRUE or FALSE
 #' @export
-is_valid_dp_repository <- function(path,
+is_valid_dp_repository <- function(path = ".",
                                    checks = c("all", "git", "dp", "renv", "branch"),
                                    verbose = F) {
+  path <- project_path_resolve(path)
   checks <- match.arg(
     arg = checks,
     choices = c("all", "git", "dp", "renv", "branch"),

@@ -4,6 +4,8 @@
   it, and is resolved to an absolute path on entry, so it no longer depends
   on later changes to the working directory.
 * `dpinput_read()` gains a `project_path` argument.
+* `is_valid_dp_repository()` can now be called without a path, and checks the
+  working directory.
 * `dp_deploy()` now records the git remote of `project_path`, not of the
   working directory.
 
