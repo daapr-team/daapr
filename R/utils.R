@@ -383,7 +383,7 @@ gitinfo_validate <- function(project_path, verbose = FALSE) {
   )
 
   #-----Check remote git url-------------
-  remote_url <- try(git2r::remote_url(repo = ".", remote = git2r::remotes()), silent = TRUE)
+  remote_url <- try(git2r::remote_url(repo = repo, remote = git2r::remotes(repo = repo)), silent = TRUE)
   has_remote_url <- class(remote_url) != "try-error"
   if (verbose) {
     if (has_remote_url) {
