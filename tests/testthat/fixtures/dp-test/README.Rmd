@@ -16,7 +16,7 @@ To build and deploy this data product:
 Clone the project, set working directory to project top folder and activate
 
 ```{r activate, eval=FALSE}
-dp_activate(project_path = ".")
+dp_activate()
 ```
 
 ### STEP 2: Set environment variables
