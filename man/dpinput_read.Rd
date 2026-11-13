@@ -5,14 +5,20 @@
 \title{Read data product input manifest}
 \usage{
 dpinput_read(
-  daap_input_yaml = yaml::read_yaml(file = "./.daap/daap_input.yaml"),
-  add_metadata = FALSE
+  daap_input_yaml = yaml::read_yaml(file = fs::path(project_path, ".daap",
+    "daap_input.yaml")),
+  add_metadata = FALSE,
+  project_path = "."
 )
 }
 \arguments{
-\item{daap_input_yaml}{daap_input yaml file imported (default "./.daap/daap_input.yaml")}
+\item{daap_input_yaml}{daap_input yaml file imported (default
+\code{.daap/daap_input.yaml} under \code{project_path})}
 
 \item{add_metadata}{T/F when TRUE dpinput format will include metadata}
+
+\item{project_path}{path to the project folder, used only to locate the
+default \code{daap_input_yaml} (default is current directory)}
 }
 \value{
 daap_input as a structured list of anonymous functions each when
