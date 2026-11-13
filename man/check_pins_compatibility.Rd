@@ -7,7 +7,8 @@
 check_pins_compatibility(project_path = ".")
 }
 \arguments{
-\item{project_path}{path to project folder}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \description{
 Check pins package compatibility

@@ -323,7 +323,7 @@ flname_xos_get <- function(fl, package = "daapr") {
 
 #' @title Check pins package compatibility
 #' @description Check pins package compatibility
-#' @param project_path path to project folder
+#' @inheritParams project_path_resolve
 #' @keywords internal
 check_pins_compatibility <- function(project_path = ".") {
   project_path <- project_path_resolve(project_path)
@@ -355,7 +355,7 @@ check_pins_compatibility <- function(project_path = ".") {
 
 #' @title Validate git info for deploy
 #' @description Validates and extracts gitinfo per deploy requirements
-#' @param project_path path to project
+#' @inheritParams project_path_resolve
 #' @param verbose F if TRUE prints process details
 #' @return git_info, a list containing git information
 #' @keywords internal
@@ -587,8 +587,8 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
 #' tidy path against the current working directory. Exported functions call
 #' this once on entry so that later working-directory changes (e.g. by
 #' `renv::init()`) cannot change which folder `project_path` refers to.
-#' @param project_path Path to the data product project folder. Defaults to
-#' the current working directory (`"."`).
+#' @param project_path Path to the data product project folder. Relative paths
+#' are resolved against the current working directory.
 #' @return An absolute `fs_path`
 #' @keywords internal
 project_path_resolve <- function(project_path = ".") {

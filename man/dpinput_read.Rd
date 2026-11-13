@@ -17,8 +17,9 @@ dpinput_read(
 
 \item{add_metadata}{T/F when TRUE dpinput format will include metadata}
 
-\item{project_path}{path to the project folder, used only to locate the
-default \code{daap_input_yaml} (default is current directory)}
+\item{project_path}{Path to the data product project folder, used only to
+locate the default \code{daap_input_yaml}. Relative paths are resolved against
+the current working directory.}
 }
 \value{
 daap_input as a structured list of anonymous functions each when

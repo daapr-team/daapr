@@ -18,7 +18,8 @@ dpconf_init(
 )
 }
 \arguments{
-\item{project_path}{path to the project folder}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 
 \item{project_name}{the name of the project. This is typically the name of
 the folder where the project is set}

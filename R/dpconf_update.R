@@ -1,8 +1,7 @@
 #' @title Modify data product configuration
 #' @description Manages all modification to data product project configuration
 #' subsequent to the initialization via `dp_init`.
-#' @param project_path path to the project folder. The folder name will be used
-#' as project name. If the path doesn't exist it will be created.
+#' @inheritParams project_path_resolve
 #' @param project_description A high level description of the project. Example:
 #' integrated, clinical and translational data from study x.
 #' @param branch_name An abbreviation to capture the specific reason for which

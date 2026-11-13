@@ -1,3 +1,12 @@
+# daapr (development version)
+
+* `project_path` now defaults to `"."` in every exported function that takes
+  it, and is resolved to an absolute path on entry, so it no longer depends
+  on later changes to the working directory.
+* `dpinput_read()` gains a `project_path` argument.
+* `dp_deploy()` now records the git remote of `project_path`, not of the
+  working directory.
+
 # daapr 1.0.0
 
 First release of the combined daapr. The `dpi`, `dpbuild`, and `dpdeploy`

@@ -2,7 +2,7 @@
 #' @description Converts structured input into a yaml manifest and writes to `.daap/daap_input.yaml`
 #' @param input_d a list generated from `dpinput_sync` with synced_input elements
 #' structured as desired
-#' @param project_path Project path
+#' @inheritParams project_path_resolve
 #' @param verbose T/F
 #' @return TRUE
 #' @export

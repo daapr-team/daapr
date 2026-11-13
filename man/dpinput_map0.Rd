@@ -7,7 +7,8 @@
 dpinput_map0(project_path = ".")
 }
 \arguments{
-\item{project_path}{current project path}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \value{
 input_map0 a data.frame that maps the content of the already synced

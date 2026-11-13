@@ -1,7 +1,7 @@
 #' @title Write data product
 #' @description This function writes the data product and logs it in `.daap/daap_log.yaml`
 #' @param data_object data_object generated from `dp_structure`
-#' @param project_path path to the project (default is current directory)
+#' @inheritParams project_path_resolve
 #' @param type File type used to save the data product, default RDS
 #' @return TRUE
 #' @export

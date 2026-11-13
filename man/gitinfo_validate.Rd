@@ -7,7 +7,8 @@
 gitinfo_validate(project_path, verbose = FALSE)
 }
 \arguments{
-\item{project_path}{path to project}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 
 \item{verbose}{F if TRUE prints process details}
 }

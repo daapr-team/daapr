@@ -7,7 +7,8 @@
 dpconf_read(project_path)
 }
 \arguments{
-\item{project_path}{path to project folder}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \value{
 a list of raw dpconf where any function call remains dry

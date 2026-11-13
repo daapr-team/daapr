@@ -1,6 +1,6 @@
 #' @title Commit data product
 #' @description Runs a number of checks and commits data product changes
-#' @param project_path Path to the project folder (default is working directory)
+#' @inheritParams project_path_resolve
 #' @param commit_description Commit message
 #' @return repo object post commit
 #' @examples \dontrun{
