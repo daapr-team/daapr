@@ -2,7 +2,7 @@ test_that("properly checks valid repository ", {
   local_mocked_bindings(is_valid_dp_repository = function(path) FALSE)
   expect_snapshot(error = TRUE, {
     data_object <- list()
-    path <- "."
+    path <- "/nonexistent/dp"
     dp_write(data_object, project_path = path)
   })
 })
@@ -22,7 +22,7 @@ test_that("properly creates data object paths", {
   local_mocked_bindings(is_valid_dp_repository = function(path) TRUE)
   expect_equal(
     save_object(data_object, path, type = "rds"),
-    file.path(path, "output_files/RDS_format/data_object.RDS")
+    fs::path(path, "output_files", "RDS_format", "data_object.RDS")
   )
   unlink(file.path(path, "output_files/RDS_format/"), recursive = TRUE)
   # expect_equal(

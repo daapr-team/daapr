@@ -4,10 +4,11 @@
 \alias{dpinput_map}
 \title{Map data input into data product workflow}
 \usage{
-dpinput_map(project_path)
+dpinput_map(project_path = ".")
 }
 \arguments{
-\item{project_path}{path to the project}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \value{
 input_map a data.frame that maps the content of the input_files to be

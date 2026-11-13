@@ -8,7 +8,7 @@
 #' options to RSPM `options(repos = <RSPM URL>)` Update DaaPR > run this
 #' function to update all DaaPR packages on renv.lock > Delete `renv` folder >
 #' run `renv::restore()` > Follow subsequent steps.
-#' @param project_path path to the project
+#' @inheritParams project_path_resolve
 #' @param pkg_name name of the package to be added or updated
 #' @param pkg_version pkg version, if not provided, tries to retrieve the latest
 #' from RSPM
@@ -37,6 +37,7 @@ dppkg_modify <- function(project_path = ".",
                          repo_url,
                          force_repo_overwrite = FALSE,
                          verbose = TRUE) {
+  project_path <- project_path_resolve(project_path)
   if (length(pkg_version) == 0 || length(pkg_sha) == 0) {
     if (length(pkg_version) != 0) {
       warning(cli::format_warning(glue::glue(
@@ -75,7 +76,7 @@ dppkg_modify <- function(project_path = ".",
   }
 
 
-  renv_manifest_path <- glue::glue("{project_path}/renv.lock")
+  renv_manifest_path <- fs::path(project_path, "renv.lock")
   renv_manifest <- jsonlite::read_json(path = renv_manifest_path)
   repo_names_manifest <- sapply(renv_manifest$R$Repositories, function(x) x$Name)
   repo_urls_manifest <- sapply(renv_manifest$R$Repositories, function(x) x$URL)

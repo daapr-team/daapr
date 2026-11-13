@@ -1,11 +1,12 @@
 #' @title Write data product
 #' @description This function writes the data product and logs it in `.daap/daap_log.yaml`
 #' @param data_object data_object generated from `dp_structure`
-#' @param project_path path to the project (default is current directory)
+#' @inheritParams project_path_resolve
 #' @param type File type used to save the data product, default RDS
 #' @return TRUE
 #' @export
 dp_write <- function(data_object, type = "rds", project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   if (!is_valid_dp_repository(path = project_path)) {
     stop(glue::glue(
       "Not a dp repsitory. ",
@@ -37,11 +38,8 @@ dp_write <- function(data_object, type = "rds", project_path = ".") {
 
   log_history <- log_note
 
-  if (file.exists(glue::glue("{project_path}/.daap/daap_log.yaml"))) {
-    log_history <- yaml::read_yaml(file = glue::glue(
-      "{project_path}/",
-      ".daap/daap_log.yaml"
-    ))
+  if (file.exists(fs::path(project_path, ".daap", "daap_log.yaml"))) {
+    log_history <- yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_log.yaml"))
 
     if (log_label %in% names(log_history)) {
       if (!identical(log_history[log_label], log_note)) {
@@ -52,10 +50,7 @@ dp_write <- function(data_object, type = "rds", project_path = ".") {
     }
   }
 
-  yaml::write_yaml(x = log_history, file = glue::glue(
-    "{project_path}/",
-    ".daap/daap_log.yaml"
-  ))
+  yaml::write_yaml(x = log_history, file = fs::path(project_path, ".daap", "daap_log.yaml"))
 
   return(TRUE)
 }
@@ -80,7 +75,7 @@ save_object <- function(data_object, project_path, type = "rds") {
   for (other_type in object_types) {
     if (other_type != type) {
       other_format_dir <- format_dirs[[other_type]]
-      other_dir_path <- glue::glue("{project_path}/output_files/{other_format_dir}")
+      other_dir_path <- fs::path(project_path, "output_files", other_format_dir)
 
       if (dir.exists(other_dir_path)) {
         # Display format for error message (preserve case as in directory name)
@@ -121,10 +116,7 @@ save_object <- function(data_object, project_path, type = "rds") {
 #' will create the directory if it does not exist
 #' @noRd
 write_rds <- function(data_object, project_path) {
-  dataobj_path <- glue::glue(
-    "{project_path}/",
-    "output_files/RDS_format/data_object.RDS"
-  )
+  dataobj_path <- fs::path(project_path, "output_files", "RDS_format", "data_object.RDS")
   check_dir(dataobj_path)
   saveRDS(object = data_object, file = dataobj_path, version = 2)
   return(dataobj_path)

@@ -44,7 +44,7 @@ is_valid_dp_repository()
 
 library(daapr)
 # get config
-config <- dpconf_get(project_path = ".")
+config <- dpconf_get()
 ```
 
 ## Step 2 Modify `dp_make.R`
@@ -68,7 +68,7 @@ data_object <- dp_structure(
 )
 
 # save and log the data product built
-dp_write(data_object = data_object, project_path = ".")
+dp_write(data_object = data_object)
 ```
 
 ## Step 4 Build and evaluate
@@ -88,8 +88,8 @@ folder before continuing with the next steps.
 Commit the changes and push the modified `dp_cars` to remote git repo
 
 ```{r dp_com_push, eval=FALSE}
-dp_commit(project_path = ".", commit_description = "Added cm feature")
-dp_push(project_path = ".")
+dp_commit(commit_description = "Added cm feature")
+dp_push()
 ```
 
 ## Step 6 Deploy

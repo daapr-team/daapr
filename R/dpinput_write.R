@@ -2,11 +2,12 @@
 #' @description Converts structured input into a yaml manifest and writes to `.daap/daap_input.yaml`
 #' @param input_d a list generated from `dpinput_sync` with synced_input elements
 #' structured as desired
-#' @param project_path Project path
+#' @inheritParams project_path_resolve
 #' @param verbose T/F
 #' @return TRUE
 #' @export
-dpinput_write <- function(project_path, input_d, verbose = F) {
+dpinput_write <- function(project_path = ".", input_d, verbose = F) {
+  project_path <- project_path_resolve(project_path)
   if (verbose) {
     print("Writing daap input yaml")
   }
@@ -21,7 +22,7 @@ dpinput_write <- function(project_path, input_d, verbose = F) {
 
   dpinput_make(input_d = input_d) |>
     yaml::write_yaml(
-      file = glue::glue("{project_path}/.daap/daap_input.yaml")
+      file = fs::path(project_path, ".daap", "daap_input.yaml")
     )
 
   return(TRUE)

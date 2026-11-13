@@ -9,7 +9,8 @@ dpconf_validate(dpconf, project_path)
 \arguments{
 \item{dpconf}{a dp config}
 
-\item{project_path}{path to project}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \description{
 This function errors if invalid conf

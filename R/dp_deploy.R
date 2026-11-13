@@ -1,11 +1,12 @@
 #' @title Deploy data product
 #' @description Deploys a data product to the where the board is set (e.g.
 #' AWS s3)
-#' @param project_path path to project
+#' @inheritParams project_path_resolve
 #' @param ... other parameters e.g. verbose = T
 #' @return TRUE
 #' @export
 dp_deploy <- function(project_path = ".", ...) {
+  project_path <- project_path_resolve(project_path)
   if (!is_valid_dp_repository(path = project_path)) {
     stop(cli::format_error(glue::glue(
       "project_path, {project_path},",
@@ -36,7 +37,7 @@ dp_deploy <- function(project_path = ".", ...) {
 #' @description Determines the saved data output object type (rds vs qs etc.)
 #' @noRd
 detect_type <- function(project_path) {
-  fs::dir_ls(file.path(project_path, "output_files/"), recurse = TRUE, regexp = "data_object") |>
+  fs::dir_ls(fs::path(project_path, "output_files"), recurse = TRUE, regexp = "data_object") |>
     tools::file_ext() |>
     tolower()
 }
@@ -47,7 +48,7 @@ detect_type <- function(project_path) {
 object_read <- function(project_path, type) {
   type <- rlang::arg_match0(type, c("rds")) #, "qs"))
   switch(type,
-    rds = readRDS(file = glue::glue("{project_path}/output_files/RDS_format/data_object.RDS")) #,
+    rds = readRDS(file = fs::path(project_path, "output_files", "RDS_format", "data_object.RDS")) #,
     # qs = read_qs(project_path)
   )
 }

@@ -11,7 +11,8 @@ dp_write(data_object, type = "rds", project_path = ".")
 
 \item{type}{File type used to save the data product, default RDS}
 
-\item{project_path}{path to the project (default is current directory)}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \value{
 TRUE

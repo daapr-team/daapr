@@ -4,10 +4,11 @@
 #' @details This function reads in the yaml config as a list. In the process, it
 #' hydrates any expression for `board_params` and `creds`. Make sure environment
 #' variables declared in dried functions are set prior to calling `dpconf_get`.
-#' @param project_path path to project folder
+#' @inheritParams project_path_resolve
 #' @return a list dpconf
 #' @export
 dpconf_get <- function(project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   check_pins_compatibility(project_path = project_path)
 
   dpconf <- dpconf_read(project_path = project_path)
@@ -35,12 +36,12 @@ dpconf_get <- function(project_path = ".") {
 
 #' @title Read daap config
 #' @description Read daap_config.yaml
-#' @param project_path path to project folder
+#' @inheritParams project_path_resolve
 #' @return a list of raw dpconf where any function call remains dry
 #' @keywords internal
 dpconf_read <- function(project_path) {
   dpconf <-
-    yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_config.yaml"))
+    yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_config.yaml"))
   return(dpconf)
 }
 
@@ -48,13 +49,13 @@ dpconf_read <- function(project_path) {
 
 #' @title Write daap config
 #' @description Write in and returns daap config file
-#' @param project_path path to project folder
+#' @inheritParams project_path_resolve
 #' @return a list dpconf
 #' @keywords internal
 dpconf_write <- function(project_path, dpconf) {
   yaml::write_yaml(
     x = dpconf,
-    file = glue::glue("{project_path}/.daap/daap_config.yaml")
+    file = fs::path(project_path, ".daap", "daap_config.yaml")
   )
   return(dpconf)
 }
@@ -63,7 +64,7 @@ dpconf_write <- function(project_path, dpconf) {
 #' @title validate dpconf
 #' @description This function errors if invalid conf
 #' @param dpconf a dp config
-#' @param project_path path to project
+#' @inheritParams project_path_resolve
 #' @keywords internal
 dpconf_validate <- function(dpconf, project_path) {
   # TODO: add additional validation for repo test as well as data remote test

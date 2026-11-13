@@ -1,8 +1,7 @@
 #' @title Modify data product configuration
 #' @description Manages all modification to data product project configuration
 #' subsequent to the initialization via `dp_init`.
-#' @param project_path path to the project folder. The folder name will be used
-#' as project name. If the path doesn't exist it will be created.
+#' @inheritParams project_path_resolve
 #' @param project_description A high level description of the project. Example:
 #' integrated, clinical and translational data from study x.
 #' @param branch_name An abbreviation to capture the specific reason for which
@@ -21,7 +20,7 @@
 #' @param ... any other metadata to be captured in the config file
 #' @return project path
 #' @export
-dpconf_update <- function(project_path = fs::path_wd(),
+dpconf_update <- function(project_path = ".",
                           project_description = character(0),
                           branch_name = character(0),
                           branch_description = character(0),
@@ -31,6 +30,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
                           commit_description = "dp_conf modified",
                           git_ignore = character(0),
                           ...) {
+  project_path <- project_path_resolve(project_path)
   if (!is_valid_dp_repository(path = project_path)) {
     message("Invalid, incomplete or incosistent dp repository:")
     ck <- dp_repository_check(path = project_path)
@@ -51,10 +51,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
   dpconf <- dpconf_read(project_path = project_path)
   repo <- git2r::repository(path = project_path)
 
-  add_gitignore <- setdiff(git_ignore, readLines(file.path(
-    project_path,
-    ".gitignore"
-  )))
+  add_gitignore <- setdiff(git_ignore, readLines(fs::path(project_path, ".gitignore")))
   if (length(add_gitignore) > 0) {
     writeLines(
       glue::glue_collapse(
@@ -63,7 +60,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
         },
         sep = "\n"
       ),
-      file.path(project_path, ".gitignore")
+      fs::path(project_path, ".gitignore")
     )
   }
 
@@ -112,7 +109,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
       creds_set_dried <- conf_read$creds_set_dried
 
       rmarkdown::render(
-        input = glue::glue("{project_path}/{flname}"),
+        input = fs::path(project_path, flname),
         params = list(
           dp_title = dp_title, github_repo_url = github_repo_url,
           board_params_set = board_params_set,
@@ -128,7 +125,7 @@ dpconf_update <- function(project_path = fs::path_wd(),
   )
 
   add_these <- unlist(git2r::status(repo = repo))
-  git2r::add(repo = repo, path = glue::glue("{project_path}/{add_these}"))
+  git2r::add(repo = repo, path = fs::path(project_path, add_these))
   git2r::commit(repo = repo, all = TRUE, message = commit_description)
 
   return(fs::path_dir(repo$path))

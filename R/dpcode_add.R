@@ -1,10 +1,11 @@
 #' @title Adds script templates
 #' @description Adds dp_make.R and dp_journal.Rmd to the dp project repo
-#' @param project_path Path to the project
+#' @inheritParams project_path_resolve
 #' @param use_targets T/F when TRUE, uses targets instead of drake (recommended)
 #' @return repo
 #' @export
-dpcode_add <- function(project_path, use_targets = T) {
+dpcode_add <- function(project_path = ".", use_targets = T) {
+  project_path <- project_path_resolve(project_path)
   if (!fs::dir_exists(project_path)) {
     stop("project_path does not exist")
   }
@@ -17,8 +18,8 @@ dpcode_add <- function(project_path, use_targets = T) {
     )))
   }
 
-  if (!fs::dir_exists(fs::path_tidy(glue::glue("{project_path}/R")))) {
-    fs::dir_create(fs::path_tidy(glue::glue("{project_path}/R")))
+  if (!fs::dir_exists(fs::path(project_path, "R"))) {
+    fs::dir_create(fs::path(project_path, "R"))
   }
 
   if (!use_targets) {
@@ -29,12 +30,12 @@ dpcode_add <- function(project_path, use_targets = T) {
 
     fs::file_copy(
       path = system.file("global_drake.R", package = "daapr"),
-      new_path = glue::glue("{project_path}/R")
+      new_path = fs::path(project_path, "R")
     )
-    fs::file_delete(path = glue::glue("{project_path}/R/global.R"))
+    fs::file_delete(path = fs::path(project_path, "R", "global.R"))
     fs::file_move(
-      path = glue::glue("{project_path}/R/global_drake.R"),
-      new_path = glue::glue("{project_path}/R/global.R")
+      path = fs::path(project_path, "R", "global_drake.R"),
+      new_path = fs::path(project_path, "R", "global.R")
     )
     renv::install(packages = "drake", prompt = FALSE)
 
@@ -50,8 +51,8 @@ dpcode_add <- function(project_path, use_targets = T) {
       new_path = project_path
     )
     fs::file_move(
-      path = glue::glue("{project_path}/_targets.R"),
-      new_path = glue::glue("{project_path}/dp_make.R")
+      path = fs::path(project_path, "_targets.R"),
+      new_path = fs::path(project_path, "dp_make.R")
     )
 
     # targets specific journal (renamed)
@@ -61,18 +62,18 @@ dpcode_add <- function(project_path, use_targets = T) {
       new_path = project_path
     )
     fs::file_move(
-      path = glue::glue("{project_path}/dp_journal_targets.Rmd"),
-      new_path = glue::glue("{project_path}/dp_journal.Rmd")
+      path = fs::path(project_path, "dp_journal_targets.Rmd"),
+      new_path = fs::path(project_path, "dp_journal.Rmd")
     )
 
     fs::file_copy(
       path = system.file("global_targets.R", package = "daapr"),
-      new_path = glue::glue("{project_path}/R")
+      new_path = fs::path(project_path, "R")
     )
-    fs::file_delete(path = glue::glue("{project_path}/R/global.R"))
+    fs::file_delete(path = fs::path(project_path, "R", "global.R"))
     fs::file_move(
-      path = glue::glue("{project_path}/R/global_targets.R"),
-      new_path = glue::glue("{project_path}/R/global.R")
+      path = fs::path(project_path, "R", "global_targets.R"),
+      new_path = fs::path(project_path, "R", "global.R")
     )
     renv::install(packages = c("targets"), prompt = FALSE)
   }
@@ -84,19 +85,19 @@ dpcode_add <- function(project_path, use_targets = T) {
   repo <- git2r::repository(path = project_path)
   git2r::add(
     repo = repo, path =
-      fs::path_tidy(glue::glue("{project_path}/dp_make.R"))
+      fs::path(project_path, "dp_make.R")
   )
   git2r::add(
     repo = repo, path =
-      fs::path_tidy(glue::glue("{project_path}/dp_journal.Rmd"))
+      fs::path(project_path, "dp_journal.Rmd")
   )
   git2r::add(
     repo = repo, path =
-      fs::path_tidy(glue::glue("{project_path}/R/global.R"))
+      fs::path(project_path, "R", "global.R")
   )
   git2r::add(
     repo = repo, path =
-      fs::path_tidy(glue::glue("{project_path}/renv.lock"))
+      fs::path(project_path, "renv.lock")
   )
   repo <- git2r::commit(
     repo = repo,

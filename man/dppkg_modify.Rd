@@ -16,7 +16,8 @@ dppkg_modify(
 )
 }
 \arguments{
-\item{project_path}{path to the project}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 
 \item{pkg_name}{name of the package to be added or updated}
 
