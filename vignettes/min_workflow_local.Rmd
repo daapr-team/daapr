@@ -74,7 +74,7 @@ if (!"daapr" %in% (.packages())) {
 Sys.setenv("GITHUB_PAT" = "<YOUR GITHUB PAT>")
 
 # Retrieve configuration
-config <- dpconf_get(project_path = ".")
+config <- dpconf_get()
 ```
 
 ## Step 3: Add input data and sync to remote
@@ -88,14 +88,14 @@ to metadata representation of the read datasets. Here we only have one dataset:
 readr::write_csv(x = cars, file = "./input_files/cars.csv")
 
 # Map all input_files content and optionally clean file labels in the map
-input_map <- dpinput_map(project_path = ".")
+input_map <- dpinput_map()
 input_map <- inputmap_clean(input_map = input_map)
 
 # Sync each read files to remote data repo
 synced_map <- dpinput_sync(conf = config, input_map = input_map, verbose = T)
 
 # For each sync'd dataset, record info that will help you retrieve as needed
-dpinput_write(project_path = ".", input_d = synced_map)
+dpinput_write(input_d = synced_map)
 ```
 
 ## Step 4: Build the data product
@@ -117,7 +117,7 @@ data_object <- dp_structure(
   output = output, config = config
 )
 # save and log the data product built
-dp_write(data_object = data_object, project_path = ".")
+dp_write(data_object = data_object)
 ```
 
 Why so many steps if the above chunk is the main logic? The pay off for all you 
@@ -139,8 +139,8 @@ At this point, you can commit and push your code. NOTE: for your push to work:
 2. `Sys.getenv("GITHUB_PAT")` returns the corresponding "GITHUB_PAT"
 
 ```{r dpcommit_, eval = F}
-dp_commit(project_path = ".", commit_description = "First dp build")
-dp_push(project_path = ".")
+dp_commit(commit_description = "First dp build")
+dp_push()
 ```
 
 
