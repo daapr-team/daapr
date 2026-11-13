@@ -33,7 +33,7 @@ library(daapr)
 **Goal:** Ensure, we are in a properly set up `daap` project
 
 ```{r check_dp_init, results= TRUE }
-is_valid_dp_repository(path = ".")
+is_valid_dp_repository()
 ```
 
 ## Remote data platform credentials
@@ -73,7 +73,7 @@ We get all configuration needed to interact with remote.
 
 
 ```{r dpconf_get}
-config <- dpconf_get(project_path = ".")
+config <- dpconf_get()
 ```
 
 
@@ -97,7 +97,7 @@ The following captures datasets from which this data product draws from
 Data was added to the `input_files` folder and mapped
 
 ```{r input_map}
-input_map <- dpinput_map(project_path = ".")
+input_map <- dpinput_map()
 ```
 
 ## Evaluating the `input_map`
@@ -149,7 +149,7 @@ input_d <- list(clin = clin, data_def = data_def)
 Here I converted `dp_input` to its metadata representation
 
 ```{r dpinput_write}
-dpinput_write(project_path = ".", input_d = input_d)
+dpinput_write(input_d = input_d)
 ```
 
 
@@ -185,7 +185,7 @@ drake::vis_drake_graph(daap_plan)
 Committed the dp with just input data.
 
 ```{r dpcommit, eval= FALSE}
-dp_commit(project_path = ".", commit_description = "First dp build: only input data")
+dp_commit(commit_description = "First dp build: only input data")
 ```
 
 <!-- **Workflow NOTE:** This step requires a remote git repo (i.e. a repo on either GitHub). If a new project, you'll need to create this repo prior to completing `dp_push` -->
@@ -193,7 +193,7 @@ dp_commit(project_path = ".", commit_description = "First dp build: only input d
 Pushed dp to remote git repository 
 
 ```{r dppush, eval = FALSE}
-dp_push(project_path = ".")
+dp_push()
 ```
 
 <!-- **RMarkdown NOTE:** When ready to render as html the following can execute the following -->

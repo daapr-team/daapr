@@ -21,7 +21,7 @@
 options(stringsAsFactors = F)
 R.utils::sourceDirectory("R", modifiedOnly = F)
 
-config <- dpconf_get(project_path = "./")
+config <- dpconf_get()
 
 conflict_prefer("filter", "dplyr")
 conflict_prefer("mutate", "dplyr")
@@ -47,7 +47,7 @@ daap_plan <- drake_plan(
 
   # Structure output and add metadata
   data_is_written =
-    dp_write(data_object = data_object, project_path = ".")
+    dp_write(data_object = data_object)
 )
 
 make(daap_plan, lock_envir = FALSE)
