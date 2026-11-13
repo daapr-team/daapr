@@ -8,7 +8,7 @@
 #' options to RSPM `options(repos = <RSPM URL>)` Update DaaPR > run this
 #' function to update all DaaPR packages on renv.lock > Delete `renv` folder >
 #' run `renv::restore()` > Follow subsequent steps.
-#' @param project_path path to the project
+#' @inheritParams project_path_resolve
 #' @param pkg_name name of the package to be added or updated
 #' @param pkg_version pkg version, if not provided, tries to retrieve the latest
 #' from RSPM

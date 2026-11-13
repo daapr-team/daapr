@@ -1,6 +1,6 @@
 #' @title Adds script templates
 #' @description Adds dp_make.R and dp_journal.Rmd to the dp project repo
-#' @param project_path Path to the project
+#' @inheritParams project_path_resolve
 #' @param use_targets T/F when TRUE, uses targets instead of drake (recommended)
 #' @return repo
 #' @export

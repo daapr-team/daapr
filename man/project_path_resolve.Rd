@@ -7,8 +7,8 @@
 project_path_resolve(project_path = ".")
 }
 \arguments{
-\item{project_path}{Path to the data product project folder. Defaults to
-the current working directory (\code{"."}).}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \value{
 An absolute \code{fs_path}

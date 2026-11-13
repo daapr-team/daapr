@@ -1,7 +1,7 @@
 #' @title Map data input into data product workflow
 #' @description This is helper function to help manage the context of
 #' input_files folder
-#' @param project_path path to the project
+#' @inheritParams project_path_resolve
 #' @return input_map a data.frame that maps the content of the input_files to be
 #'  evaluated
 #' @importFrom dplyr .data

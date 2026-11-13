@@ -4,8 +4,9 @@
 #' @param daap_input_yaml daap_input yaml file imported (default
 #' `.daap/daap_input.yaml` under `project_path`)
 #' @param add_metadata T/F when TRUE dpinput format will include metadata
-#' @param project_path path to the project folder, used only to locate the
-#' default `daap_input_yaml` (default is current directory)
+#' @param project_path Path to the data product project folder, used only to
+#' locate the default `daap_input_yaml`. Relative paths are resolved against
+#' the current working directory.
 #' @return daap_input as a structured list of anonymous functions each when
 #' called retrieves the specific data
 #' @export

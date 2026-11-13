@@ -7,7 +7,8 @@
 dpcode_add(project_path = ".", use_targets = T)
 }
 \arguments{
-\item{project_path}{Path to the project}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 
 \item{use_targets}{T/F when TRUE, uses targets instead of drake (recommended)}
 }

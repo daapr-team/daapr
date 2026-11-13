@@ -1,7 +1,7 @@
 #' @title Deploy data product
 #' @description Deploys a data product to the where the board is set (e.g.
 #' AWS s3)
-#' @param project_path path to project
+#' @inheritParams project_path_resolve
 #' @param ... other parameters e.g. verbose = T
 #' @return TRUE
 #' @export

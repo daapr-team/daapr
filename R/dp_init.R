@@ -4,8 +4,9 @@
 #' @details This function will create a local git-tracked data product repository,
 #' write the data product configuration details to `.daap/daap_config.yaml`,
 #' initialize renv for the project, and commit all changes.
-#' @param project_path path to the project folder. The folder name will be used
-#' as project name. If the path doesn't exist it will be created.
+#' @param project_path Path to the data product project folder. Relative paths
+#' are resolved against the current working directory. The folder name is used
+#' as the project name, and the folder is created if it doesn't exist.
 #' @param project_description A high level description of the project. Example:
 #' integrated, clinical and translational data from study x.
 #' @param branch_name An abbreviation to capture the specific reason for which
@@ -207,7 +208,7 @@ dp_init <- function(project_path = ".",
 
 #' @title Initialize daap configuration file
 #' @description Initializes daap configuration file `.daap/daap_config.yaml`
-#' @param project_path path to the project folder
+#' @inheritParams project_path_resolve
 #' @param project_name the name of the project. This is typically the name of
 #' the folder where the project is set
 #' @param project_description A high level description of the project. Example:
@@ -305,7 +306,7 @@ fn_dry <- function(fn_called) {
 
 #' @title dp git initialization
 #' @description Initializes the git repo according to the requirements of dp
-#' @param project_path Path to the project folder
+#' @inheritParams project_path_resolve
 #' @param project_name The name of the project. This is typically the name of
 #' the folder where the project is set
 #' @param branch_name An abbreviation to capture the specific reason for which
@@ -407,7 +408,7 @@ dp_git_init <- function(project_path, project_name, branch_name,
 }
 
 #' @title Add readme to the project
-#' @param project_path Path to the project folder
+#' @inheritParams project_path_resolve
 #' @param dp_title readme title
 #' @param board_params_set_dried Character representation of the function for
 #' setting board_params. Use `fn_dry()` in combination with
