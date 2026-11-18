@@ -21,7 +21,8 @@ The path to the created file, invisibly.
 \description{
 Writes a template derivation function named \verb{derive_<domain>_<subdir>} to
 \verb{<project_path>/R/<subdir>/}, or \verb{derive_<domain>} to \verb{<project_path>/R/}
-when \code{subdir} is \code{NULL}.
+when \code{subdir} is \code{NULL}, then prints code to add the new derivation to the
+project's \code{dp_make.R} (in \code{targets} or \code{drake} format, matching the file).
 }
 \examples{
 \dontrun{

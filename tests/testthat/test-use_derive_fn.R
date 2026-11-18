@@ -230,3 +230,29 @@ test_that("opens the created file with usethis when available", {
   path <- suppressMessages(use_derive_fn("ae"))
   expect_equal(opened, path)
 })
+
+test_that("prints a targets dp_make.R snippet by default", {
+  local_derive_fn_project()
+  expect_message(use_derive_fn("ae"), "tar_target\\(ae, derive_ae\\(")
+  expect_snapshot(cat(dp_make_snippet(".", "ae"), sep = "\n"))
+  expect_snapshot(cat(dp_make_snippet(".", "ae", "safety"), sep = "\n"))
+})
+
+test_that("prints a drake dp_make.R snippet when dp_make.R uses drake", {
+  local_derive_fn_project()
+  file.copy(system.file("dp_make.R", package = "daapr"), "dp_make.R")
+  expect_message(use_derive_fn("ae"), "ae = derive_ae\\(")
+  expect_snapshot(cat(dp_make_snippet(".", "ae"), sep = "\n"))
+  expect_snapshot(cat(dp_make_snippet(".", "ae", "safety"), sep = "\n"))
+})
+
+test_that("dp_make.R snippets are valid R", {
+  local_derive_fn_project()
+  wrap <- function(lines, fn) paste0(fn, "(\n", paste(lines, collapse = "\n"), "\n)")
+  for (subdir in list(NULL, "safety")) {
+    lines <- dp_make_snippet(".", "ae", subdir)
+    output <- length(lines)
+    expect_no_error(parse(text = wrap(lines[-output], "list")))
+    expect_no_error(parse(text = wrap(lines[output], "list")))
+  }
+})

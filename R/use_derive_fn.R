@@ -2,7 +2,8 @@
 #'
 #' Writes a template derivation function named `derive_<domain>_<subdir>` to
 #' `<project_path>/R/<subdir>/`, or `derive_<domain>` to `<project_path>/R/`
-#' when `subdir` is `NULL`.
+#' when `subdir` is `NULL`, then prints code to add the new derivation to the
+#' project's `dp_make.R` (in `targets` or `drake` format, matching the file).
 #'
 #' @param domain Name of the domain the derivation function reads from.
 #' @param subdir Optional subdirectory of `R/` in which to create the function.
@@ -78,12 +79,66 @@ use_derive_fn <- function(domain, subdir = NULL, project_path = ".") {
   dir.create(dir_path, showWarnings = FALSE, recursive = TRUE)
   writeLines(fn_text, file_path)
   cli::cli_alert_success("Created {.path {file_path}}")
+  cli::cli_alert_info("Add the new derivation to {.path dp_make.R}:")
+  cli::cli_code(dp_make_snippet(project_path, domain, subdir))
 
   if (requireNamespace("usethis", quietly = TRUE)) {
     usethis::edit_file(file_path)
   }
 
   invisible(file_path)
+}
+
+
+#' @title Generate dp_make.R code for a new derivation function
+#' @description Builds the targets that call `derive_<domain>[_<subdir>]()`,
+#'   group them by `subdir`, and pass them to `dp_structure()`. Uses `drake`
+#'   syntax if the project's `dp_make.R` calls `drake_plan()`, and `targets`
+#'   syntax otherwise.
+#' @param project_path path to the project folder
+#' @param domain name of the domain the derivation function reads from
+#' @param subdir subdirectory of `R/` holding the function, or `NULL`
+#' @return character vector of code lines
+#' @noRd
+dp_make_snippet <- function(project_path, domain, subdir = NULL) {
+  dp_make_path <- file.path(project_path, "dp_make.R")
+  uses_drake <- file.exists(dp_make_path) &&
+    any(grepl("drake_plan(", readLines(dp_make_path, warn = FALSE), fixed = TRUE))
+
+  fn_name <- paste(c("derive", domain, subdir), collapse = "_")
+  target <- paste(c(domain, subdir), collapse = "_")
+  fn_call <- paste0(fn_name, "(data_files_read = data_files_read, config = config)")
+
+  if (uses_drake) {
+    header <- "# Add to drake_plan()"
+    derive <- paste0(target, " = ", fn_call, ",")
+    group_open <- paste0(subdir, " = list(")
+    group_close <- "),"
+  } else {
+    header <- "# Add to the list of targets"
+    derive <- paste0("tar_target(", target, ", ", fn_call, "),")
+    group_open <- paste0("tar_target(", subdir, ", list(")
+    group_close <- ")),"
+  }
+
+  if (is.null(subdir)) {
+    group <- NULL
+    output_name <- target
+    header <- paste0(header, ":")
+  } else {
+    group <- c(group_open, paste0("  ", domain, " = ", target), group_close)
+    output_name <- subdir
+    header <- paste0(
+      header, " (if a `", subdir, "` target already exists, add `",
+      domain, " = ", target, "` to its list instead):"
+    )
+  }
+
+  c(
+    header, derive, group, "",
+    "# Add to the `output` list in dp_structure():",
+    paste0(output_name, " = ", output_name)
+  )
 }
 
 
