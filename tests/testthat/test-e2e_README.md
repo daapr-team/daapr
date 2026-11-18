@@ -83,6 +83,17 @@ copied files, and writes the updated map back to `.daap/daap_input.yaml`.
 
 Must be called from within the temp daap directory.
 
+### `load_use_derive_fns()`
+
+Calls `use_derive_fn("dm")` and `use_derive_fn("dm", subdir = "safety")`, then
+evaluates every expression in `dp_make.R` except the final list of targets
+(i.e. the header that sources `R/`) in a new environment. Returns a named
+logical vector indicating whether `derive_dm` and `derive_dm_safety` are
+available as functions. The generated files are removed afterwards so the
+later build and fixture comparisons are unaffected.
+
+Must be called from within the temp daap directory.
+
 ### `build_and_deploy_local_test_daap(dev_fixtures_daap_dir)`
 
 Copies the derivation scripts (`R/derive_subjects.R`, `R/derive_bor.R`) and the
@@ -180,6 +191,7 @@ deploy so the temp daap's active `renv` project is preserved across steps.
 | `dpcode_add()` | `R/global.R` matches the fixture; `dp_journal.Rmd` matches `inst/dp_journal_targets.Rmd`; `dp_make.R` matches `inst/_targets.R` |
 | `dpcode_add()` lockfile update | `renv.lock` no longer contains `drake` and does contain `targets` |
 | Input ingestion | `add_test_daap_inputs()` creates `.daap/daap_input.yaml` entries for `dm` and `rs_onco_imwg`, and the deployed input pins match the fixture |
+| `use_derive_fn()` | Functions created in `R/` and `R/<subdir>/` are available after evaluating the header of `dp_make.R`, and are cleaned up afterwards |
 | Full build & deploy | `build_and_deploy_local_test_daap()` completes, `.daap/daap_log.yaml` contains a single non-`HEAD` `rds_log_*` entry, and the deployed output pin matches the fixture output |
 | Reading deployed daap | `dpconf_get()`, `dp_connect()`, `dp_list()`, and `dp_get()` work against the local board, and the recovered input/output objects match the deployed artifacts |
 | Package version consistency | The `daapr` version used in each `callr` step matches the version used to launch the test |

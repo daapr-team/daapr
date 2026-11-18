@@ -38,6 +38,7 @@ reference:
   - dpcode_add
   - starts_with("dpname_")
   - readme_get
+  - use_derive_fn
 - title: Auxillary functions
 - contents:
   - dppkg_modify
