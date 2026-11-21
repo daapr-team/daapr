@@ -30,14 +30,19 @@ test_that("checks the repository at project_path", {
     checked <<- path
     FALSE
   })
-  expect_error(use_derive_fn("ae", project_path = "proj"), "dp_repository_check\\(\"proj\"\\)")
-  expect_equal(checked, "proj")
+  proj <- project_path_resolve("proj")
+  expect_error(
+    use_derive_fn("ae", project_path = "proj"),
+    paste0("dp_repository_check(\"", proj, "\")"),
+    fixed = TRUE
+  )
+  expect_equal(checked, proj)
 })
 
 test_that("creates the file under project_path", {
   local_derive_fn_project()
   dir.create("proj")
-  expected <- file.path("proj", "R", "safety", "derive_ae_safety.R")
+  expected <- fs::path(project_path_resolve("proj"), "R", "safety", "derive_ae_safety.R")
   out <- suppressMessages(use_derive_fn("ae", subdir = "safety", project_path = "proj"))
   expect_equal(out, expected)
   expect_true(file.exists(expected))
@@ -58,7 +63,7 @@ test_that("rejects invalid domain", {
 
 test_that("accepts upper-case domain and subdir", {
   local_derive_fn_project()
-  expected <- file.path(".", "R", "Safety", "derive_AE_Safety.R")
+  expected <- fs::path(project_path_resolve(), "R", "Safety", "derive_AE_Safety.R")
   out <- suppressMessages(use_derive_fn("AE", subdir = "Safety"))
   expect_equal(out, expected)
   expect_true(file.exists(expected))
@@ -86,7 +91,7 @@ test_that("reuses an existing subdirectory that differs only by case", {
   local_derive_fn_project()
   dir.create(file.path("R", "safety"), recursive = TRUE)
   out <- suppressMessages(use_derive_fn("ae", subdir = "Safety"))
-  expect_equal(out, file.path(".", "R", "safety", "derive_ae_safety.R"))
+  expect_equal(out, fs::path(project_path_resolve(), "R", "safety", "derive_ae_safety.R"))
   expect_true(file.exists(out))
   expect_equal(list.dirs("R", recursive = FALSE, full.names = FALSE), "safety")
 })
@@ -97,7 +102,7 @@ test_that("prefers an exact subdirectory match over a case-insensitive one", {
   skip_if(dir.exists(file.path("R", "safety")), "file system is case-insensitive")
   dir.create(file.path("R", "safety"))
   out <- suppressMessages(use_derive_fn("ae", subdir = "safety"))
-  expect_equal(out, file.path(".", "R", "safety", "derive_ae_safety.R"))
+  expect_equal(out, fs::path(project_path_resolve(), "R", "safety", "derive_ae_safety.R"))
 })
 
 test_that("ignores non-R files when checking for conflicts", {
@@ -131,7 +136,7 @@ test_that("error messages don't evaluate braces in user input", {
 
 test_that("creates derive_<domain>.R in R/ when subdir is NULL", {
   local_derive_fn_project()
-  expected <- file.path(".", "R", "derive_ae.R")
+  expected <- fs::path(project_path_resolve(), "R", "derive_ae.R")
   expect_invisible(out <- suppressMessages(use_derive_fn("ae")))
   expect_equal(out, expected)
   expect_true(file.exists(expected))
@@ -139,7 +144,7 @@ test_that("creates derive_<domain>.R in R/ when subdir is NULL", {
 
 test_that("creates derive_<domain>_<subdir>.R in R/<subdir>/", {
   local_derive_fn_project()
-  expected <- file.path(".", "R", "safety", "derive_ae_safety.R")
+  expected <- fs::path(project_path_resolve(), "R", "safety", "derive_ae_safety.R")
   out <- suppressMessages(use_derive_fn("ae", subdir = "safety"))
   expect_equal(out, expected)
   expect_true(file.exists(expected))
@@ -228,7 +233,7 @@ test_that("opens the created file with usethis when available", {
     .package = "usethis"
   )
   path <- suppressMessages(use_derive_fn("ae"))
-  expect_equal(opened, path)
+  expect_equal(opened, as.character(path))
 })
 
 test_that("prints a targets dp_make.R snippet by default", {
