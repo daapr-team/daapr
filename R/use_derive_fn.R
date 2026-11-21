@@ -9,7 +9,7 @@
 #' @param subdir Optional subdirectory of `R/` in which to create the function.
 #'   An existing folder whose name differs only by case is reused, and its name
 #'   is used in the function name.
-#' @param project_path Path to the project folder (default is current directory)
+#' @inheritParams project_path_resolve
 #'
 #' @return The path to the created file, invisibly.
 #' @examples \dontrun{
@@ -19,10 +19,11 @@
 #' }
 #' @export
 use_derive_fn <- function(domain, subdir = NULL, project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   # Generated files are only sourced by a dp project's dp_make.R
   if (!is_valid_dp_repository(path = project_path)) {
     stop(cli::format_error(
-      "Not a dp repository. Run `dp_repository_check(\"{project_path}\")` for details"
+      "Not a dp repository. Run `dp_repository_check(\"{as.character(project_path)}\")` for details"
     ))
   }
 
@@ -42,7 +43,7 @@ use_derive_fn <- function(domain, subdir = NULL, project_path = ".") {
     ))
   }
 
-  r_dir <- file.path(project_path, "R")
+  r_dir <- fs::path(project_path, "R")
   subdir <- existing_subdir(r_dir, subdir)
 
   # A syntactically invalid function name would break sourcing of the whole R/ folder
@@ -52,8 +53,8 @@ use_derive_fn <- function(domain, subdir = NULL, project_path = ".") {
       "`domain` and `subdir` must form a valid R name; got: {.val {fn_name}}"
     ))
   }
-  dir_path <- do.call(file.path, as.list(c(r_dir, subdir)))
-  file_path <- file.path(dir_path, glue::glue("{fn_name}.R"))
+  dir_path <- if (is.null(subdir)) r_dir else fs::path(r_dir, subdir)
+  file_path <- fs::path(dir_path, glue::glue("{fn_name}.R"))
 
   conflicts <- derive_fn_conflicts(r_dir, fn_name)
   if (length(conflicts) > 0) {
@@ -101,7 +102,7 @@ use_derive_fn <- function(domain, subdir = NULL, project_path = ".") {
 #' @return character vector of code lines
 #' @noRd
 dp_make_snippet <- function(project_path, domain, subdir = NULL) {
-  dp_make_path <- file.path(project_path, "dp_make.R")
+  dp_make_path <- fs::path(project_path, "dp_make.R")
   uses_drake <- file.exists(dp_make_path) &&
     any(grepl("drake_plan(", readLines(dp_make_path, warn = FALSE), fixed = TRUE))
 

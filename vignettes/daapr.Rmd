@@ -114,15 +114,15 @@ data is in a tabular format.
 readr::write_csv(x = cars, file = "./input_files/cars.csv")
 
 # Map all input_files content and clean file labels in the map
-input_map <- dpinput_map(project_path = ".")
+input_map <- dpinput_map()
 input_map <- inputmap_clean(input_map = input_map)
 
 # Sync each input file to remote data repo
-config <- dpconf_get(project_path = ".")
+config <- dpconf_get()
 synced_map <- dpinput_sync(conf = config, input_map = input_map, verbose = TRUE)
 
 # For each sync'd dataset, record info that will help you retrieve as needed
-dpinput_write(project_path = ".", input_d = synced_map)
+dpinput_write(input_d = synced_map)
 ```
 
 ## Step 4: Build the data product
@@ -195,8 +195,8 @@ NOTE: for your push to work:
 2. `Sys.getenv("GITHUB_PAT")` returns the corresponding "GITHUB_PAT"
 
 ```{r commit, eval=F}
-dp_commit(project_path = ".", commit_description = "First dp build: only input data")
-dp_push(project_path = ".")
+dp_commit(commit_description = "First dp build: only input data")
+dp_push()
 ```
 
 This will complete one development cycle, making the data product and 

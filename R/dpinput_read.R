@@ -1,13 +1,16 @@
 #' @title Read data product input manifest
 #' @description Reads yaml dpinput manifest and returns
 #' a structured pinlink
-#' @param daap_input_yaml daap_input yaml file imported (default "./.daap/daap_input.yaml")
+#' @param daap_input_yaml daap_input yaml file imported (default
+#' `.daap/daap_input.yaml` under the working directory)
 #' @param add_metadata T/F when TRUE dpinput format will include metadata
 #' @return daap_input as a structured list of anonymous functions each when
 #' called retrieves the specific data
 #' @export
 dpinput_read <-
-  function(daap_input_yaml = yaml::read_yaml(file = "./.daap/daap_input.yaml"),
+  function(daap_input_yaml = yaml::read_yaml(
+             file = fs::path(".daap", "daap_input.yaml")
+           ),
            add_metadata = FALSE) {
     dpinput <- purrr::map(daap_input_yaml, .f = function(x) {
       if (is.list(x)) {

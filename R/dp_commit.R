@@ -1,20 +1,20 @@
 #' @title Commit data product
 #' @description Runs a number of checks and commits data product changes
-#' @param project_path Path to the project folder (default is working directory)
+#' @inheritParams project_path_resolve
 #' @param commit_description Commit message
 #' @return repo object post commit
 #' @examples \dontrun{
 #' dp_commit(commit_description = "First dp commit")
 #' }
 #' @export
-dp_commit <- function(project_path = fs::path_wd(),
+dp_commit <- function(project_path = ".",
                       commit_description) {
+  project_path <- project_path_resolve(project_path)
   if (length(commit_description) == 0) {
     stop("commit_description needs to have length > 0")
   }
 
-  project_path <- fs::path_tidy(project_path)
-  log_path <- fs::path_tidy(glue::glue("{project_path}/.daap/daap_log.yaml"))
+  log_path <- fs::path(project_path, ".daap", "daap_log.yaml")
   object_path <- get_data_object_path(project_path)
 
   if (!fs::dir_exists(project_path)) {
@@ -47,7 +47,7 @@ dp_commit <- function(project_path = fs::path_wd(),
   add_these <- unlist(git2r::status(repo = repo))
 
   if (length(add_these) > 0) {
-    git2r::add(repo = repo, path = glue::glue("{project_path}/{add_these}"))
+    git2r::add(repo = repo, path = fs::path(project_path, add_these))
     repo <- git2r::commit(repo = repo, all = TRUE, message = commit_description)
   } else {
     print("Nothing new to commit")
@@ -59,8 +59,8 @@ dp_commit <- function(project_path = fs::path_wd(),
 get_data_object_path <- function(project_path) {
   # Define possible formats and their paths
   possible_formats <- list(
-    RDS = fs::path_tidy(glue::glue("{project_path}/output_files/RDS_format/data_object.RDS")) #,
-    # QS = fs::path_tidy(glue::glue("{project_path}/output_files/qs_format/data_object.qs"))
+    RDS = fs::path(project_path, "output_files", "RDS_format", "data_object.RDS") #,
+    # QS = fs::path(project_path, "output_files", "qs_format", "data_object.qs")
   )
 
   # Iterate through the list and check if the file exists

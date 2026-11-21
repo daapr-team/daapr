@@ -21,7 +21,7 @@
 options(stringsAsFactors = F)
 R.utils::sourceDirectory("R", modifiedOnly = F)
 
-config <- dpconf_get(project_path = "./")
+config <- dpconf_get()
 
 conflict_prefer("filter", "dplyr")
 conflict_prefer("mutate", "dplyr")
@@ -51,6 +51,6 @@ list(
   # Structure output and add metadata
   tar_target(
     name = data_is_written,
-    command = dp_write(data_object = data_object, project_path = ".")
+    command = dp_write(data_object = data_object)
   )
 )

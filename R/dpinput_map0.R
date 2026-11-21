@@ -1,16 +1,17 @@
 #' @title Get input metadata from dpinput manifest
 #' @description Build the last dpinput from `.daap/daap_input.yaml`
-#' @param project_path current project path
+#' @inheritParams project_path_resolve
 #' @return input_map0 a data.frame that maps the content of the already synced
 #' input content or NULL if no `.daap/daap_input.yaml`
 #' @keywords internal
 dpinput_map0 <- function(project_path = ".") {
-  if (!fs::file_exists(glue::glue("{project_path}/.daap/daap_input.yaml"))) {
+  project_path <- project_path_resolve(project_path)
+  if (!fs::file_exists(fs::path(project_path, ".daap", "daap_input.yaml"))) {
     return(NULL)
   }
 
   daap_input_yaml <-
-    yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_input.yaml"))
+    yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_input.yaml"))
   read_dpinput0 <-
     dpinput_read(daap_input_yaml = daap_input_yaml, add_metadata = T)
   input_obj0 <- dpinput_flatten(read_dpinput0)

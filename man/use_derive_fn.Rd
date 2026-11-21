@@ -13,7 +13,8 @@ use_derive_fn(domain, subdir = NULL, project_path = ".")
 An existing folder whose name differs only by case is reused, and its name
 is used in the function name.}
 
-\item{project_path}{Path to the project folder (default is current directory)}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 }
 \value{
 The path to the created file, invisibly.

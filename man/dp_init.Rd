@@ -5,7 +5,7 @@
 \title{Initialize data product project}
 \usage{
 dp_init(
-  project_path = fs::path_wd(),
+  project_path = ".",
   project_description,
   branch_name,
   branch_description,
@@ -21,8 +21,9 @@ dp_init(
 )
 }
 \arguments{
-\item{project_path}{path to the project folder. The folder name will be used
-as project name. If the path doesn't exist it will be created.}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory. The folder name is used
+as the project name, and the folder is created if it doesn't exist.}
 
 \item{project_description}{A high level description of the project. Example:
 integrated, clinical and translational data from study x.}

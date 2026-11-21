@@ -4,10 +4,11 @@
 \alias{dpinput_write}
 \title{Write data product input manifest}
 \usage{
-dpinput_write(project_path, input_d, verbose = F)
+dpinput_write(project_path = ".", input_d, verbose = F)
 }
 \arguments{
-\item{project_path}{Project path}
+\item{project_path}{Path to the data product project folder. Relative paths
+are resolved against the current working directory.}
 
 \item{input_d}{a list generated from \code{dpinput_sync} with synced_input elements
 structured as desired}

@@ -323,9 +323,10 @@ flname_xos_get <- function(fl, package = "daapr") {
 
 #' @title Check pins package compatibility
 #' @description Check pins package compatibility
-#' @param project_path path to project folder
+#' @inheritParams project_path_resolve
 #' @keywords internal
 check_pins_compatibility <- function(project_path = ".") {
+  project_path <- project_path_resolve(project_path)
   read_conf_file <- dpconf_read(project_path = project_path)
 
   if ("is_legacy" %in% names(read_conf_file)) {
@@ -354,7 +355,7 @@ check_pins_compatibility <- function(project_path = ".") {
 
 #' @title Validate git info for deploy
 #' @description Validates and extracts gitinfo per deploy requirements
-#' @param project_path path to project
+#' @inheritParams project_path_resolve
 #' @param verbose F if TRUE prints process details
 #' @return git_info, a list containing git information
 #' @keywords internal
@@ -382,7 +383,7 @@ gitinfo_validate <- function(project_path, verbose = FALSE) {
   )
 
   #-----Check remote git url-------------
-  remote_url <- try(git2r::remote_url(repo = ".", remote = git2r::remotes()), silent = TRUE)
+  remote_url <- try(git2r::remote_url(repo = repo, remote = git2r::remotes(repo = repo)), silent = TRUE)
   has_remote_url <- class(remote_url) != "try-error"
   if (verbose) {
     if (has_remote_url) {
@@ -581,13 +582,33 @@ dpboardlog_update <- function(conf, git_info, dlog = NULL,
 }
 
 
+#' @title Resolve project path
+#' @description Validates `project_path` and resolves it to an absolute,
+#' tidy path against the current working directory. Exported functions call
+#' this once on entry so that later working-directory changes (e.g. by
+#' `renv::init()`) cannot change which folder `project_path` refers to.
+#' @param project_path Path to the data product project folder. Relative paths
+#' are resolved against the current working directory.
+#' @return An absolute `fs_path`
+#' @keywords internal
+project_path_resolve <- function(project_path = ".") {
+  if (!rlang::is_string(project_path) || !nzchar(project_path)) {
+    stop(cli::format_error(glue::glue(
+      "`project_path` must be a single non-empty string, not ",
+      "{paste(deparse(project_path), collapse = '')}."
+    )))
+  }
+  fs::path_abs(fs::path_expand(project_path))
+}
+
+
 #' @title Get dlog
 #' @description Reads and format daap_log.yml pasting values in key:value
 #' pairs at depth 2 with delimitter " > "
 #' @return dlog
 #' @keywords internal
 get_dlog <- function(project_path) {
-  dlog <- yaml::read_yaml(file = glue::glue("{project_path}/.daap/daap_log.yaml"))
+  dlog <- yaml::read_yaml(file = fs::path(project_path, ".daap", "daap_log.yaml"))
   dlog <- purrr::modify_depth(
     .x = dlog, .depth = 2, .ragged = TRUE,
     .f = function(x) paste0(x, collapse = " > ")

@@ -4,15 +4,17 @@
 #' @details All diagnostic tests to check validity of dp repository are run
 #' regardless of choice of checks. Checks determines what subset is considered
 #' in return T/F.
-#' @param path Path to be evaluated
+#' @param path Path to the folder to be evaluated. Relative paths are resolved
+#' against the current working directory.
 #' @param checks any combination of c("all","git","dp","renv","branch"). default
 #' is all.
 #' @param verbose If TRUE, it will print which tests passed/failed
 #' @return TRUE or FALSE
 #' @export
-is_valid_dp_repository <- function(path,
+is_valid_dp_repository <- function(path = ".",
                                    checks = c("all", "git", "dp", "renv", "branch"),
                                    verbose = F) {
+  path <- project_path_resolve(path)
   checks <- match.arg(
     arg = checks,
     choices = c("all", "git", "dp", "renv", "branch"),
@@ -55,8 +57,8 @@ is_valid_dp_repository <- function(path,
 dp_repository_check <- function(path) {
   dx <- list()
   dx$git_initialized <- git2r::in_repository(path = path)
-  dx$dp_initialized <- unname(fs::file_exists(glue::glue("{path}/.daap/daap_config.yaml")))
-  dx$renv_initialized <- unname(fs::dir_exists(glue::glue("{path}/renv")))
+  dx$dp_initialized <- unname(fs::file_exists(fs::path(path, ".daap", "daap_config.yaml")))
+  dx$renv_initialized <- unname(fs::dir_exists(fs::path(path, "renv")))
   dx$branch_name_matches <- NA
   dp_repository <- unname(dx$git_initialized & dx$dp_initialized & dx$renv_initialized)
   if (!dp_repository) {
